@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>Horror Dungeon — DDD</title>
+<!-- PWA -->
+<meta name="theme-color" content="#0a0806">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Horror Dungeon">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Horror Dungeon — DDD&quot;,&quot;short_name&quot;:&quot;HorrorDDD&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%230a0806&quot;,&quot;theme_color&quot;:&quot;%230a0806&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230a0806'/%3E%3Ctext x='256' y='340' font-size='300' text-anchor='middle'%3E🎲%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+<script>
+if('serviceWorker' in navigator){
+  const sw=`
+self.addEventListener('install',e=>e.waitUntil(
+  caches.open('hd6-v1').then(c=>c.addAll([location.pathname]))
+));
+self.addEventListener('fetch',e=>e.respondWith(
+  caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match(e.request)))
+));`;
+  const blob=new Blob([sw],{type:'application/javascript'});
+  const url=URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(()=>{});
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh;}
+.screen{display:none;padding:10px;}.screen.active{display:block;}
+#sc-pass{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+#sc-pass.active{display:flex;}
+.pass-title{font-family:'Cinzel',serif;font-size:24px;color:#c8a020;text-align:center;margin-bottom:6px;letter-spacing:3px;}
+.pass-sub{font-size:12px;color:#6a5a3a;text-align:center;margin-bottom:40px;font-style:italic;}
+.pass-player{font-family:'Cinzel',serif;font-size:18px;margin-bottom:10px;text-align:center;}
+.pass-player.p1{color:#4a9eff;}.pass-player.p2{color:#ff6b6b;}.pass-player.pm{color:#c8a020;}
+.pass-msg{font-size:12px;color:#8a7a5a;text-align:center;margin-bottom:30px;max-width:260px;line-height:1.6;}
+.pass-btn{font-family:'Cinzel',serif;font-size:15px;padding:14px 36px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;letter-spacing:2px;}
+.pass-btn:hover{background:rgba(200,160,32,.28);}
+#sc-gameover{background:#050302;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
+#sc-gameover.active{display:flex;}
+.go-blood{font-size:58px;margin-bottom:18px;animation:bp 2s ease-in-out infinite;}
+@keyframes bp{0%,100%{filter:drop-shadow(0 0 8px #8b0000);}50%{filter:drop-shadow(0 0 28px #cc0000);transform:scale(1.1);}}
+.go-title{font-family:'Cinzel',serif;font-size:18px;color:#8b0000;letter-spacing:5px;margin-bottom:4px;text-shadow:0 0 30px rgba(180,0,0,.9);}
+.go-player{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:20px;letter-spacing:2px;}
+.go-epitaph{font-family:'Crimson Text',Georgia,serif;font-size:13px;color:#a89068;line-height:2;max-width:310px;font-style:italic;margin-bottom:28px;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;}
+.go-score{font-family:'Cinzel',serif;font-size:14px;color:#c8a020;margin-bottom:20px;padding:12px;border:1px solid rgba(200,160,32,.3);border-radius:8px;background:rgba(200,160,32,.06);text-align:center;}
+.go-restart{font-family:'Cinzel',serif;font-size:11px;padding:10px 24px;border-radius:7px;border:1.5px solid #8b0000;background:rgba(139,0,0,.12);color:#cc4040;cursor:pointer;letter-spacing:2px;}
+/* VICTORY */
+#sc-victory{background:#050a02;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
+#sc-victory.active{display:flex;}
+.vic-title{font-family:'Cinzel',serif;font-size:22px;color:#c8a020;letter-spacing:4px;margin-bottom:20px;text-shadow:0 0 20px rgba(200,160,32,.8);}
+.vic-trophy{font-size:54px;margin-bottom:16px;animation:trophypulse 1.5s ease-in-out infinite;}
+@keyframes trophypulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);filter:drop-shadow(0 0 16px gold);}}
+.vic-scores{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;width:100%;max-width:300px;}
+.vic-score-row{background:rgba(200,160,32,.08);border:1px solid rgba(200,160,32,.25);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.vic-player{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;}
+.vic-pts{font-family:'Cinzel',serif;font-size:18px;color:#f0d060;}
+.vic-winner{border-color:#c8a020;background:rgba(200,160,32,.15);}
+.vic-restart{font-family:'Cinzel',serif;font-size:11px;padding:10px 24px;border-radius:7px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:2px;}
+#sc-game{padding:8px 10px;}
+.hdr{text-align:center;margin-bottom:5px;}
+.realm{font-size:7px;letter-spacing:3px;color:#6a5a3a;text-transform:uppercase;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;gap:6px;}
+.pname-cur{font-family:'Cinzel',serif;font-size:13px;font-weight:600;}
+.pname-cur.p1{color:#4a9eff;}.pname-cur.p2{color:#ff6b6b;}.pname-cur.pm{color:#c8a020;}
+.vpbox{font-family:'Cinzel',serif;font-size:16px;color:#c8a020;text-align:center;}
+.vplbl{font-size:7px;color:#6a5a3a;text-align:center;}
+.pturn-btn{font-family:'Cinzel',serif;font-size:9px;padding:6px 10px;border-radius:6px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;white-space:nowrap;}
+.slbl{font-size:7px;color:#6a5a3a;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.merged-badge{background:rgba(200,160,32,.12);border:1.5px solid #c8a020;border-radius:7px;padding:4px 10px;font-size:8px;color:#c8a020;text-align:center;margin-bottom:4px;font-family:'Cinzel',serif;}
+.lifebar-wrap{margin-bottom:6px;}
+.lifebar{display:flex;gap:0;border-radius:4px;overflow:hidden;border:1.5px solid rgba(200,160,32,.35);}
+.lbcell{flex:1;height:24px;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(0,0,0,.4);position:relative;user-select:none;}
+.lbcell:last-child{border-right:none;}
+.lbval{font-family:'Cinzel',serif;font-size:5.5px;font-weight:600;pointer-events:none;}
+.lbcell[data-band="safe"]{background:#182e0c;}.lbcell[data-band="safe"] .lbval{color:#70d040;}
+.lbcell[data-band="warn"]{background:#3c2e06;}.lbcell[data-band="warn"] .lbval{color:#c8a828;}
+.lbcell[data-band="danger"]{background:#4a1e06;}.lbcell[data-band="danger"] .lbval{color:#e06020;}
+.lbcell[data-band="dead"]{background:#3a0606;}.lbcell[data-band="dead"] .lbval{color:#ee2020;}
+.lbcell.locked{cursor:default;}
+.lbcell.locked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(100,200,60,.7);pointer-events:none;}
+.lbcell.cur{outline:2.5px solid #fff;outline-offset:-2px;z-index:2;}
+.lbcell.past{opacity:.55;}
+.lbcell.past::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:rgba(220,40,40,.85);pointer-events:none;}
+.lbcell.deadspin{background:#8b0000!important;animation:dpulse .45s;}
+@keyframes dpulse{0%,100%{filter:brightness(1);}50%{filter:brightness(2);}}
+.dsec{background:rgba(0,0,0,.3);border:1px solid rgba(200,160,32,.18);border-radius:7px;padding:8px;margin-bottom:7px;}
+.dtitle{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+.drow{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+.die{width:36px;height:36px;border-radius:6px;border:2px solid;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:'Cinzel',serif;transition:all .12s;user-select:none;flex-shrink:0;}
+.die.w{background:#f2ede4;border-color:#c0b090;color:#2a1a08;}
+.die.b{background:#222;border-color:#777;color:#eee;}
+.die.sel{transform:translateY(-4px);}
+.die.w.sel{border-color:#c8a020;box-shadow:0 4px 10px rgba(200,160,32,.5);}
+.die.b.sel{border-color:#ccc;box-shadow:0 4px 10px rgba(200,200,200,.4);}
+.die.used{opacity:.3;pointer-events:none;}
+.rollbtn{padding:6px 11px;border-radius:6px;border:1px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;font-family:'Cinzel',serif;font-size:10px;cursor:pointer;}
+.brow{display:flex;align-items:center;gap:4px;margin-bottom:5px;flex-wrap:wrap;}
+.bhint{font-size:7px;color:#6a5a3a;}
+.buse{width:16px;height:16px;border-radius:3px;background:#1a1a1a;border:1.5px solid #777;display:flex;align-items:center;justify-content:center;font-size:8px;color:#eee;flex-shrink:0;}
+.buse.x{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.15);}
+.clrbtn{padding:2px 7px;border-radius:4px;border:1px solid rgba(255,80,80,.25);background:rgba(255,80,80,.06);color:#ff9999;font-size:8px;cursor:pointer;margin-left:auto;}
+.pairs{display:flex;gap:6px;flex-wrap:wrap;}
+.pslot{background:rgba(255,255,255,.03);border:1.5px dashed rgba(200,160,32,.18);border-radius:5px;padding:3px 6px;min-width:66px;text-align:center;}
+.pslot.rdy{border-color:rgba(200,160,32,.5);background:rgba(200,160,32,.05);}
+.plbl{font-size:6px;color:#6a5a3a;letter-spacing:1px;margin-bottom:1px;}
+.psum{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;}
+.pdice{display:flex;gap:2px;justify-content:center;margin-bottom:1px;}
+.mdie{width:15px;height:15px;border-radius:2px;border:1.5px solid;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.mdie.w{background:#f2ede4;border-color:#c0b090;color:#2a1a08;}
+.mdie.b{background:#222;border-color:#777;color:#eee;}
+.dhint{font-size:7px;color:#6a5a3a;font-style:italic;margin-top:2px;}
+.pair-del{font-size:9px;color:#ff7070;cursor:pointer;margin-left:3px;font-weight:700;align-self:center;}
+.turn-info{font-size:8px;color:#c8a020;margin-top:3px;background:rgba(200,160,32,.06);border-radius:4px;padding:3px 6px;text-align:center;}
+.black-die-free{font-size:8px;font-family:'Cinzel',serif;padding:3px 8px;border-radius:4px;margin-top:3px;text-align:center;}
+.black-die-free.yes{background:rgba(50,200,50,.12);border:1px solid rgba(50,200,50,.4);color:#50dd50;}
+.black-die-free.no{background:rgba(200,50,50,.1);border:1px solid rgba(200,50,50,.3);color:#dd6060;}
+/* Schermata modalità */
+#sc-mode{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+#sc-mode.active{display:flex;}
+.mode-btn{font-family:'Cinzel',serif;font-size:13px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;margin-bottom:12px;width:100%;max-width:260px;}
+.mode-btn:hover{background:rgba(200,160,32,.25);}
+.mode-btn.secondary{border-color:#4a9eff;color:#4a9eff;background:rgba(74,158,255,.08);}
+.mode-btn.secondary:hover{background:rgba(74,158,255,.2);}
+.sync-code{font-family:'Cinzel',serif;font-size:28px;letter-spacing:8px;color:#c8a020;background:rgba(200,160,32,.1);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 20px;text-align:center;margin:12px 0;}
+.sync-input{font-family:'Cinzel',serif;font-size:20px;letter-spacing:6px;text-align:center;background:rgba(0,0,0,.3);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 16px;color:#c8a020;width:100%;max-width:220px;text-transform:uppercase;}
+.sync-status{font-size:11px;margin-top:8px;min-height:18px;text-align:center;}
+.sync-status.ok{color:#50dd50;}.sync-status.err{color:#dd5050;}.sync-status.wait{color:#c8a020;}
+#sc-side{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+#sc-side.active{display:flex;}
+.side-title{font-family:'Cinzel',serif;font-size:18px;color:#c8a020;text-align:center;margin-bottom:8px;letter-spacing:3px;}
+.side-sub{font-size:11px;color:#6a5a3a;text-align:center;margin-bottom:30px;font-style:italic;max-width:280px;line-height:1.6;}
+.side-opts{display:flex;gap:14px;}
+.side-btn{font-family:'Cinzel',serif;font-size:13px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;}
+.side-btn:hover{background:rgba(200,160,32,.25);}
+/* Victory story */
+.vic-story{font-family:'Crimson Text',Georgia,serif;font-size:12px;color:#a89068;line-height:1.9;max-width:310px;font-style:italic;margin-bottom:20px;border-left:2px solid #6a5a0a;padding-left:14px;text-align:left;}
+.vic-score-detail{font-size:9px;color:#8a7a5a;margin-top:4px;}
+.mapsec{margin-bottom:7px;}
+.maptitle{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;letter-spacing:1px;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;}
+.zoom-ctrls{display:flex;gap:4px;}
+.zbtn{font-family:'Cinzel',serif;font-size:13px;width:24px;height:24px;border-radius:4px;border:1px solid rgba(200,160,32,.4);background:rgba(200,160,32,.08);color:#c8a020;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.legend{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:3px;}
+.leg{display:flex;align-items:center;gap:2px;font-size:7px;color:#6a5a3a;}
+.legdot{width:7px;height:7px;border-radius:1px;flex-shrink:0;}
+/* Map: pinch-to-zoom + scroll */
+.mapwrap{width:100%;max-height:400px;overflow:scroll;-webkit-overflow-scrolling:touch;background:#0d0b06;border-radius:6px;border:1px solid rgba(200,160,32,.2);touch-action:pan-x pan-y;position:relative;}
+.mapwrap::-webkit-scrollbar{width:6px;height:6px;}
+.mapwrap::-webkit-scrollbar-track{background:rgba(0,0,0,.3);}
+.mapwrap::-webkit-scrollbar-thumb{background:rgba(200,160,32,.4);border-radius:3px;}
+.mapwrap::-webkit-scrollbar-corner{background:rgba(0,0,0,.3);}
+#mapscale{transform-origin:top left;display:inline-block;padding:4px;will-change:transform;}
+.mhint{font-size:7px;color:#6a5a3a;margin-top:2px;min-height:12px;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px;}
+.mcard{background:rgba(160,50,30,.07);border:1.5px solid rgba(160,50,30,.22);border-radius:6px;padding:6px 7px;}
+.mcard.boss{background:rgba(180,140,20,.06);border-color:rgba(180,140,20,.35);}
+.mcard.dead{opacity:.28;}
+.mname{font-family:'Cinzel',serif;font-size:8px;color:#d06060;margin-bottom:2px;line-height:1.2;}
+.mcard.boss .mname{color:#c8a020;}
+.mcard.dead .mname::after{content:" ✓";color:#4caf50;}
+.minfo{font-size:6px;color:#6a5a3a;margin-bottom:3px;}
+.mnums{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:3px;}
+.mnum{font-family:'Cinzel',serif;font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;line-height:1;}
+.mnum.locked{color:#5a5040;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+.mnum.unlocked{color:#f0d060;background:rgba(200,160,20,.15);border:1px solid rgba(200,160,20,.4);}
+.hprow{display:flex;gap:2px;flex-wrap:wrap;}
+.hp{width:13px;height:13px;border-radius:2px;border:1.5px solid #b03020;background:rgba(176,48,32,.08);}
+.hp.hit{background:#b03020;}
+.mcard.boss .hp{border-color:#c8a020;}.mcard.boss .hp.hit{background:#c8a020;}
+.cnts{display:flex;gap:4px;margin-bottom:7px;}
+.cnt{flex:1;background:rgba(0,0,0,.22);border:1px solid rgba(200,160,32,.12);border-radius:5px;padding:4px;text-align:center;}
+.clbl{font-size:6.5px;color:#6a5a3a;margin-bottom:2px;letter-spacing:1px;}
+.cval{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;min-width:18px;text-align:center;}
+.sep{height:1px;background:rgba(255,255,255,.06);margin:6px 0;}
+.treasure-section{background:rgba(200,160,32,.05);border:1.5px solid rgba(200,160,32,.25);border-radius:7px;padding:8px;margin-bottom:7px;}
+.treasure-title{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;margin-bottom:6px;letter-spacing:1px;}
+.treasure-items{display:flex;gap:5px;}
+.tres-item{flex:1;background:rgba(0,0,0,.18);border:1.5px solid rgba(200,160,32,.2);border-radius:5px;padding:5px 4px;text-align:center;}
+.tres-ico{font-size:13px;line-height:1;margin-bottom:2px;}
+.tres-lbl{font-size:6px;color:#8a7a5a;line-height:1.3;}
+.tres-boxes{display:flex;gap:2px;justify-content:center;margin-top:3px;flex-wrap:wrap;}
+.tres-box{width:12px;height:12px;border-radius:2px;border:1.5px solid #c8a020;background:transparent;cursor:pointer;position:relative;}
+.tres-box.checked{background:#c8a020;}
+.tres-box.checked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#1a1208;}
+.tres-torch-row{display:flex;align-items:center;gap:4px;justify-content:center;margin-top:3px;}
+.torch-token{width:16px;height:16px;border-radius:3px;border:1.5px solid #e08020;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative;}
+.torch-token.avail{background:rgba(224,128,32,.15);color:#e08020;}
+.torch-token.avail:hover{background:rgba(224,128,32,.35);}
+.torch-token.active{background:#e08020;color:#1a0a00;animation:tpulse .6s ease-in-out infinite;}
+.torch-token.spent{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.15);cursor:default;}
+@keyframes tpulse{0%,100%{box-shadow:0 0 0 0 rgba(224,128,32,0);}50%{box-shadow:0 0 0 4px rgba(224,128,32,.35);}}
+.torch-slots{font-size:8px;color:#e08020;font-family:'Cinzel',serif;font-weight:700;}
+.torch-toggle.locked-torch{opacity:0.35;cursor:default;}
+.fist-section{background:rgba(80,40,10,.2);border:1.5px solid rgba(150,90,25,.3);border-radius:7px;padding:8px;margin-bottom:7px;}
+.fist-title{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;margin-bottom:4px;letter-spacing:1px;}
+.fist-desc{font-size:7px;color:#8a7a5a;margin-bottom:5px;}
+.fist-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
+.fist-boxes{display:flex;gap:3px;}
+.fist-box{width:18px;height:18px;border-radius:3px;border:1.5px solid rgba(200,120,30,.5);background:rgba(0,0,0,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.fist-box.checked{background:rgba(180,90,15,.32);border-color:#c07818;}
+.fist-arrow{font-size:10px;color:#c8a020;}.fist-reward{font-size:9px;color:#c8a020;font-family:'Cinzel',serif;}
+.fist-done-lbl{font-size:7px;color:#4a9a30;font-family:'Cinzel',serif;margin-left:4px;}
+.modal-wrap{background:rgba(0,0,0,.8);padding:14px;margin:8px auto;max-width:320px;border-radius:10px;}
+.modal-wrap.hidden{display:none;}
+.modal{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:13px;}
+.modal-t{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;margin-bottom:8px;text-align:center;}
+.ropts{display:flex;flex-direction:column;gap:7px;}
+.ropt{background:rgba(255,255,255,.03);border:1.5px solid rgba(200,160,32,.25);border-radius:6px;padding:8px 10px;cursor:pointer;}
+.ropt:hover{background:rgba(200,160,32,.12);}
+.ropt.disabled{opacity:.3;cursor:default;pointer-events:none;}
+.ropt-t{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;margin-bottom:2px;}
+.ropt-d{font-size:8px;color:#8a7a5a;line-height:1.4;}
+.notif{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:10px 14px;text-align:center;max-width:280px;margin:6px auto;}
+.notif.hidden{display:none;}
+.nt{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:3px;}
+.nb{font-size:9px;line-height:1.45;}
+.nok{margin-top:5px;background:rgba(200,160,32,.1);border:1px solid rgba(200,160,32,.24);color:#c8a020;padding:3px 10px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:9px;}
+</style>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+</head>
+<body>
+
+<div id="sc-mode" class="active">
+  <div class="side-title">HORROR<br>DUNGEON</div>
+  <div class="pass-sub">Realm · DDD</div>
+  <div class="side-title" style="font-size:14px;margin-bottom:16px;">Modalità di gioco</div>
+  <div id="continue-btn-wrap" style="display:none;width:100%;max-width:260px;margin-bottom:6px;">
+    <button class="mode-btn" style="border-color:#50dd50;color:#50dd50;background:rgba(80,221,80,.08);" onclick="continueSavedGame()">▶ Continua partita<br><span style="font-size:9px;color:#3a9a3a;">Riprendi da dove avevi lasciato</span></button>
+    <div style="height:1px;background:rgba(200,160,32,.15);margin:10px 0;width:100%;"></div>
+  </div>
+  <button class="mode-btn" onclick="startSingleDevice()">📱 Dispositivo singolo<br><span style="font-size:9px;color:#8a7a5a;">Entrambi i giocatori sullo stesso dispositivo</span></button>
+  <button class="mode-btn secondary" onclick="startMultiDevice('host')">🌐 Due dispositivi — Giocatore 1<br><span style="font-size:9px;color:#4a7a9a;">Crea la partita e condividi il codice</span></button>
+  <button class="mode-btn secondary" onclick="startMultiDevice('join')">🔗 Due dispositivi — Giocatore 2<br><span style="font-size:9px;color:#4a7a9a;">Inserisci il codice del Giocatore 1</span></button>
+  <!-- Pulsante installa Android -->
+  <button id="install-btn" class="mode-btn" style="display:none;margin-top:14px;border-color:#c8a020;color:#c8a020;font-size:11px;padding:10px 18px;" onclick="installApp()">⬇ Installa come app</button>
+  <!-- Banner iOS -->
+  <div id="ios-banner" style="display:none;margin-top:14px;max-width:260px;background:rgba(200,160,32,.08);border:1px solid rgba(200,160,32,.25);border-radius:8px;padding:10px 12px;font-size:10px;color:#8a7a5a;text-align:center;line-height:1.7;">
+    📲 Per installare su iPhone:<br>tocca <b style="color:#c8a020">Condividi</b> → <b style="color:#c8a020">Aggiungi a schermata Home</b>
+  </div>
+</div>
+
+<!-- Schermata host: mostra codice -->
+<div id="sc-host" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;">
+    <div class="side-title">HORROR DUNGEON</div>
+    <div class="pass-sub" style="margin-bottom:20px;">Codice partita — condividilo con il Giocatore 2</div>
+    <div class="sync-code" id="host-code" style="font-size:16px;letter-spacing:2px;word-break:break-all;">——</div>
+    <button class="mode-btn" style="margin-top:8px;padding:8px 18px;font-size:11px;" onclick="copyHostCode()">📋 Copia codice</button>
+    <div class="sync-status wait" id="host-status">In attesa della connessione…</div>
+    <div style="font-size:10px;color:#6a5a3a;margin-top:16px;text-align:center;max-width:280px;">Il Giocatore 2 deve aprire lo stesso file HTML, scegliere <b style="color:#c8a020">"Due dispositivi — Giocatore 2"</b> e incollare il codice completo mostrato qui sopra.</div>
+  </div>
+</div>
+
+<!-- Schermata join: inserisci codice -->
+<div id="sc-join" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;">
+    <div class="side-title">HORROR DUNGEON</div>
+    <div class="pass-sub" style="margin-bottom:20px;">Inserisci il codice numerico del Giocatore 1</div>
+    <input class="sync-input" id="join-code" maxlength="6" placeholder="ABCDEF">
+    <button class="mode-btn" style="margin-top:14px;" onclick="joinGame()">Connetti ➜</button>
+    <div class="sync-status" id="join-status"></div>
+  </div>
+</div>
+
+<div id="sc-side" class="screen">
+  <div class="side-title">HORROR<br>DUNGEON</div>
+  <div class="pass-sub">Realm · DDD</div>
+  <div class="side-title" style="font-size:14px;margin-bottom:6px;">⚔ Scelta Posizione Iniziale</div>
+  <div class="side-sub">Giocatore 1: scegli da quale lato vuoi partire. Giocatore 2 partirà dal lato opposto.</div>
+  <div class="side-opts">
+    <button class="side-btn" onclick="chooseStartSide('left')">← Sinistra<br><span style="font-size:9px;color:#8a7a5a;">P1 sx · P2 dx</span></button>
+    <button class="side-btn" onclick="chooseStartSide('right')">Destra →<br><span style="font-size:9px;color:#8a7a5a;">P1 dx · P2 sx</span></button>
+  </div>
+</div>
+
+<div id="sc-pass">
+  <div class="pass-title">HORROR<br>DUNGEON</div>
+  <div class="pass-sub">Realm · DDD</div>
+  <div class="pass-player" id="pass-who">Turno di: Giocatore 1</div>
+  <div class="pass-msg" id="pass-msg">Passa il dispositivo al Giocatore 1 e premi Inizia Turno.</div>
+  <button class="pass-btn" id="pass-btn-start" onclick="startTurn()">⚔ Inizia Turno</button>
+</div>
+
+<div id="sc-gameover" class="screen">
+  <div class="go-blood">🩸</div>
+  <div class="go-title">IL REALM TI HA RECLAMATO</div>
+  <div class="go-player" id="go-player"></div>
+  <div class="go-epitaph" id="go-epitaph"></div>
+  <div class="go-score" id="go-score"></div>
+  <button class="go-restart" onclick="resetAll()">☠ Nuova Partita</button>
+</div>
+
+<div id="sc-victory" class="screen">
+  <div class="vic-trophy">🏆</div>
+  <div class="vic-title">VITTORIA!</div>
+  <div class="vic-scores" id="vic-scores"></div>
+  <div class="vic-story" id="vic-story"></div>
+  <button class="vic-restart" onclick="resetAll()">↩ Nuova Partita</button>
+</div>
+
+<div id="sc-game" class="screen">
+  <div class="hdr"><div class="realm">HORROR DUNGEON — DDD</div></div>
+  <div style="text-align:right;margin-bottom:4px;">
+    <button onclick="resetAll()" style="font-size:8px;color:#5a4a2a;background:none;border:1px solid rgba(90,74,42,.3);border-radius:4px;padding:3px 8px;cursor:pointer;">🔄 Reset</button>
+  </div>
+  <div class="topbar">
+    <div><div class="pname-cur" id="pcur">Giocatore 1</div><div style="font-size:7px;color:#6a5a3a;">Turno in corso</div></div>
+    <div><div class="vpbox" id="vpv">0</div><div class="vplbl">PV</div></div>
+    <button class="pturn-btn" onclick="passTurn()">Passa ➜</button>
+  </div>
+  <div class="merged-badge hidden" id="merged-badge">⚔ UNIONE — Giocatore unificato</div>
+  <div class="slbl">❤ Punti Vita</div>
+  <div class="lifebar-wrap"><div class="lifebar" id="lifebar"></div></div>
+  <div class="dsec">
+    <div class="dtitle"><span>🎲 DADI</span><span id="cross-count" style="font-size:8px;color:#c8a020;"></span></div>
+    <div class="drow" id="drow"><button class="rollbtn" onclick="rollDice()">🎲 Lancia</button></div>
+    <div class="brow"><span class="bhint">⬛ Dado nero:</span><div id="buses" style="display:flex;gap:2px;"></div><button class="clrbtn" onclick="clearDice()" title="Resetta tutto il turno">↺ Reset turno</button></div>
+    <div id="black-die-status" class="black-die-free yes"></div>
+    <div class="pairs" id="pairs">
+      <div class="pslot" id="ps0"><div class="plbl">COPPIA 1</div><div class="pdice" id="pd0"></div><div class="psum" id="pv0">—</div></div>
+      <div class="pslot" id="ps1"><div class="plbl">COPPIA 2</div><div class="pdice" id="pd1"></div><div class="psum" id="pv1">—</div></div>
+    </div>
+    <div class="dhint" id="dhint">Lancia i dadi e forma 2 coppie</div>
+    <div class="turn-info" id="turn-info">Caselle barrate: 0 / 2</div>
+  </div>
+  <div class="mapsec">
+    <div class="maptitle">
+      <span>🗺 MAPPA</span>
+      <div class="zoom-ctrls">
+        <button class="zbtn" onclick="zm(-1)">−</button>
+        <button class="zbtn" onclick="zm(0)">⌂</button>
+        <button class="zbtn" onclick="zm(1)">+</button>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="legdot" style="background:#5a9e38"></div>Start</div>
+      <div class="leg"><div class="legdot" style="background:#e8e0cc"></div>Regular</div>
+      <div class="leg"><div class="legdot" style="background:#c8b018"></div>Tesoro</div>
+      <div class="leg"><div class="legdot" style="background:#9a9080"></div>Attiv.</div>
+      <div class="leg"><div class="legdot" style="background:#b86820"></div>Pugno</div>
+      <div class="leg"><div class="legdot" style="background:#c0b898"></div>Mostro</div>
+    </div>
+    <div class="modal-wrap hidden" id="tmodal">
+      <div class="modal"><div class="modal-t">💰 Scegli Ricompensa</div><div class="ropts" id="tropts"></div></div>
+    </div>
+    <div class="mapwrap" id="mapwrap">
+      <div id="mapscale"><svg id="mapsvg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+    <div class="mhint" id="mhint"></div>
+  </div>
+  <div class="treasure-section" style="margin-bottom:6px;">
+    <div class="treasure-title">💰 TESORI TROVATI</div>
+    <div class="treasure-items">
+      <div class="tres-item"><div class="tres-ico">🛡</div><div class="tres-lbl">+1💎<br>3 Scudi<br><span style="font-size:5px;color:#6a4a3a">(1×)</span></div><div class="tres-boxes" id="tres-life"></div></div>
+      <div class="tres-item"><div class="tres-ico">🕯</div><div class="tres-lbl">Token<br>Torcia<br><span style="font-size:5px;color:#6a4a3a">(clicca)</span></div><div class="tres-boxes" id="tres-torch"></div></div>
+      <div class="tres-item"><div class="tres-ico">⬛</div><div class="tres-lbl">+3 Dadi<br>Neri<br><span style="font-size:5px;color:#6a4a3a">(1×)</span></div><div class="tres-boxes" id="tres-dice"></div></div>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <div class="fist-section">
+    <div class="fist-title">✊ PUGNI</div>
+    <div class="fist-desc">5 pugni → +3💎 (primo giocatore che completa)</div>
+    <div id="fist-rows"></div>
+  </div>
+  <div class="sep"></div>
+  <div class="slbl" style="margin-bottom:4px;">👾 MOSTRI</div>
+  <div class="mgrid" id="mgrid"></div>
+  <div class="sep"></div>
+  <div class="cnts">
+    <div class="cnt"><div class="clbl">💎 GEMME</div><div class="cval" id="vgm">0</div></div>
+    <div class="cnt"><div class="clbl">⭐ PV TOT</div><div class="cval" id="vvp">0</div></div>
+  </div>
+  <div class="notif hidden" id="notif">
+    <div class="nt" id="nt"></div><div class="nb" id="nb"></div>
+    <button class="nok" onclick="closeN()">OK</button>
+  </div>
+  <div style="height:16px;"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  HORROR DUNGEON — DDD
+//  Mappa SVG con sistema bordi+passaggi
+//  Coordinate in unità mezzo-cella (step = 0.5) per sfalsamento
+// ══════════════════════════════════════════════════════════════
+
+const CW=34, CH=34;   // cell size px
+const PAD=8;
+const BW=2.5;         // border width
+const PASS=10;        // gap size for passages
+const HALF_STEP=CW/2+1; // half-step offset in px
+
+// ─── ICONE MOSTRI ───
+const MICO={FK:'🩸',JS:'🧩',MM:'🔪',LF:'😷',GF:'👻',JV:'🪓',PW:'🎈'};
+// FK=artiglio(🩸), JI=pupazzo(🤡), MM=coltello(🔪), LF=maschera(😷), GF=fantasma(👻), JV=ascia(🪓), PW=palloncino(🎈)
+
+// ─── COLORI ───
+const CC={
+  S:   {fill:'#5a9e38',stroke:'#2a6012'},
+  R:   {fill:'#e8e0cc',stroke:'#9a9060'},
+  G:   {fill:'#9a9080',stroke:'#686050'},
+  T:   {fill:'#c8b018',stroke:'#7a6800'},
+  P:   {fill:'#b86820',stroke:'#784010'},
+  M:   {fill:'#c0b898',stroke:'#7a7050'},
+  BOSS:{fill:'#a89870',stroke:'#685830'},
+  D:   {fill:'rgba(40,35,20,0.5)',stroke:'rgba(180,150,80,0.6)'},
+};
+
+// ─── CELLE ───
+// Griglia 13×20: righe A-M (row 0-12), colonne 1-20 (col 0-19)
+// cw/ch: estensione in celle aggiuntive (es. cw:1 = 2 colonne)
+// gem: casella con gemma (BX)
+
+const CELLS=[
+  // ── RIGA A ──
+  {k:'A8_10p',  t:'P',  n:10, col:7,  row:0},
+  {k:'A13_12p', t:'P',  n:12, col:12, row:0},
+  {k:'A16_3g',  t:'G',  n:3,  col:15, row:0},
+  {k:'A17_4v',  t:'S',  n:4,  col:16, row:0},
+  {k:'A19_5v',  t:'S',  n:5,  col:18, row:0, ch:1}, // A19B19 → 2 righe, stessa colonna
+  // ── RIGA B ──
+  {k:'B4_2v',   t:'S',  n:2,  col:3,  row:1},
+  {k:'B5_4g',   t:'G',  n:4,  col:4,  row:1, cw:1}, // B5B6
+  {k:'FK',      t:'M',  n:null,col:6, row:1, cw:1,ch:1, mkey:'FK'}, // B7B8C7C8
+  {k:'B13_2bx', t:'R',  n:2,  col:12, row:1, gem:true},
+  {k:'JV',      t:'M',  n:null,col:14,row:1, cw:1,ch:1, mkey:'JV'}, // B15B16C15C16
+  {k:'B18_9g',  t:'G',  n:9,  col:17, row:1, ch:1}, // B18C18
+  // ── RIGA C ──
+  {k:'C4_9v',   t:'S',  n:9,  col:3,  row:2, cw:1}, // C4C5
+  {k:'C10_12bx',t:'R',  n:12, col:9,  row:2, gem:true},
+  {k:'C12_8b',  t:'R',  n:8,  col:11, row:2, cw:1}, // C12C13
+  {k:'C19_8v',  t:'S',  n:8,  col:18, row:2},
+  // ── RIGA D ──
+  {k:'D3_7v',   t:'S',  n:7,  col:2,  row:3, ch:1}, // D3E3
+  {k:'D4_6v',   t:'S',  n:6,  col:3,  row:3},
+  {k:'D6_DD',   t:'D',  n:null,col:5, row:3, ch:1}, // D6E6
+  {k:'D7_7b',   t:'R',  n:7,  col:6,  row:3},
+  {k:'D8_3g',   t:'G',  n:3,  col:7,  row:3},
+  {k:'D9_10b',  t:'R',  n:10, col:8,  row:3, cw:1}, // D9D10
+  {k:'D11_9b',  t:'R',  n:9,  col:10, row:3},
+  {k:'D12_6b',  t:'R',  n:6,  col:11, row:3},
+  {k:'D14_DD',  t:'D',  n:null,col:13,row:3},
+  {k:'D15_7b',  t:'R',  n:7,  col:14, row:3},
+  {k:'D17_2bx', t:'R',  n:2,  col:16, row:3, cw:2,ch:1, gem:true}, // D17E17F17
+  {k:'D19_10v', t:'S',  n:10, col:18, row:3, ch:1}, // D19E19
+  // ── RIGA E ──
+  {k:'E1_12v',  t:'S',  n:12, col:0,  row:4},
+  {k:'E2_3v',   t:'S',  n:3,  col:1,  row:4},
+  {k:'E4_10g',  t:'G',  n:10, col:3,  row:4},
+  {k:'E12_11g', t:'G',  n:11, col:11, row:4, cw:2}, // E12E13E14
+  // ── RIGA F ──
+  {k:'F1_5b',   t:'R',  n:5,  col:0,  row:5},
+  {k:'F2_6g',   t:'G',  n:6,  col:1,  row:5},
+  {k:'JS',      t:'M',  n:null,col:3, row:5, cw:1,ch:1, mkey:'JS'}, // F4F5G4G5
+  {k:'F7_11t',  t:'T',  n:11, col:6,  row:5, ch:1}, // F7G7
+  {k:'F8_12bx', t:'R',  n:12, col:7,  row:5, gem:true},
+  {k:'F9_3g',   t:'G',  n:3,  col:8,  row:5, cw:1}, // F9F10
+  {k:'PW',      t:'BOSS',n:null,col:10,row:5,cw:4,ch:3,mkey:'PW'}, // F11..I15 (5 col × 4 row)
+  {k:'F19_11v', t:'S',  n:11, col:18, row:5},
+  // ── RIGA G ──
+  {k:'G1_4p',   t:'P',  n:4,  col:0,  row:6, cw:1}, // G1G2
+  {k:'G6_9b',   t:'R',  n:9,  col:5,  row:6},
+  {k:'G18_3t',  t:'T',  n:3,  col:17, row:6},
+  {k:'G19_12bx',t:'R',  n:12, col:18, row:6, gem:true},
+  // ── RIGA H ──
+  {k:'H1_12bx', t:'R',  n:12, col:0,  row:7, gem:true},
+  {k:'H2_2bx',  t:'R',  n:2,  col:1,  row:7, gem:true},
+  {k:'H6_DD',   t:'D',  n:null,col:5, row:7, cw:1}, // H6H7
+  {k:'H8_10b',  t:'R',  n:10, col:7,  row:7},
+  {k:'H9_5g',   t:'G',  n:5,  col:8,  row:7, cw:1}, // H9H10
+  {k:'H17_4g',  t:'G',  n:4,  col:16, row:7},
+  {k:'H19_DD',  t:'D',  n:null,col:18,row:7},
+  // ── RIGA I ──
+  {k:'I5_5b',   t:'R',  n:5,  col:4,  row:8},
+  {k:'I17_7b',  t:'R',  n:7,  col:16, row:8, cw:1}, // I17I18
+  {k:'I19_9b',  t:'R',  n:9,  col:18, row:8},
+  // ── RIGA J ──
+  {k:'J5_7b',   t:'R',  n:7,  col:4,  row:9},
+  {k:'J15_8g',  t:'G',  n:8,  col:14, row:9, ch:1}, // J15K15
+  {k:'J16_JX',  t:'D',  n:null,col:15,row:9, ch:1}, // J16K16L16 (trattato come DD)
+  {k:'J17_9b',  t:'R',  n:9,  col:16, row:9},
+  {k:'J19_8b',  t:'R',  n:8,  col:18, row:9},
+  {k:'J20_2p',  t:'P',  n:2,  col:19, row:9},
+  // ── RIGA K ──
+  {k:'K3_6p',   t:'P',  n:6,  col:2,  row:10},
+  {k:'K4_2bx',  t:'R',  n:2,  col:3,  row:10, ch:1, gem:true}, // K4L4 = 2 righe stessa colonna
+  {k:'K5_DD',   t:'D',  n:null,col:4, row:10},
+  {k:'K6_6b',   t:'R',  n:6,  col:5,  row:10},
+  {k:'K7_8g',   t:'G',  n:8,  col:6,  row:10, cw:1}, // K7K8
+  {k:'K9_7b',   t:'R',  n:7,  col:8,  row:10, cw:1}, // K9K10
+  {k:'LF',      t:'M',  n:null,col:11,row:10,cw:2,ch:2,mkey:'LF'}, // K12..M14
+  {k:'GF',      t:'M',  n:null,col:16,row:10,cw:2,ch:2,mkey:'GF'}, // K17..M19
+  // ── RIGA L ──
+  {k:'MM',      t:'M',  n:null,col:5, row:11,cw:1,ch:1,mkey:'MM'}, // L6L7M6M7
+  {k:'L15_6b',  t:'R',  n:6,  col:14, row:11},
+  // ── RIGA M ──
+  {k:'M4_5g',   t:'G',  n:5,  col:3,  row:12, cw:1}, // M4M5
+];
+
+const CMAP={};CELLS.forEach(c=>CMAP[c.k]=c);
+
+// ─── ADIACENZE ───
+// Auto-calcolate dalla geometria: due celle sono adiacenti se condividono
+// almeno un segmento di lato (non solo un angolo).
+function cellRect(c){return{x1:c.col,x2:c.col+(c.cw||0)+1,y1:c.row,y2:c.row+(c.ch||0)+1};}
+function sharesSide(a,b){
+  const ra=cellRect(a),rb=cellRect(b);
+  if(ra.x2===rb.x1){const lo=Math.max(ra.y1,rb.y1),hi=Math.min(ra.y2,rb.y2);if(hi-lo>0)return true;}
+  if(ra.x1===rb.x2){const lo=Math.max(ra.y1,rb.y1),hi=Math.min(ra.y2,rb.y2);if(hi-lo>0)return true;}
+  if(ra.y2===rb.y1){const lo=Math.max(ra.x1,rb.x1),hi=Math.min(ra.x2,rb.x2);if(hi-lo>0)return true;}
+  if(ra.y1===rb.y2){const lo=Math.max(ra.x1,rb.x1),hi=Math.min(ra.x2,rb.x2);if(hi-lo>0)return true;}
+  return false;
+}
+// Ponti espliciti (coppie non fisicamente adiacenti ma collegate da un ponte)
+const BRIDGES_ADJ=[
+  ['A17_4v','A19_5v'],
+  ['C12_8b','JV'],
+  ['JV','B18_9g'],
+  ['JV','C19_8v'],       // C19 adiacente a JV via lato/ponte
+  ['JV','B13_2bx'],      // B13 raggiungibile da JV
+  ['D4_6v','D6_DD'],
+  ['D6_DD','E4_10g'],
+  ['D11_9b','F9_3g'],
+  ['D15_7b','D17_2bx'],
+  ['D17_2bx','D19_10v'],
+  ['D17_2bx','F19_11v'],
+  ['F2_6g','JS'],        // F2 attiva JS via ponte
+  ['JS','F8_12bx'],      // F8 adiacente a JS
+  ['JS','I5_5b'],        // G5↔I5
+  ['G18_3t','H17_4g'],   // G18↔H17
+  ['K9_7b','LF'],        // K10↔K12 (LF)
+  ['FK','C4_9v'],        // C4 raggiunge FK (lato condiviso mancante)
+  ['FK','B4_2v'],        // B4 raggiunge FK
+  ['GF','H17_4g'],       // H17 attiva GF
+  ['GF','I17_7b'],       // I17 attiva GF
+  ['GF','I19_9b'],       // I19 raggiunge GF
+];
+// EDGES auto-costruito: geometria + ponti
+const EDGES=(()=>{
+  const pairs=new Set();
+  const add=(a,b)=>pairs.add([a,b].sort().join('|'));
+  for(let i=0;i<CELLS.length;i++)for(let j=i+1;j<CELLS.length;j++)if(sharesSide(CELLS[i],CELLS[j]))add(CELLS[i].k,CELLS[j].k);
+  BRIDGES_ADJ.forEach(([a,b])=>add(a,b));
+  return[...pairs].map(p=>p.split('|'));
+})();
+
+const ADJ_SET=new Set(EDGES.map(([a,b])=>[a,b].sort().join('|')));
+function isAdj(a,b){return ADJ_SET.has([a,b].sort().join('|'));}
+function getAdjKeys(k){return EDGES.flatMap(([a,b])=>a===k?[b]:b===k?[a]:[]);}
+
+// ─── PONTI VISIVI ───
+// Coppie di celle collegate da un ponte visivo (linea tratteggiata sul bordo SVG)
+const BRIDGES=[
+  ['A17_4v','A19_5v'],
+  ['C12_8b','JV'],       // C13↔C15
+  ['JV','B18_9g'],       // C16↔C18
+  ['D4_6v','D6_DD'],     // D4↔D6
+  ['D11_9b','F9_3g'],    // D11↔F10
+  ['D15_7b','D17_2bx'],  // D15↔D17
+  ['D17_2bx','D19_10v'], // D17↔D19
+  ['E4_10g','D6_DD'],    // E4↔E6
+  ['F2_6g','JS'],        // F2↔F4
+  ['D17_2bx','F19_11v'], // F17↔F19
+  ['JS','I5_5b'],        // G5↔I5
+  ['G18_3t','H17_4g'],   // G18↔H17
+  ['K9_7b','LF'],        // K10↔K12
+];
+// ─── MOSTRI ───
+// active: true=nero(attivo subito), false=bianco(bloccato finché greyAdj non barrata)
+// Numeri neri = attivi da subito o dopo sblocco greyAdj
+// FK: 3/4 bianchi, 11 nero → active[0]=false,active[1]=false,active[2]=true
+// JS: 6/10 bianchi, 8 nero → active[0]=false,active[1]=true,active[2]=false
+// MM: 5/8 bianchi, 4 nero → active[0]=true,active[1]=false,active[2]=false
+// LF: 2/12 tutti neri
+// GF: 3/11 tutti neri
+// JV: 3/9 bianchi, 5 nero → active[0]=false,active[1]=true,active[2]=false
+// PW: tutti bianchi
+const MONS={
+  FK:{name:'Freddy Krueger',nums:[3,4,11],  active:[false,false,true],              hp:4, gem:2,isBoss:false,greyAdj:['B5_4g','C4_9v']},
+  JV:{name:'Jason Voorhees',nums:[3,5,9],   active:[false,true,false],              hp:4, gem:2,isBoss:false,greyAdj:['B18_9g','C19_8v']},
+  JS:{name:'Jigsaw',        nums:[6,8,10],  active:[false,true,false],              hp:4, gem:2,isBoss:false,greyAdj:['F2_6g','E4_10g']},
+  MM:{name:'Michael Myers', nums:[4,5,8],   active:[true,false,false],              hp:5, gem:2,isBoss:false,greyAdj:['K6_6b','K7_8g']},
+  LF:{name:'Leatherface',   nums:[2,12],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['K9_7b','J15_8g']},
+  GF:{name:'Ghostface',     nums:[3,11],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['H17_4g','I17_7b']},
+  PW:{name:'Pennywise',     nums:[3,4,5,8,11],active:[false,false,false,false,false],hp:12,gem:6,isBoss:true,
+      greyAdj:['F9_3g','E12_11g','H9_5g','I5_5b','F19_11v']},
+};
+const MK=['FK','JV','JS','MM','LF','GF','PW'];
+
+function getUnlocked(marked){
+  const res={};
+  MK.forEach(mk=>{
+    const mon=MONS[mk];
+    const activeArr=[...mon.active];
+    // Ogni casella in greyAdj, se barrata, sblocca il numero corrispondente del mostro.
+    // Non serve che sia geometricamente adiacente al mostro — è il designer che decide quali
+    // caselle grigie attivano quali numeri.
+    mon.greyAdj.forEach(gk=>{
+      const gc=CMAP[gk];
+      if(!gc||gc.t!=='G')return;    // solo caselle grigie
+      if(!marked[gk])return;         // deve essere barrata
+      const numIdx=mon.nums.indexOf(gc.n);
+      if(numIdx>=0&&!activeArr[numIdx]){
+        activeArr[numIdx]=true;
+      }
+    });
+    res[mk]=mon.nums.filter((_,i)=>activeArr[i]);
+  });
+  return res;
+}
+
+// ─── LIFE ───
+const LIFE_STEPS=[
+  {label:'0',pen:0,band:'safe'},{label:'0',pen:0,band:'safe'},{label:'0',pen:0,band:'safe'},
+  {label:'-1',pen:1,band:'warn'},{label:'-2',pen:2,band:'warn'},{label:'-4',pen:4,band:'warn'},
+  {label:'-6',pen:6,band:'danger'},{label:'-9',pen:9,band:'danger'},{label:'-12',pen:12,band:'danger'},
+  {label:'-16',pen:16,band:'dead'},{label:'-20',pen:20,band:'dead'},
+];
+const MAX_LIFE_IDX=LIFE_STEPS.length-1;
+
+const EPITAPHS=[
+  `Freddy lo trovò nei sogni prima ancora che chiudesse gli occhi. L'ultima cosa che vide fu quella mano di lame che scendeva lenta, quasi rassicurante. Il Realm aveva scelto il momento giusto.`,
+  `Jason non fa rumore quando cammina. Lo capì troppo tardi, quando sentì il respiro attraverso la maschera proprio dietro la sua nuca. Nel bosco non c'è nessuno da chiamare.`,
+  `Jigsaw non uccide. Fa scegliere. E lui scelse male, ogni volta, fino all'ultima. La trappola scattò con un clic gentile, quasi musicale.`,
+  `Michael Myers stava in piedi nell'ombra da ore. Immobile. Paziente. Quando finalmente si mosse, fu così veloce che l'esploratore non ebbe nemmeno il tempo di urlare.`,
+  `Leatherface non parla. Cammina e basta. Quando lo sentì arrivare tra le foglie secche, era già troppo tardi per correre. I dungeon non hanno uscite per i perdenti.`,
+  `Ghostface chiamò prima di attaccare. Sembrava quasi sportivo. "Qual è il tuo film horror preferito?" Era la domanda sbagliata nel momento sbagliato nel posto sbagliato.`,
+  `Pennywise rise quando lo vide arrivare. Aveva aspettato. Si era nutrito della paura per settimane. Quando finalmente aprì quella bocca enorme, il clown sembrava quasi contento.`,
+  `La nebbia arrivò all'improvviso e si fermò, disorientato. Quando si diradò, c'era soltanto una sagoma davanti a lui. Alta. Silenziosa. Con una maschera bianca e una lama lunga così.`,
+  `Trovarono il suo zaino sul bordo del dungeon. Dentro: una torcia spenta, un dado ancora caldo, e qualcosa che nessuno volle toccare. Nessuno si chiese mai cosa fosse successo davvero.`,
+  `Il dado uscì male tre volte di fila. Sapeva cosa significava. Guardò la barra della vita scendere e pensò: "Ancora un turno". Non ci fu nessun altro turno.`,
+  `Le gemme luccicavano ancora nella sua borsa quando il Realm lo reclamò. Ricchezze inutili. L'oro non compra un'uscita da questi corridoi. Non per lui. Non quella notte.`,
+  `Aveva quasi ucciso il boss. Quasi. Pennywise era a un colpo dalla morte quando rise di nuovo, più forte. "Quasi non conta, qui sotto," disse il clown, e spense la luce.`,
+  `Sentì i passi nell'oscurità e credette fosse il secondo giocatore. Si girò con un sorriso. Non era il secondo giocatore. Non indossava neanche un volto umano.`,
+  `La torcia si spense nel momento sbagliato. Nel buio totale del dungeon, senti qualcosa di bagnato sul pavimento. Poi niente. Poi buio per sempre.`,
+  `Jason Voorhees non dimentica. Non perdona. E soprattutto, non si stanca mai. L'esploratore si fermò per riprendere fiato. Fu il suo ultimo errore in questo realm.`,
+  `Il Realm non ha pietà per chi sbaglia i conti. Due caselle da barrare, un dado che tradisce, una vita che scivola. La matematica del dungeon è sempre implacabile.`,
+  `Credeva di aver trovato un pattern sicuro. Credeva di poter calcolare ogni mossa. Freddy Krueger sorrise, perché sa benissimo che i sogni non obbediscono alla logica.`,
+  `L'ultima casella era quella giusta. Il numero era perfetto. Ma la creatura era già lì, ad aspettare nell'ombra. Il Realm aveva previsto la sua mossa prima ancora che la facesse.`,
+  `Rimase paralizzato dalla paura quando vide la sagoma emergere dal buio. Leatherface è lento ma non si ferma mai. E il dungeon è piccolo quando non puoi correre.`,
+  `Dissero che aveva lottato bene. Dissero che era arrivato lontano. Ma alla fine il Realm tende sempre le sue trappole, e quella notte erano state tese proprio per lui.`,
+];
+
+// ─── STORIE VITTORIA PER FASCIA PUNTEGGIO ───
+// 8 fasce: 0-9, 10-24, 25-39, 40-54, 55-69, 70-84, 85-94, 95+
+// 20 storie per fascia
+const VICTORY_STORIES={
+  r0:[
+    `Il dungeon è stato ripulito, ma a quale costo. Ogni passo è stato una lotta, ogni respiro un miracolo. Le creature sono morte, ma il Realm vi ha quasi inghiottiti con loro. Siete vivi — per poco.`,
+    `Pennywise è caduto per ultimo, con un sorriso. Come se sapesse qualcosa che voi non sapete ancora. Siete usciti con le ossa rotte e le tasche vuote, ma almeno siete usciti.`,
+    `Avete vinto. Tecnicamente. Ma il Realm ha preso quasi tutto quello che avevate da dare. Le piaghe del dungeon vi seguiranno nei sogni per molto, molto tempo.`,
+    `La vittoria sa di sangue stantio e torce bruciate. Avete abbattuto ogni creatura, ma il prezzo pagato in carne e vita è stato altissimo. Il Realm vi ha segnati per sempre.`,
+    `Freddy Krueger è caduto per primo, sorridendo. Sapeva che anche nella vittoria sareste stati perdenti. Aveva ragione — siete vivi, ma il dungeon ha vinto lo stesso.`,
+    `L'ultimo mostro si è dissolto nell'oscurità. Avete guardato le vostre mani tremanti. Gemme? Poche. Vita? Quasi nulla. Ma siete in piedi. In questo realm, basta quello.`,
+    `La porta del dungeon si è aperta lentamente. Fuori c'era solo nebbia. Vi siete trascinati fuori, a malapena, portando con voi le cicatrici di ogni battaglia persa di poco.`,
+    `Michael Myers è caduto, ma non senza lasciarvi il segno. La barra della vita era quasi vuota quando avete inferto l'ultimo colpo. Una vittoria che sembra una sconfitta.`,
+    `Avete completato il dungeon come due fantasmi esausti. Nessuna gemma abbastanza per dimenticare le ferite, nessun tesoro abbastanza per pagare il debito con il Realm.`,
+    `Leatherface era l'ultimo. È caduto in silenzio, come sempre. E voi siete rimasti in silenzio anche dopo, troppo stanchi persino per esultare. Questo è il dungeon. Questo è tutto.`,
+    `Siete sopravvissuti. Appena. Le pareti del dungeon sembravano stringersi ad ogni turno. Avete infilato l'uscita per un pelo, con le mani vuote e le ginocchia a pezzi.`,
+    `La vittoria è arrivata, grigia e pesante come la pietra del dungeon. Nessun trionfo, solo sollievo. E la certezza che non tornerete mai più in questi corridoi maledetti.`,
+    `Avete vinto barrando l'ultima casella con le ultime forze rimaste. Ghostface si è dissolto ridendo. "Tornerete," ha detto. Sperate di no. Ma nel profondo, sapete che forse sì.`,
+    `Il Realm vi ha restituiti al mondo, malconci e vuoti. Ogni creatura è morta, ma le loro urla riecheggiano ancora nelle orecchie. Una vittoria pagata a carissimo prezzo.`,
+    `Jigsaw aveva detto che avreste imparato qualcosa. Aveva ragione. Avete imparato che vincere in questo dungeon fa quasi più male che perdere.`,
+    `L'ultimo colpo è stato tremante, disperato. Il boss è caduto. Voi siete crollati un secondo dopo. Qualcuno ha dovuto portarvi fuori di peso. Vittoria. Di misura.`,
+    `Pennywise ha riso fino all'ultimo respiro. Un riso che conosceva il vostro punteggio ancor prima di voi. Avete vinto, ma il clown sembrava comunque soddisfatto.`,
+    `Siete usciti dal dungeon trascinando le gambe. Le gemme raccolte erano poche, i danni ricevuti tanti. Una vittoria di pura resistenza, senza grazia né gloria.`,
+    `La fine del dungeon vi ha accolti con silenzio. Non c'era nessuno ad aspettarvi. Avete vinto, ma il Realm vi ha consumati quasi completamente. Forse era questo il piano.`,
+    `Ogni creatura è morta per mano vostra, ma il dungeon ha tenuto il conto. Le ferite sono reali. Il punteggio lo conferma. Avete vinto il minimo indispensabile.`,
+  ],
+  r10:[
+    `Il dungeon è stato un calvario, ma avete tenuto. Le creature giacciono sparse per le sale oscure e voi siete ancora in piedi, doloranti ma integri. Un'impresa da raccontare — con qualche omissione.`,
+    `Freddy Krueger ha puntato sui vostri sogni spezzati. Ha sbagliato calcolo. Avete resistito abbastanza a lungo da abbatterlo, e siete usciti con qualcosa di più di niente.`,
+    `Jason vi ha inseguiti per metà dungeon. Alla fine siete stati voi a cacciare lui. Non è andata benissimo, ma non è andata male. Il Realm vi ha testati e avete retto.`,
+    `Leatherface è caduto per ultimo. Anche lui sembrava stanco. Forse il dungeon è stanco di voi. O forse no — ma il punteggio dice che vi siete difesi dignitosamente.`,
+    `Avete attraversato il dungeon come soldati in ritirata che improvvisamente capiscono di aver vinto. Non elegante, non glorioso, ma sufficiente. Il Realm vi rispetta — poco.`,
+    `Michael Myers è rimasto in piedi più a lungo del previsto. Ma alla fine ha ceduto. Voi no. Questo conta. Le gemme erano poche, i danni tanti, ma la vittoria è reale.`,
+    `Il boss si è preso i suoi colpi prima di cadere. E voi avete incassato i suoi. Pari. Anzi, leggermente a vostro vantaggio. Una partita giocata col cuore, non con la testa.`,
+    `Ghostface ha provato a distrarvi con le domande sbagliate. Avete risposto con i dadi. Non sempre bene, ma abbastanza. Uscite dal dungeon con qualche ammaccatura di troppo.`,
+    `Il dungeon vi ha messi alla prova e avete risposto presente — non brillantemente, ma con costanza. Le creatura sono tutte morte. Voi no. È già una notizia.`,
+    `Jigsaw aveva costruito le sue trappole con cura. Ne avete evitate abbastanza. La partita è stata combattuta, il punteggio è onesto. Non un trionfo, ma neanche una disfatta.`,
+    `Avete gestito il dungeon come si gestisce una tempesta: abbassando la testa e andando avanti. Qualche danno, qualche perdita, ma siete arrivati dall'altra parte.`,
+    `Le creature del Realm hanno lottato bene. Voi avete lottato meglio. Di poco, ma meglio. Il punteggio lo dice chiaro: vittoria sudata, meritata, e non dimenticabile.`,
+    `Pennywise ha tentato ogni trucco del suo repertorio. Alcuni hanno funzionato — abbastanza da lasciare il segno. Ma non abbastanza da fermarvi. Siete ancora vivi.`,
+    `La torcia ha illuminato i corridoi giusti. I dadi sono usciti abbastanza bene. Il dungeon è pulito. Non siete eroi, ma non siete nemmeno vittime. Qualcosa nel mezzo.`,
+    `Ogni mostro è caduto dopo la resistenza che si meritava. Voi avete resistito di più. Non di molto, ma di più. Questo è il dungeon: un millimetro alla volta.`,
+    `Il Realm vi ha testati senza pietà. Avete risposto senza troppa grazia ma con sufficiente determinazione. La vittoria è vostra. Il dungeon ne prende atto, cupo.`,
+    `Siete usciti vivi e con qualche gemma in tasca. Non il bottino con cui si torna da eroi, ma abbastanza per sapere che valete più di quanto il dungeon pensasse.`,
+    `Jason è caduto con un tonfo sordo. Come sempre. Avete tirato un sospiro di sollievo e guardato il vostro punteggio. Modesto, ma onesto. Un dungeon che vi ha formato.`,
+    `Le sale del dungeon sono silenziose ora. Le creature sono morte, i tesori raccolti — qualcuno. Uscite a testa alta, con qualche cicatrice in più e un rispetto nuovo per il Realm.`,
+    `Non avete vinto con stile, ma avete vinto con sostanza. Il dungeon ha fatto di tutto per fermarvi. Non ci è riuscito. Un risultato che vale più di quanto il punteggio mostri.`,
+  ],
+  r25:[
+    `Il dungeon è stato duro, ma voi siete stati più duri. Le creature sono cadute una dopo l'altra, e voi siete usciti con gemme sufficienti per dire che ne valeva la pena.`,
+    `Freddy Krueger ha trovato i suoi sogni trasformati in incubi — per lui. Avete navigato il dungeon con competenza crescente e un punteggio che riflette un'impresa solida.`,
+    `Michael Myers non aveva fatto i conti con la vostra coordinazione. Le coppie di dadi erano precise, le caselle scelte bene. Un dungeon completato con metodo e soddisfazione.`,
+    `Avete costruito il vostro percorso sul dungeon come architetti del caos. Non tutto è andato secondo i piani, ma abbastanza. Il punteggio lo dice: bravi, ma potevate fare meglio.`,
+    `Jigsaw ha apprezzato la vostra logica. Non abbastanza da lasciarvi passare senza graffi, ma abbastanza da morire con un certo rispetto. Il dungeon era difficile — voi di più.`,
+    `Il boss è caduto dopo una lunga battaglia. Ogni colpo era calcolato, ogni turno sfruttato al meglio. Non perfetti, ma decisamente competenti. Il Realm vi riconosce.`,
+    `Leatherface era l'ultimo ostacolo. Non il più difficile, alla fine. Avete trovato il ritmo giusto a metà partita e non l'avete più perso. Un bel risultato in un dungeon cattivo.`,
+    `Le gemme brillano nella vostra borsa. I mostri giacciono nelle loro sale. Siete usciti con un punteggio che racconta di scelte intelligenti e dadi non troppo avari.`,
+    `Ghostface ha chiamato una volta sola. Avete riagganciato. Poi lo avete cercato voi, con i dadi, e lui non ha risposto più. Bel dungeon. Belle decisioni. Bella vittoria.`,
+    `Il Realm vi ha sfidati con sette creature e voi avete risposto con strategia. Non impeccabile, ma solida. Un punteggio da esploratori esperti che iniziano a capire il dungeon.`,
+    `Avete attraversato il dungeon senza risparmiarvi. Ogni turno usato bene, ogni coppia di dadi sfruttata. Il risultato è un punteggio dignitoso che racconta un'avventura vera.`,
+    `Jason è caduto silenzioso come era arrivato. A differenza di lui, voi avete lasciato tracce: gemme raccolte, mostri abbattuti, vita conservata abbastanza. Ben fatto.`,
+    `Il dungeon vi ha insegnato qualcosa. Lo si vede nel punteggio: non eccezionale, ma costruito con cura. Avete imparato a leggere la mappa e a rispettare le creature.`,
+    `Pennywise è stato l'ultimo a ridere — e anche il primo a smettere. Il boss è caduto sotto colpi precisi. Uscite dal dungeon con la soddisfazione di chi sa di aver fatto bene.`,
+    `Le sale del dungeon vi hanno riservato sorprese. Le avete gestite tutte. Non sempre elegantemente, ma efficacemente. Un punteggio che racconta di adattamento e coraggio.`,
+    `Il Realm non vi ha regalato nulla. Ogni punto è stato guadagnato sul campo, ogni gemma conquistata con i dadi. Un risultato onesto di una partita giocata con testa.`,
+    `Avete lavorato bene insieme. Le caselle barrate al momento giusto, i mostri colpiti quando possibile. Il dungeon era vostro già da metà partita. Il punteggio lo conferma.`,
+    `Michael Myers è stato il più ostinato. Ma anche lui ha ceduto. Voi avete tenuto il passo per tutta la partita e siete usciti con un punteggio che racconta un buon lavoro.`,
+    `Non avete lasciato gemme per terra se potevate raccoglierle. Non avete sprecato turni se potevate usarli. Il risultato è un punteggio solido da esploratori che sanno il fatto loro.`,
+    `Il dungeon è finito. Le creature sono morte. Il punteggio è buono. Siete stanchi, qualche cicatrice di troppo, ma soprattutto — siete soddisfatti. Meritatamente.`,
+  ],
+  r40:[
+    `Il dungeon vi ha visti arrivare e ha fatto del suo meglio per fermarvi. Non ci è riuscito. Le gemme riempiono la borsa, i mostri tacciono, e il punteggio racconta di una bella impresa.`,
+    `Freddy Krueger è caduto presto. Jason dopo. Uno alla volta, con metodo. Avete letto il dungeon come una mappa familiare e lo avete percorso con sicurezza crescente.`,
+    `Il boss non si è aspettato tanta determinazione. Ha dato tutto quello che aveva — voi avete dato di più. Un punteggio che riflette una vittoria costruita con intelligenza e coraggio.`,
+    `Avete giocato il dungeon come se lo conosceste da sempre. Le coppie di dadi erano quasi sempre quelle giuste, le caselle scelte con criterio. Un'esplorazione da manuale.`,
+    `Michael Myers non ha trovato crepe nelle vostre difese. Avete chiuso ogni corridoio con le caselle giuste e lo avete abbattuto quando era il momento. Bello. Molto bello.`,
+    `Il Realm vi ha testati con tutte e sette le creature. Voi avete risposto con tattiche diverse per ognuna. Il punteggio è la prova che ogni scelta ha avuto senso.`,
+    `Leatherface era il più imprevedibile. Lo avete preso comunque. Come tutti gli altri. Uscite dal dungeon con la certezza di aver dominato la situazione per quasi tutta la partita.`,
+    `Le gemme sono molte. I danni sono stati contenuti. I mostri sono tutti morti. Siete stanchi ma soddisfatti — ed è una soddisfazione che si vede nel punteggio finale.`,
+    `Jigsaw aveva preparato le sue trappole meglio del solito. Le avete smontate meglio del solito. Una partita di livello superiore, con un punteggio che lo riflette chiaramente.`,
+    `Ghostface non ha mai avuto il controllo della situazione. Voi sì — per quasi tutta la partita. La vittoria è stata costruita mattone su mattone, turno su turno.`,
+    `Il dungeon ha capitolato davanti alla vostra coordinazione. Avete bilanciato attacco e difesa, gemme e vita, rischio e prudenza. Un equilibrio difficile da raggiungere — e voi ci siete riusciti.`,
+    `Pennywise ha capito di aver perso molto prima dell'ultimo colpo. Lo si vedeva nei suoi occhi gialli. Voi avete chiuso la partita con stile e con un punteggio da ricordare.`,
+    `Le sale del dungeon raccontano la vostra storia: caselle barrate con precisione, mostri abbattuti al momento giusto, vita conservata con cura. Un'avventura di alto livello.`,
+    `Il Realm vi guarderà tornare con rispetto. Non timore — rispetto. Il punteggio che portate fuori da questi corridoi dice che siete esploratori veri, non turisti del terrore.`,
+    `Ogni turno è stato una scelta consapevole. Ogni dado una opportunità colta. Il risultato è un punteggio forte che riflette una partita giocata con maturità e competenza.`,
+    `Jason è caduto con quella maschera ancora sul viso. Avete continuato senza guardare. C'erano altri mostri da abbattere e voi sapevate esattamente come farlo. E l'avete fatto.`,
+    `Non avete perso tempo né energie. Ogni mossa aveva uno scopo. Il dungeon vi ha messo alla prova e voi avete superato l'esame con un voto decisamente alto.`,
+    `Il boss è caduto dopo una sequenza di colpi precisi e ben calcolati. Un finale degno di una partita costruita con testa. Siete esploratori esperti — e il punteggio lo sa.`,
+    `Avete lasciato il dungeon in silenzio assoluto. Nessuna creatura viva, nessuna opportunità sprecata. Un punteggio che racconta di una vittoria pulita, netta, meritata.`,
+    `Il Realm non vi ha regalato nulla — e voi non avete chiesto niente. Avete preso tutto con i dadi e la strategia. Un risultato eccellente per esploratori di questo calibro.`,
+  ],
+  r55:[
+    `Il dungeon è caduto ai vostri piedi come se fosse stato costruito apposta per voi. Gemme abbondanti, vita conservata, mostri abbattuti con eleganza. Una partita da ricordare.`,
+    `Freddy non ha mai trovato i vostri punti deboli. Li avevate coperti tutti. Una difesa solida e un attacco preciso hanno trasformato il dungeon in un campo di vittoria personale.`,
+    `Avete dominato il Realm con un'efficienza che ha lasciato le creature senza parole — o quasi. Il punteggio che portate fuori è il racconto di una partita giocata alla grande.`,
+    `Michael Myers non aveva mai incontrato giocatori così precisi. Ogni coppia di dadi al punto giusto, ogni casella barrata con intenzione. Un dungeon risolto con maestria.`,
+    `Il boss è caduto come doveva: sotto una pioggia di colpi precisi, dopo un'attivazione perfetta. Avete letto il dungeon come un testo familiare e lo avete chiuso alla grande.`,
+    `Leatherface, Ghostface, Pennywise — tutti abbattuti con metodo e decisione. Le gemme sono tante. La vita è alta. Il punteggio è alto. Benvenuti nel tier degli esploratori veri.`,
+    `Jigsaw ha provato ogni variazione dei suoi giochi. Voi avete giocato il vostro: caselle precise, dadi sfruttati, mostri eliminati. Una vittoria netta in un dungeon cattivissimo.`,
+    `Il Realm vi ha rispettati dopo il primo turno e non ha smesso. Ogni scelta era quella giusta, ogni turno ben usato. Un punteggio che parla da solo — forte e chiaro.`,
+    `Siete usciti dal dungeon con la sicurezza di chi sa di aver giocato una partita eccellente. I numeri lo confermano: gemme molte, danni pochi, mostri morti. Perfezione quasi totale.`,
+    `Il dungeon non aveva abbastanza ombre per nascondere le creature dal vostro radar. Avete illuminato ogni angolo e abbattuto ogni pericolo. Una vittoria luminosa.`,
+    `Jason è caduto prima che potesse costruire tensione. Come tutti gli altri. Avete giocato con una fluidità rara, trasformando ogni turno in un'opportunità sfruttata al massimo.`,
+    `Le gemme riempiono le tasche. Il corpo è quasi intatto. Il dungeon è silenzioso. Questo è ciò che si sente quando si gioca davvero bene in un posto davvero pericoloso.`,
+    `Pennywise ha perso il suo sorriso al secondo turno. Lo avevate già smontato mentalmente. La partita fisica è stata solo la conferma di quello che sapevate già: sareste vincitori.`,
+    `Il Realm vi ha messo ogni ostacolo possibile. Voi li avete superati tutti con un punteggio che racconta di talento, pratica e una lettura del dungeon quasi soprannaturale.`,
+    `Non avete sprecato un turno. Non avete perso una gemma evitabile. Non avete subito un danno non necessario. Un punteggio da giocatori esperti in forma perfetta.`,
+    `Le creature del dungeon hanno capito di essere in svantaggio molto presto. Voi lo avete capito ancora prima. La partita è stata dominata con stile e intelligenza.`,
+    `Il boss aveva 12 punti vita. Ne ha persi uno alla volta, con calma, con metodo. Come tutto il resto del dungeon. Siete stati impeccabili — e il punteggio lo certifica.`,
+    `Uscite dal dungeon come esploratori leggendari. Non lo siete ancora del tutto, ma ci siete vicini. Questo punteggio è la prova che siete sulla strada giusta. Molto sulla strada.`,
+    `Ogni gemma raccolta era programmata. Ogni mostro abbattuto era inevitabile. Avete trasformato il dungeon in uno spazio familiare e lo avete conquistato con serena determinazione.`,
+    `Il Realm non vi ha mai spaventati abbastanza. Avete risposto ad ogni paura con una scelta giusta. Un dungeon eccellente meritava esploratori eccellenti — e li ha trovati.`,
+  ],
+  r70:[
+    `Il dungeon non aveva segreti per voi. Avete letto ogni corridoio, anticipato ogni creatura, massimizzato ogni turno. Un punteggio straordinario per una partita straordinaria.`,
+    `Freddy Krueger è rimasto senza sogni con cui spaventarvi. Avevate già immaginato la vittoria dal primo turno — e l'avete realizzata quasi alla perfezione. Quasi.`,
+    `Le creature del Realm hanno combattuto bene. Ma voi avete combattuto meglio. Il punteggio riflette una padronanza del dungeon che pochi esploratori raggiungono in tutta la loro carriera.`,
+    `Michael Myers non ha trovato nemmeno un'ombra abbastanza lunga per nascondersi. Avete illuminato ogni angolo del dungeon e conquistato ogni sala con precisione chirurgica.`,
+    `Il boss è caduto esattamente quando avevate pianificato. Le sue 12 vite si sono esaurite sistematicamente, colpo dopo colpo. Un'esecuzione quasi perfetta di una strategia quasi perfetta.`,
+    `Avete trasformato il dungeon in un esercizio di efficienza pura. Gemme massimizzate, danni minimizzati, mostri eliminati nell'ordine ottimale. Una partita da studio.`,
+    `Jigsaw avrebbe apprezzato la vostra logica — se non fosse stato troppo impegnato a morire. Le trappole non vi hanno mai sorpresi. Le avevate già risolte mentalmente.`,
+    `Il Realm vi guarderà andare via con qualcosa di simile all'invidia. Pochi esploratori portano fuori un punteggio così. Siete tra quei pochi. Godetevelo.`,
+    `Le gemme scintillano. La vita è alta. Il dungeon è silenzioso. Questo è come deve sembrare la vittoria quando la si gioca davvero bene. Avete alzato l'asticella del Realm.`,
+    `Ghostface non ha mai avuto la risposta giusta al modo in cui avete giocato. Ogni sua mossa era già stata prevista e contromossa. Una partita di livello superiore.`,
+    `Avete completato il dungeon con una pulizia che lascia stupefatti. Nessun turno sprecato, nessuna gemma lasciata, nessun danno inutile. Un'impresa quasi leggendaria.`,
+    `Jason è caduto per primo. O per ultimo. Non importa — è caduto come doveva. Come tutti. Voi avete scelto l'ordine e il momento. Il dungeon ha obbedito.`,
+    `Il Realm ha visto molti esploratori. Pochi hanno lasciato dietro di sé un dungeon così silenzioso e un punteggio così alto. Siete nella memoria del dungeon ora.`,
+    `Pennywise ha riso per la prima e ultima volta al vostro ingresso. Non ha più riso dopo. Avete spento il suo sorriso con la precisione di chi sa esattamente cosa sta facendo.`,
+    `Ogni scelta è stata quella ottimale. Non per caso — per capacità. Il punteggio che portate fuori dal dungeon non è fortuna: è la prova di una partita dominata con intelligenza.`,
+    `Le creature non hanno trovato una sola fessura nelle vostre difese. Non una gemma sprecata, non un danno evitabile subito. Un dungeon dominato ai massimi livelli.`,
+    `Il boss aveva 12 punti vita e voi ne avevate molti di più di determinazione. La battaglia è stata bellissima. La vittoria era scritta già prima che iniziasse. Lo sapevate.`,
+    `Siete usciti dal dungeon come vincitori totali. Non in stile — in sostanza. Ogni numero del punteggio finale racconta una scelta precisa, un turno ben giocato, una gemma guadagnata.`,
+    `Il Realm non dimentica i grandi esploratori. Il vostro nome è inciso nei corridoi di pietra. Un punteggio come questo non si ottiene per caso — si costruisce con dedizione.`,
+    `Avete giocato il dungeon come si suona uno strumento: con tecnica, con sensibilità, con ritmo. Il risultato è una partitura perfetta. Il Realm inchina la testa.`,
+  ],
+  r85:[
+    `Il dungeon non ha mai avuto una chance. Avete dominato ogni sala, massimizzato ogni risorsa, eliminato ogni creatura nell'ordine ideale. Un punteggio da leggenda del Realm.`,
+    `Freddy Krueger non ha trovato nemmeno un sogno con cui tormentarvi. Avevate già trasformato il dungeon in un sogno — il vostro. Un'impresa vicina alla perfezione.`,
+    `Le creature del Realm hanno combattuto con tutta la loro ferocia. Non è bastato. Avete risposto ad ogni minaccia con la mossa migliore possibile. Un'impresa rarissima.`,
+    `Michael Myers è caduto per primo o per ultimo, poco importa — nel vostro piano era già previsto tutto. Una partita di livello quasi irraggiungibile in questi corridoi maledetti.`,
+    `Il boss era il culmine. L'avete affrontato con le gemme già in tasca, la vita quasi intatta, e una sequenza di colpi che sembrava coreografata. Quasi perfetti.`,
+    `Avete portato il dungeon al limite di ciò che può essere dominato. Il punteggio che uscite con voi è nella fascia più alta mai registrata in questi corridoi. Benvenuti nell'olimpo.`,
+    `Jigsaw ha visto la sua sconfitta disegnata nelle vostre caselle barrate. Ogni mossa era quella giusta. Ogni turno era quello ideale. Un dungeon risolto ai massimi livelli assoluti.`,
+    `Il Realm vi guarda andare via con qualcosa che si avvicina alla paura. Pochi esploratori hanno mai estratto così tanto valore da questi corridoi. Voi ci siete riusciti.`,
+    `Le gemme scintillano. Il corpo è quasi intatto. Il punteggio supera le aspettative più alte. Avete scritto una delle pagine più brillanti nella storia del dungeon.`,
+    `Ghostface non ha mai avuto una domanda abbastanza difficile. Voi avevate già le risposte — e i dadi giusti, e le caselle giuste, e la strategia giusta. Quasi leggendari.`,
+    `Siete usciti dal dungeon con un punteggio che mette il silenzio. Chi lo vedrà capirà immediatamente: questi esploratori sapevano esattamente cosa stavano facendo.`,
+    `Il dungeon è stato vostro dalla prima casella barrata. Non avete mai perso il controllo, mai sprecato un'opportunità, mai subito un danno che non fosse inevitabile.`,
+    `Jason non ha mai visto avversari così determinati. Lo si è capito dalla velocità con cui è caduto. Come tutti gli altri. Sequenzialmente. Sistematicamente. Splendidamente.`,
+    `Pennywise ha perso il suo sorriso per la prima e unica volta. Davanti a voi. In questo dungeon. Con questo punteggio. È stata la più bella punizione che il Realm potesse vedere.`,
+    `Ogni risorsa ottimizzata. Ogni scelta azzeccata. Ogni mostro eliminato al momento giusto. Un dungeon affrontato con una competenza che rasenta il soprannaturale.`,
+    `Il Realm non ha più segreti per voi. Li avete scoperti tutti, usati tutti, sfruttati tutti. Un punteggio quasi perfetto per una partita quasi perfetta in un dungeon davvero difficile.`,
+    `Le creature non hanno trovato nemmeno un centimetro di spazio in cui infilarsi. Le vostre difese erano impenetrabili, i vostri attacchi devastanti. Un'impresa memorabile.`,
+    `Il boss è caduto con la dignità che meritava — lentamente, sotto colpi precisi, in un momento scelto da voi. Un finale magnifico per una partita magnificamente costruita.`,
+    `Siete nella storia del Realm. Non metaforicamente — letteralmente. Il vostro punteggio è inciso nelle pietre del dungeon per avvertire le creature di ciò che può arrivare.`,
+    `Avete giocato il dungeon come pochi sanno fare. Quasi alla perfezione assoluta. Un risultato che pochi raggiungono e che racconta di due esploratori ai vertici assoluti del gioco.`,
+  ],
+  r95:[
+    `La perfezione si avvicina e voi le siete andati incontro. Punteggio massimo. Gemme massime. Vita quasi intatta. Il Realm non ha mai visto nulla di simile. Siete la leggenda.`,
+    `Il dungeon è stato una passeggiata — una passeggiata pericolosissima che avete trasformato in un capolavoro. Ogni turno ideale, ogni scelta perfetta. Siete entrati nella storia.`,
+    `Freddy Krueger non ha trovato nemmeno un sogno. I vostri sogni erano tutti vincenti. Un punteggio che supera qualsiasi aspettativa e racconta di una partita perfetta.`,
+    `Le creature del Realm sono cadute come dominoes. L'ordine era il vostro, il tempo era il vostro, la vittoria era la vostra dall'inizio. Un'impresa assoluta. Storica.`,
+    `Michael Myers è caduto prima ancora di capire cosa stesse succedendo. Come tutti gli altri. Avete attraversato il dungeon come un vento impossibile. Punteggio leggendario.`,
+    `Il boss ha perso ogni colpo di vita senza poter fare nulla. Avete orchestrato la battaglia come compositori. Il finale era scritto. Il punteggio è la prova: perfetti.`,
+    `Jigsaw ha visto la sua sconfitta nell'ordine assoluto con cui avete barrato ogni casella. Non c'era niente da scegliere — avevate già scelto tutto, e tutto era giusto.`,
+    `Il Realm vi teme. Non vi rispetta — vi teme. Un punteggio come il vostro è al di là della comprensione delle creature che abitano questi corridoi. Siete qualcosa di diverso.`,
+    `Le gemme riempiono ogni tasca. Il corpo è intatto. Il dungeon è un ricordo. E il punteggio finale è il più alto che questi corridoi maledetti abbiano mai visto. Pura leggenda.`,
+    `Ghostface non ha fatto in tempo a fare una domanda. Era già caduto. Come tutti. Con una velocità e una precisione che il Realm ricorderà per sempre. Eravate inarrestabili.`,
+    `Avete giocato la partita perfetta. Non quasi perfetta — perfetta. Ogni dado sfruttato, ogni gemma raccolta, ogni mostro eliminato al momento esatto. Irripetibile.`,
+    `Il dungeon esiste da secoli. Nessuno l'aveva mai affrontato così. Avete riscritto la storia del Realm con un punteggio che non si dimentica. Siete entrati nella leggenda.`,
+    `Jason, Freddy, Jigsaw, Myers, Leatherface, Ghostface, Pennywise — nomi che fanno tremare. Tremano ancora, ma davanti a voi. Non è ironia: è il vostro punteggio che parla.`,
+    `Pennywise ha smesso di ridere prima ancora di morire. Vi aveva visti giocare. Sapeva. Un dungeon finito alla perfezione da esploratori che il Realm non meritava.`,
+    `Avete massimizzato ogni risorsa disponibile nel dungeon. Gemme, tesori, vita, dadi — tutto ottimizzato al massimo. Un'impresa che va oltre il gioco e diventa arte.`,
+    `Il Realm non ha barriere per voi. Le avete attraversate tutte, una per una, con un punteggio che dice: non c'era niente qui che potesse fermarci. E avete ragione.`,
+    `Le creature hanno lottato. Avete lottato meglio — molto meglio. Un punteggio di questo livello racconta di due esploratori che hanno raggiunto il limite assoluto del possibile.`,
+    `Il boss aveva 12 punti vita. Voi ne avete tolti uno alla volta, senza fretta, senza errori. Un'esecuzione perfetta di un piano perfetto in un dungeon perfettamente conquistato.`,
+    `Siete i più grandi esploratori che il Realm abbia mai visto. Il punteggio lo certifica. I mostri morti lo testimoniano. Il dungeon silenzioso lo conferma. Siete la leggenda.`,
+    `Nessuno aveva mai estratto così tanto valore da questo dungeon. Voi l'avete fatto. Con intelligenza, con precisione, con una coordinazione che rasenta il soprannaturale. Perfetti.`,
+  ],
+};
+
+function getVictoryStory(score){
+  let key;
+  if(score<=9)key='r0';
+  else if(score<=24)key='r10';
+  else if(score<=39)key='r25';
+  else if(score<=54)key='r40';
+  else if(score<=69)key='r55';
+  else if(score<=84)key='r70';
+  else if(score<=94)key='r85';
+  else key='r95';
+  const arr=VICTORY_STORIES[key];
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+// ─── STORAGE ───
+const PFX='hd6_';
+let P=1,turnCrossed=0;
+const MAX_CROSS=2;
+let dV=[0,0,0,0,0],dSel=[false,false,false,false,false],dUsed=[false,false,false,false,false];
+let pairs=[[],[]],pairsConsumed=[false,false],rolled=false,bUsedThisTurn=0;
+let fistDoneGlobal=false;
+let globalTurnNumber=0;
+let p1StartSide='left';
+
+// Torcia
+let torchMode=false,torchLeft=0,torchAvailable=false;
+// Indice del token torcia attualmente attivo (-1 = nessuno)
+let activeTorchSlot=-1;
+
+// Snapshot dello stato all'inizio del turno (per reset completo)
+let turnSnapshot=null;
+
+// turnMarked: set di chiavi barrate IN QUESTO TURNO (da qualsiasi coppia)
+let turnMarked=new Set();
+
+// pairActions[pi] = array di azioni prodotte dalla coppia pi, da annullare se si cancella la coppia
+// Ogni azione: { type: 'mark'|'gem'|'fist'|'mhp'|'shield'|'life'|'torch', ... }
+let pairActions=[[],[]];
+
+// Snapshot degli stati all'inizio del turno (per rollback)
+// Si aggiorna ogni volta che una coppia "consuma" un'azione
+function recordAction(pi, action){ pairActions[pi].push(action); }
+
+function sv(p,k,v){localStorage.setItem(PFX+'p'+p+'_'+k,JSON.stringify(v));}
+function ld(p,k,d){const v=localStorage.getItem(PFX+'p'+p+'_'+k);return v!==null?JSON.parse(v):d;}
+function isMerged(){return Object.keys(ld(1,'mk',{})).some(k=>ld(2,'mk',{})[k]);}
+function getMM(){return{...ld(1,'mk',{}),...ld(2,'mk',{})};}
+function getMLife(){return Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));}
+function getMGems(){return ld(1,'gems',0)+ld(2,'gems',0);}
+function effMk(){return(isMerged()||P==='M')?getMM():ld(P,'mk',{});}
+
+// ─── DADO NERO ───
+// Due giocatori separati: dado nero SEMPRE gratuito (illimitato, non pesa sugli slot)
+// Giocatore unificato: 3 slot totali, dado nero gratuito un turno sì e uno no
+function isBlackDieFreeThisTurn(){
+  if(isMerged()||P==='M'){
+    // Unificato: alterna ogni turno (globalTurnNumber pari = gratuito)
+    return globalTurnNumber%2===0;
+  }
+  // Giocatori separati: sempre gratuito
+  return true;
+}
+
+// Quando i giocatori sono separati, il dado nero è gratuito e ILLIMITATO
+// (non occupa slot bused_confirmed). Da unificato usa i 3 slot normali.
+function isBlackDieUnlimited(){
+  return !(isMerged()||P==='M');
+}
+function renderBlackDieStatus(){
+  const el=document.getElementById('black-die-status');
+  if(!el)return;
+  if(isBlackDieUnlimited()){
+    el.className='black-die-free yes';
+    el.textContent='⬛ Dado nero GRATUITO (illimitato)';
+  } else {
+    const free=isBlackDieFreeThisTurn();
+    el.className='black-die-free '+(free?'yes':'no');
+    el.textContent=free?'⬛ Dado nero GRATUITO questo turno':'⬛ Dado nero NON gratuito questo turno';
+  }
+}
+
+// ─── ZOOM + PINCH ───
+let zoomLevel=1.0;
+let zoomIdx=3;
+const ZOOM_STEPS=[0.45,0.6,0.75,1.0,1.3,1.7,2.2,2.8];
+
+function zm(dir){
+  if(dir===0)zoomIdx=3;
+  else if(dir>0)zoomIdx=Math.min(ZOOM_STEPS.length-1,zoomIdx+1);
+  else zoomIdx=Math.max(0,zoomIdx-1);
+  applyZoom(ZOOM_STEPS[zoomIdx]);
+}
+function applyZoom(z){
+  zoomLevel=z;
+  const ms=document.getElementById('mapscale');
+  ms.style.transform=`scale(${z})`;
+  const svg=document.getElementById('mapsvg');
+  ms.style.width=Math.round(+svg.getAttribute('width')*z)+'px';
+  ms.style.height=Math.round(+svg.getAttribute('height')*z)+'px';
+}
+
+// Pinch-to-zoom
+(function(){
+  let initialDist=0,initialZoom=1;
+  const wrap=document.getElementById('mapwrap');
+  function getDist(t){
+    const a=t[0],b=t[1];
+    return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+  }
+  wrap.addEventListener('touchstart',e=>{
+    if(e.touches.length===2){initialDist=getDist(e.touches);initialZoom=zoomLevel;e.preventDefault();}
+  },{passive:false});
+  wrap.addEventListener('touchmove',e=>{
+    if(e.touches.length===2){
+      e.preventDefault();
+      const d=getDist(e.touches);
+      let z=initialZoom*(d/initialDist);
+      z=Math.min(Math.max(z,ZOOM_STEPS[0]),ZOOM_STEPS[ZOOM_STEPS.length-1]);
+      applyZoom(z);
+    }
+  },{passive:false});
+})();
+
+// ─── MULTI-DEVICE SYNC (PeerJS WebRTC) ───
+// PeerJS usa il signaling server pubblico peerjs.com per connettere i peer.
+// Funziona da file://, da reti diverse, da mobile Chrome.
+let deviceRole='single';
+let syncRoomCode='';
+let syncInterval=null;
+let syncBinId='';
+
+let hostPeer=null;      // Peer dell'host
+let hostConn=null;      // Connessione host→join (lato host, dopo che join si connette)
+let joinConn=null;      // Connessione join→host (lato join)
+let lastSyncTs=0;
+
+// Il codice partita È l'ID del peer host (6 caratteri alfanumerici leggibili)
+function genPeerId(){
+  return 'hd6-'+Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+function copyHostCode(){
+  const code=document.getElementById('host-code').textContent.trim();
+  if(!code||code==='——')return;
+  navigator.clipboard.writeText(code).then(()=>showN('✓ Codice copiato!','Incollalo al Giocatore 2.')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showN('✓ Codice copiato!','Incollalo al Giocatore 2.');
+  });
+}
+function allScreensOff(){
+  ['sc-mode','sc-host','sc-join','sc-side','sc-pass','sc-game','sc-gameover','sc-victory'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.className='screen';
+  });
+}
+function showScreen(id){allScreensOff();const el=document.getElementById(id);if(el)el.className=(id==='sc-mode'||id==='sc-side')?'active':'screen active';}
+
+function clearGameData(){
+  [1,2,'M'].forEach(p=>['mk','mhp','def','lifeIdx','gems','bmax','bused_confirmed','tres','fists','shield'].forEach(k=>localStorage.removeItem(PFX+'p'+p+'_'+k)));
+  localStorage.removeItem(PFX+'fistDone');
+  localStorage.removeItem(PFX+'turnNum');
+  localStorage.removeItem(PFX+'p1side');
+  localStorage.removeItem(PFX+'savedMode');
+  fistDoneGlobal=false;globalTurnNumber=0;p1StartSide='';
+}
+
+function startSingleDevice(){
+  deviceRole='single';
+  clearGameData();
+  localStorage.setItem(PFX+'savedMode','single');
+  showScreen('sc-side');
+}
+
+function startMultiDevice(role){
+  deviceRole=role;
+  clearGameData();
+  if(role==='host'){
+    showScreen('sc-host');
+    document.getElementById('host-code').textContent='——';
+    document.getElementById('host-status').textContent='Connessione in corso…';
+    document.getElementById('host-status').className='sync-status wait';
+    initHostPeer();
+  } else {
+    showScreen('sc-join');
+  }
+}
+
+function initHostPeer(){
+  const peerId=genPeerId();
+  hostPeer=new Peer(peerId,{debug:0});
+  hostPeer.on('open', id=>{
+    // Mostra solo la parte leggibile (senza prefisso hd6-)
+    const shortCode=id.replace('hd6-','');
+    syncBinId=id; syncRoomCode=shortCode;
+    document.getElementById('host-code').textContent=shortCode;
+    document.getElementById('host-status').textContent='✓ Pronto — Giocatore 2, inserisci il codice qui sopra';
+    document.getElementById('host-status').className='sync-status ok';
+  });
+  hostPeer.on('connection', conn=>{
+    hostConn=conn;
+    conn.on('open',()=>{
+      document.getElementById('host-status').textContent='✓ Giocatore 2 connesso!';
+      // Invia stato attuale al join
+      conn.send({type:'state',state:exportState(),ts:Date.now()});
+      // Host: naviga alla schermata gioco (scelta lato o pass turno)
+      const side=localStorage.getItem(PFX+'p1side')||'';
+      if(!side){showScreen('sc-side');}else{P=1;showPass(1);}
+    });
+    conn.on('data', d=>handlePeerData(d,'host'));
+    conn.on('error', e=>console.warn('hostConn error',e));
+  });
+  hostPeer.on('error', e=>{
+    document.getElementById('host-status').textContent='⚠ Errore: '+e.type+'. Riprova.';
+    document.getElementById('host-status').className='sync-status err';
+  });
+}
+
+function createSyncBin(){} // stub — non usato con PeerJS
+
+function joinGame(){
+  const code=document.getElementById('join-code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(code.length<4){
+    document.getElementById('join-status').textContent='Inserisci il codice del Giocatore 1.';
+    document.getElementById('join-status').className='sync-status err';
+    return;
+  }
+  const peerId='hd6-'+code;
+  syncBinId=peerId; syncRoomCode=code;
+  document.getElementById('join-status').textContent='Connessione in corso…';
+  document.getElementById('join-status').className='sync-status wait';
+
+  const joinPeer=new Peer({debug:0});
+  joinPeer.on('open', myId=>{
+    joinConn=joinPeer.connect(peerId,{reliable:true});
+    const timeout=setTimeout(()=>{
+      document.getElementById('join-status').textContent='Timeout: codice non trovato o Giocatore 1 non in attesa.';
+      document.getElementById('join-status').className='sync-status err';
+    },12000);
+    joinConn.on('open',()=>{
+      clearTimeout(timeout);
+      document.getElementById('join-status').textContent='✓ Connesso!';
+      document.getElementById('join-status').className='sync-status ok';
+    });
+    joinConn.on('data', d=>{
+      if(!d)return;
+      if(d.type==='reset'){doReset();return;}
+      if(d.type==='gameover'){showGameOver(d.dp);return;}
+      if(d.type==='state'){
+        if(d.ts<=lastSyncTs)return;
+        lastSyncTs=d.ts;
+        importState(d.state);
+        fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
+        globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
+        p1StartSide=localStorage.getItem(PFX+'p1side')||'';
+        // Imposta deviceRole e P al primo aggiornamento
+        if(deviceRole!=='join'){P=2;deviceRole='join';}
+        const side=localStorage.getItem(PFX+'p1side')||'';
+        const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:2;
+        if(!side){
+          // L'host non ha ancora scelto il lato: rimani su sc-join in attesa
+          document.getElementById('join-status').textContent='✓ Connesso! In attesa che l\'host avvii la partita…';
+          document.getElementById('join-status').className='sync-status ok';
+        } else {
+          // Naviga sempre alla schermata corretta
+          showPass(nextP);
+        }
+      }
+    });
+    joinConn.on('error', e=>{
+      document.getElementById('join-status').textContent='Errore connessione: '+e.type;
+      document.getElementById('join-status').className='sync-status err';
+    });
+  });
+  joinPeer.on('error', e=>{
+    document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
+    document.getElementById('join-status').className='sync-status err';
+  });
+}
+
+function exportState(){
+  const state={};
+  [1,2,'M'].forEach(p=>{
+    ['mk','mhp','def','lifeIdx','gems','bmax','bused_confirmed','tres','fists','shield'].forEach(k=>{
+      const v=localStorage.getItem(PFX+'p'+p+'_'+k);
+      if(v!==null)state[PFX+'p'+p+'_'+k]=v;
+    });
+  });
+  ['fistDone','turnNum','p1side'].forEach(k=>{
+    const v=localStorage.getItem(PFX+k);
+    if(v!==null)state[PFX+k]=v;
+  });
+  return state;
+}
+
+function importState(state){
+  Object.entries(state).forEach(([k,v])=>localStorage.setItem(k,v));
+}
+
+function pushState(nextP){
+  if(deviceRole==='single')return;
+  const payload={type:'state',state:exportState(),ts:Date.now(),nextP:nextP!==undefined?nextP:null};
+  try{
+    if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
+    if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
+  }catch(e){}
+}
+
+function handlePeerData(d, myRole){
+  if(!d)return;
+  if(d.type==='reset'){doReset();return;}
+  if(d.type==='gameover'){showGameOver(d.dp);return;}
+  if(d.type!=='state')return;
+  if(d.ts<=lastSyncTs)return;
+  lastSyncTs=d.ts;
+  importState(d.state);
+  fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
+  globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
+  p1StartSide=localStorage.getItem(PFX+'p1side')||'';
+  const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:(globalTurnNumber%2===0?1:2);
+  // Se il gioco è in corso (sc-game attivo), aggiorna solo il render
+  if(document.getElementById('sc-game').className.includes('active')){renderAll();return;}
+  // Altrimenti naviga alla schermata pass corretta
+  showPass(nextP);
+}
+
+async function loadAndApplyState(){} // non usato con PeerJS
+
+function startSyncPolling(role){} // stub — PeerJS usa eventi diretti
+
+// Wrappa sv per pushare automaticamente quando in modalità multi
+// (chiamata esplicita in passTurn e commitTurn invece del wrapper ricorsivo)
+
+// ─── PWA INSTALL ───
+let _installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();_installPrompt=e;
+  const btn=document.getElementById('install-btn');
+  if(btn)btn.style.display='block';
+});
+window.addEventListener('appinstalled',()=>{
+  const btn=document.getElementById('install-btn');if(btn)btn.style.display='none';
+});
+function installApp(){
+  if(_installPrompt){_installPrompt.prompt();_installPrompt.userChoice.then(()=>{_installPrompt=null;document.getElementById('install-btn').style.display='none';});}
+}
+// iOS: mostra banner solo se non è già installata come PWA
+(function(){
+  const isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone=window.navigator.standalone===true;
+  if(isIos&&!isStandalone){
+    window.addEventListener('DOMContentLoaded',()=>{
+      const b=document.getElementById('ios-banner');if(b)b.style.display='block';
+    });
+  }
+})();
+
+// ─── INIT ───
+window.onload=()=>{
+  if(!localStorage.getItem(PFX+'p1_lifeIdx'))sv(1,'lifeIdx',0);
+  if(!localStorage.getItem(PFX+'p2_lifeIdx'))sv(2,'lifeIdx',0);
+  fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
+  globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
+  p1StartSide=localStorage.getItem(PFX+'p1side')||'';
+  // Mostra "Continua partita" se esiste una partita singolo salvata
+  const hasSaved=localStorage.getItem(PFX+'savedMode')==='single'&&!!localStorage.getItem(PFX+'p1side');
+  if(hasSaved){document.getElementById('continue-btn-wrap').style.display='flex';document.getElementById('continue-btn-wrap').style.flexDirection='column';document.getElementById('continue-btn-wrap').style.alignItems='center';}
+  // Mostra sempre la schermata modalità all'avvio
+  showScreen('sc-mode');
+};
+
+function continueSavedGame(){
+  deviceRole='single';
+  fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
+  globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
+  p1StartSide=localStorage.getItem(PFX+'p1side')||'left';
+  // Riprendi dal turno corretto: turni pari=P1, dispari=P2
+  const nextP=(globalTurnNumber%2===0)?1:2;
+  P=nextP;
+  showPass(nextP);
+}
+
+function showSideSelection(){showScreen('sc-side');}
+
+function chooseStartSide(side){
+  p1StartSide=side;
+  localStorage.setItem(PFX+'p1side',side);
+  if(deviceRole==='single')showPass(1);
+  else if(deviceRole==='host'){P=1;showPass(1);pushState(1);}
+  else showPass(2);
+}
+
+function showPass(nextP){
+  allScreensOff();
+  const el=document.getElementById('sc-pass');if(el)el.className='screen active';
+
+  const merged=isMerged();
+
+  if(deviceRole==='single'){
+    // Modalità singolo: alterna P1/P2, o M se unificati
+    P=merged?'M':nextP;
+  } else if(deviceRole==='host'){
+    if(merged){
+      // Unificato su due dispositivi: alternano ogni turno (turno pari=host, dispari=join)
+      P='M';
+      // Host gioca i turni pari (globalTurnNumber pari)
+      const isMyTurn=(globalTurnNumber%2===0);
+      const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+      pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+      const free=isBlackDieFreeThisTurn();
+      if(isMyTurn){
+        pm.innerHTML=`È il tuo turno (Host).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
+      } else {
+        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 2 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
+      }
+      return;
+    } else {
+      // Non-merged: l'host è sempre Giocatore 1
+      P=1;
+      const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+      if(nextP===1){
+        // È il turno dell'host
+        const side=p1StartSide||'left';
+        const sideIt=side==='left'?'SINISTRA':'DESTRA';
+        pw.textContent='Turno di: Giocatore 1';pw.className='pass-player p1';
+        pm.innerHTML=`È il tuo turno, Giocatore 1.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+      } else {
+        // È il turno del join — host attende
+        pw.textContent='Turno di: Giocatore 2';pw.className='pass-player p2';
+        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 2 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
+        // Disabilita il pulsante startTurn
+        const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=true;
+      }
+      // Ri-abilita il pulsante se è il turno host
+      const btn=document.getElementById('pass-btn-start');
+      if(btn)btn.disabled=(nextP!==1);
+      return;
+    }
+  } else { // join
+    if(merged){
+      P='M';
+      // Join gioca i turni dispari (globalTurnNumber dispari)
+      const isMyTurn=(globalTurnNumber%2===1);
+      const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+      pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+      const free=isBlackDieFreeThisTurn();
+      if(isMyTurn){
+        pm.innerHTML=`È il tuo turno (Giocatore 2).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
+      } else {
+        pm.innerHTML=`<span style="color:#8a7060;">Turno dell'Host — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
+      }
+      return;
+    } else {
+      // Non-merged: il join è sempre Giocatore 2
+      P=2;
+      const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+      if(nextP===2){
+        // È il turno del join
+        const side=p1StartSide==='left'?'right':'left';
+        const sideIt=side==='left'?'SINISTRA':'DESTRA';
+        pw.textContent='Turno di: Giocatore 2';pw.className='pass-player p2';
+        pm.innerHTML=`È il tuo turno, Giocatore 2.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+      } else {
+        // È il turno dell'host — join attende
+        pw.textContent='Turno di: Giocatore 1';pw.className='pass-player p1';
+        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 1 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
+      }
+      const btn=document.getElementById('pass-btn-start');
+      if(btn)btn.disabled=(nextP!==2);
+      return;
+    }
+  }
+
+  // Rendering standard (single device o multi non-unificato)
+  const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+  if(P==='M'){
+    pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+    const free=isBlackDieFreeThisTurn();
+    pm.innerHTML=`Ora siete un unico esploratore. Potete usare tutte le caselle Start.<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO questo turno (3 slot)':'non gratuito questo turno'}</span>`;
+  } else {
+    pw.textContent=`Turno di: Giocatore ${P}`;pw.className='pass-player p'+P;
+    const side=P===1?(p1StartSide||'left'):(p1StartSide==='left'?'right':'left');
+    const sideIt=side==='left'?'SINISTRA':'DESTRA';
+    if(deviceRole==='single'){
+      pm.innerHTML=`Passa il dispositivo al Giocatore ${P} e premi Inizia Turno.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+    } else {
+      pm.innerHTML=`È il tuo turno, Giocatore ${P}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+    }
+  }
+}
+
+function startTurn(){
+  // In modalità multi-device: verifica che sia il proprio turno
+  if(deviceRole==='host'&&!isMerged()){
+    if(P!==1){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 2 finisca il suo turno.');return;}
+  }
+  if(deviceRole==='join'&&!isMerged()){
+    if(P!==2){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 1 finisca il suo turno.');return;}
+  }
+  // In modalità unificata multi-device: verifica che sia il proprio turno
+  if(deviceRole!=='single'&&isMerged()){
+    const isHostTurn=(globalTurnNumber%2===0);
+    if(deviceRole==='host'&&!isHostTurn){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 2 finisca il suo turno.');return;}
+    if(deviceRole==='join'&&isHostTurn){showN('⏳ Non è il tuo turno','Attendi che l\'Host finisca il suo turno.');return;}
+  }
+  document.getElementById('sc-pass').className='screen';
+  document.getElementById('sc-game').className='screen active';
+  dV.fill(0);dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
+  rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;
+  turnCrossed=0;bUsedThisTurn=0;bFreeUsedThisTurn=0;turnMarked=new Set();pairActions=[[],[]];
+  // Snapshot stato inizio turno
+  const cp=isMerged()?'M':P;
+  turnSnapshot={
+    gems1:ld(1,'gems',0), gems2:ld(2,'gems',0),
+    shield1:ld(1,'shield',0), shield2:ld(2,'shield',0),
+    tres1:JSON.stringify(ld(1,'tres',{life:0,torch:0,dice:0})),
+    tres2:JSON.stringify(ld(2,'tres',{life:0,torch:0,dice:0})),
+    bmax1:ld(1,'bmax',3), bmax2:ld(2,'bmax',3),
+    mhp:JSON.stringify(ld(P,'mhp',{})),
+    def:JSON.stringify(ld(P,'def',{})),
+    mk1:JSON.stringify(ld(1,'mk',{})), mk2:JSON.stringify(ld(2,'mk',{})),
+    fists:ld(P,'fists',0), fistDone:fistDoneGlobal,
+    lifeIdx1:ld(1,'lifeIdx',0), lifeIdx2:ld(2,'lifeIdx',0),
+    torchAvailable:false, torchLeft:0,
+  };
+  renderAll();renderBlackDieStatus();setTimeout(()=>zm(0),80);
+  // Notifica l'altro dispositivo che il turno è iniziato (così aggiorna la sua schermata di attesa)
+  if(deviceRole!=='single')pushState(P===1?1:2);
+}
+
+function passTurn(){
+  const prevP=P;
+  // Nuova regola: penalità solo se non si è barrata NESSUNA casella nel turno
+  if(turnCrossed===0){
+    let dmg=2;
+    const shield=ld(prevP,'shield',0);
+    if(shield>0){
+      const absorbed=Math.min(shield,dmg);
+      sv(prevP,'shield',shield-absorbed);
+      dmg-=absorbed;
+      if(absorbed>0)showN(`🛡 Scudo! Assorbiti ${absorbed} danni`,'');
+    }
+    if(dmg>0){
+      const ci=ld(prevP,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);
+      sv(prevP,'lifeIdx',ni);
+      if(ni>=MAX_LIFE_IDX){commitTurn(prevP);globalTurnNumber++;localStorage.setItem(PFX+'turnNum',globalTurnNumber);if(deviceRole!=='single')pushState(null);triggerGO(prevP);return;}
+    }
+  }
+  commitTurn(prevP);
+  globalTurnNumber++;
+  localStorage.setItem(PFX+'turnNum',globalTurnNumber);
+  // Calcola il prossimo giocatore/dispositivo
+  const nextP=P==='M'?'M':(P===1?2:1);
+  if(deviceRole!=='single')pushState(nextP);
+  showPass(nextP);
+}
+
+// bFreeUsedThisTurn: 1 se il dado nero gratuito è stato usato questo turno
+let bFreeUsedThisTurn=0;
+function commitTurn(prevP){
+  if(isBlackDieUnlimited()){
+    // Giocatori separati: dado nero illimitato, non aggiornare slot
+    return;
+  }
+  // Unificato: salva solo gli usi NON gratuiti
+  const paidUses=Math.max(0,bUsedThisTurn-bFreeUsedThisTurn);
+  sv(prevP,'bused_confirmed',ld(prevP,'bused_confirmed',0)+paidUses);
+}
+
+function triggerGO(dp){
+  // In modalità multi-device: notifica l'altro dispositivo
+  if(deviceRole!=='single'){
+    const payload={type:'gameover',dp:dp,ts:Date.now()};
+    try{
+      if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
+      if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
+    }catch(e){}
+  }
+  showGameOver(dp);
+}
+
+function showGameOver(dp){
+  allScreensOff();
+  document.getElementById('sc-gameover').className='screen active';
+  document.getElementById('go-player').textContent=`— ${dp==='M'?'Giocatore Unificato':'Giocatore '+dp} —`;
+  document.getElementById('go-epitaph').textContent=EPITAPHS[Math.floor(Math.random()*EPITAPHS.length)];
+  const vp=calcVP(dp==='M'?1:dp);
+  document.getElementById('go-score').textContent=`Punteggio finale: ${vp} PV`;
+}
+
+function checkVictory(){
+  const def=ld(P,'def',{});
+  const allDead=MK.every(mk=>!!def[mk]);
+  if(!allDead)return false;
+  showVictory();
+  return true;
+}
+
+function calcVP(p){
+  // Formula: gemme × 3 + tesori × 2 - penalità vita
+  // Penalità = valore della prima cella senza X (indice ci+1, o ultima se a fine barra)
+  const gems=p==='M'?getMGems():ld(p,'gems',0);
+  const li=p==='M'?getMLife():ld(p,'lifeIdx',0);
+  // Tesori: contare le tre tipologie (life, torch, dice) raccolte
+  const tres=p==='M'?
+    {life:ld(1,'tres',{}).life||0,torch:ld(1,'tres',{}).torch||0,dice:ld(1,'tres',{}).dice||0}:
+    ld(p,'tres',{life:0,torch:0,dice:0});
+  const tresCount=(tres.life||0)+(tres.torch||0)+(tres.dice||0);
+  const penIdx=Math.min(li+1, MAX_LIFE_IDX);
+  const pen=LIFE_STEPS[penIdx].pen;
+  return Math.max(0, gems*3 + tresCount*2 - pen);
+}
+
+function showVictory(){
+  allScreensOff();
+  document.getElementById('sc-victory').className='screen active';
+  const vp1=calcVP(1),vp2=calcVP(2);
+  const rows=document.getElementById('vic-scores');
+  const winner=vp1>=vp2?1:2;
+  const topScore=Math.max(vp1,vp2);
+
+  // Dettaglio punteggio
+  function scoreDetail(p){
+    const gems=ld(p,'gems',0);
+    const li=ld(p,'lifeIdx',0);
+    const tres=ld(p,'tres',{life:0,torch:0,dice:0});
+    const tresCount=(tres.life||0)+(tres.torch||0)+(tres.dice||0);
+    const pen=LIFE_STEPS[li].pen;
+    return `💎${gems}×3=${gems*3} + 💰${tresCount}×2=${tresCount*2} − ❤${pen}`;
+  }
+
+  rows.innerHTML=`
+    <div class="vic-score-row ${winner===1?'vic-winner':''}">
+      <div>
+        <span class="vic-player" style="color:#4a9eff">Giocatore 1</span>
+        <div class="vic-score-detail">${scoreDetail(1)}</div>
+      </div>
+      <span class="vic-pts">${vp1}</span>
+    </div>
+    <div class="vic-score-row ${winner===2?'vic-winner':''}">
+      <div>
+        <span class="vic-player" style="color:#ff6b6b">Giocatore 2</span>
+        <div class="vic-score-detail">${scoreDetail(2)}</div>
+      </div>
+      <span class="vic-pts">${vp2}</span>
+    </div>
+    <div style="font-size:11px;color:#c8a020;margin-top:8px;font-family:'Cinzel',serif;">
+      🏆 Vince Giocatore ${winner}!
+    </div>`;
+
+  // Storia finale basata sul punteggio del vincitore
+  const story=getVictoryStory(topScore);
+  const storyEl=document.getElementById('vic-story');
+  if(storyEl)storyEl.textContent=story;
+}
+function renderAll(){
+  const merged=isMerged()||P==='M';
+  const pc=document.getElementById('pcur'),badge=document.getElementById('merged-badge');
+  if(merged){pc.textContent='Giocatore Unificato';pc.className='pname-cur pm';badge.classList.remove('hidden');}
+  else{pc.textContent='Giocatore '+P;pc.className='pname-cur p'+P;badge.classList.add('hidden');}
+  renderLife();renderDice();renderPairs();buildSVG();renderMonsters();renderTreasures();renderFists();updCnts();updTurnInfo();
+}
+
+function renderLife(){
+  const ci=(isMerged()||P==='M')?getMLife():ld(P,'lifeIdx',0);
+  let h='';
+  LIFE_STEPS.forEach((s,i)=>{
+    // Cella 0 e tutte le celle <= ci hanno la X
+    let cls='lbcell';
+    if(i===0)cls+=' past locked';
+    else if(i<=ci)cls+=' past';
+    if(i===MAX_LIFE_IDX&&ci>=MAX_LIFE_IDX)cls+=' deadspin';
+    h+=`<div class="${cls}" data-band="${s.band}"><span class="lbval">${s.label}</span></div>`;
+  });
+  document.getElementById('lifebar').innerHTML=h;
+}
+
+// ─── SVG MAP ───
+function cellPx(col){return PAD+col*(CW+1);}
+function cellPy(row){return PAD+row*(CH+1);}
+
+function buildSVG(){
+  const merged=isMerged()||P==='M';
+  const myM=merged?getMM():ld(P,'mk',{});
+  const other=P===1?2:1;
+  const otM=merged?{}:ld(other,'mk',{});
+  const unlocked=getUnlocked(myM);
+  const sums=getSums();
+
+  const maxC=Math.max(...CELLS.map(c=>c.col+(c.cw||0)+1));
+  const maxR=Math.max(...CELLS.map(c=>c.row+(c.ch||0)+1));
+  const W=Math.ceil(maxC*(CW+1))+2*PAD;
+  const H=Math.ceil(maxR*(CH+1))+2*PAD;
+
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.getElementById('mapsvg');
+  svg.setAttribute('width',W);svg.setAttribute('height',H);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+
+  const bg=document.createElementNS(ns,'rect');
+  bg.setAttribute('width',W);bg.setAttribute('height',H);bg.setAttribute('fill','#0d0b06');svg.appendChild(bg);
+
+  const H2=PASS/2;
+  // drawSide now works with actual pixel width/height of the cell
+  function drawSide(g,x,y,side,hasPass,color,cellW,cellH){
+    const segs=[];
+    const mw=cellW/2,mh=cellH/2;
+    if(side==='T'){if(hasPass)segs.push([x,y,x+mw-H2,y],[x+mw+H2,y,x+cellW,y]);else segs.push([x,y,x+cellW,y]);}
+    else if(side==='B'){if(hasPass)segs.push([x,y+cellH,x+mw-H2,y+cellH],[x+mw+H2,y+cellH,x+cellW,y+cellH]);else segs.push([x,y+cellH,x+cellW,y+cellH]);}
+    else if(side==='L'){if(hasPass)segs.push([x,y,x,y+mh-H2],[x,y+mh+H2,x,y+cellH]);else segs.push([x,y,x,y+cellH]);}
+    else if(side==='R'){if(hasPass)segs.push([x+cellW,y,x+cellW,y+mh-H2],[x+cellW,y+mh+H2,x+cellW,y+cellH]);else segs.push([x+cellW,y,x+cellW,y+cellH]);}
+    segs.forEach(([x1,y1,x2,y2])=>{
+      const l=document.createElementNS(ns,'line');
+      l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+      l.setAttribute('stroke',color);l.setAttribute('stroke-width',BW);l.setAttribute('stroke-linecap','round');
+      g.appendChild(l);
+    });
+  }
+
+  // Helper: does cell 'a' physically touch cell 'b' on any side?
+  function physAdj(a,b){
+    const acw=a.cw||0,ach=a.ch||0,bcw=b.cw||0,bch=b.ch||0;
+    const ax1=a.col,ax2=a.col+acw,ay1=a.row,ay2=a.row+ach;
+    const bx1=b.col,bx2=b.col+bcw,by1=b.row,by2=b.row+bch;
+    // Touch on top: a's top edge = b's bottom edge, columns overlap
+    if(Math.abs(ay1-(by2+1))<0.1&&ax1<=bx2&&ax2>=bx1)return'T';
+    // Touch on bottom
+    if(Math.abs(ay2+1-by1)<0.1&&ax1<=bx2&&ax2>=bx1)return'B';
+    // Touch on left
+    if(Math.abs(ax1-(bx2+1))<0.1&&ay1<=by2&&ay2>=by1)return'L';
+    // Touch on right
+    if(Math.abs(ax2+1-bx1)<0.1&&ay1<=by2&&ay2>=by1)return'R';
+    return null;
+  }
+
+  CELLS.forEach(cell=>{
+    const{k,t,n,col,row,gem,mkey}=cell;
+    const cw=(cell.cw||0),ch=(cell.ch||0);
+    const x=cellPx(col),y=cellPy(row);
+    const cellW=CW*(1+cw)+(cw);   // extra cols add CW+1 each
+    const cellH=CH*(1+ch)+(ch);
+    const isMarked=!!myM[k];
+    const isP1=!merged&&isMarked&&!otM[k]&&P===1;
+    const isP2=!merged&&isMarked&&!otM[k]&&P===2;
+    const isBoth=!merged&&isMarked&&!!otM[k];
+    const isMC=merged&&isMarked;
+
+    // Highlight
+    let isCanMove=false,isBlocked=false,isTorch=false,isDeselectable=false;
+    const isThisTurnMarked=isMarked&&turnMarked.has(k);
+
+    if(isThisTurnMarked){
+      isDeselectable=true; // può essere deselezionata
+    } else if((t==='M'||t==='BOSS')&&!isMarked){
+      // Mostro: evidenzia se adiacente a una casella barrata E ha numeri attivi che matchano le coppie
+      if(sums.length){
+        const adjMarked=getAdjKeys(k).some(ak=>myM[ak]);
+        if(adjMarked){
+          const unl=getUnlocked(myM)[mkey]||[];
+          if(unl.length&&sums.some(s=>unl.includes(s)))isCanMove=true;
+          else isBlocked=true;
+        } else isBlocked=true;
+      }
+    } else if(t!=='M'&&t!=='BOSS'&&!isMarked){
+      if(torchMode&&activeTorchSlot>=0){
+        // In modalità torcia: evidenzia tutte le celle adiacenti a quelle già barrate
+        if(canReach(k,myM))isTorch=true;
+        else isBlocked=true;
+      } else if(sums.length){
+        const reach=canReach(k,myM);
+        if(!reach){isBlocked=true;}
+        else if(t==='D'){
+          // DD: serve un doppio
+          const hasDouble=pairs.some(pr=>pr.length===2&&dV[pr[0]]===dV[pr[1]]);
+          if(hasDouble)isCanMove=true; else isBlocked=true;
+        } else if(t==='P'){
+          // Pugno: solo coppia doppia (due dadi uguali) con somma = n
+          const validDouble=pairs.some(pr=>pr.length===2&&dV[pr[0]]===dV[pr[1]]&&(dV[pr[0]]+dV[pr[1]])===n);
+          if(validDouble)isCanMove=true; else isBlocked=true;
+        } else if(n!==null&&sums.includes(n))isCanMove=true;
+        else if(n===null)isCanMove=true;
+        else isBlocked=true;
+      }
+    }
+
+    const g=document.createElementNS(ns,'g');
+    if(isBlocked)g.setAttribute('opacity','0.22');
+
+    let fill=CC[t]?.fill||'#888';
+    let stroke=CC[t]?.stroke||'#444';
+    if(isBoth||isMC){fill='rgba(255,215,0,0.7)';stroke='#c8a020';}
+    else if(isP1){fill='rgba(74,158,255,0.6)';stroke='#4a9eff';}
+    else if(isP2){fill='rgba(255,107,107,0.6)';stroke='#ff6b6b';}
+
+    const rect=document.createElementNS(ns,'rect');
+    rect.setAttribute('x',x+BW/2);rect.setAttribute('y',y+BW/2);
+    rect.setAttribute('width',cellW-BW);rect.setAttribute('height',cellH-BW);
+    rect.setAttribute('rx','4');rect.setAttribute('fill',fill);
+    g.appendChild(rect);
+
+    if(isCanMove||isTorch||isDeselectable){
+      const hl=document.createElementNS(ns,'rect');
+      hl.setAttribute('x',x+BW/2);hl.setAttribute('y',y+BW/2);
+      hl.setAttribute('width',cellW-BW);hl.setAttribute('height',cellH-BW);
+      hl.setAttribute('rx','4');hl.setAttribute('fill','none');
+      const hlColor=isDeselectable?'#00eeff':isCanMove?'#50ff70':'#ff9900';
+      hl.setAttribute('stroke',hlColor);hl.setAttribute('stroke-width','2');
+      g.appendChild(hl);
+    }
+
+    // Determine which sides have passages (physically adjacent + logically adjacent)
+    let hasTop=false,hasBot=false,hasLft=false,hasRgt=false;
+    CELLS.forEach(other=>{
+      if(other.k===k)return;
+      const side=physAdj(cell,other);
+      if(side&&isAdj(k,other.k)){
+        if(side==='T')hasTop=true;
+        else if(side==='B')hasBot=true;
+        else if(side==='L')hasLft=true;
+        else if(side==='R')hasRgt=true;
+      }
+    });
+
+    drawSide(g,x,y,'T',hasTop,stroke,cellW,cellH);
+    drawSide(g,x,y,'B',hasBot,stroke,cellW,cellH);
+    drawSide(g,x,y,'L',hasLft,stroke,cellW,cellH);
+    drawSide(g,x,y,'R',hasRgt,stroke,cellW,cellH);
+
+    const fs=8,icos=11;
+    const cx=x+cellW/2, cy=y+cellH/2;
+
+    if(isMarked){
+      const cr=document.createElementNS(ns,'text');
+      cr.setAttribute('x',cx);cr.setAttribute('y',cy+1);
+      cr.setAttribute('text-anchor','middle');cr.setAttribute('dominant-baseline','middle');
+      cr.setAttribute('font-size',cw||ch?'22':'16');cr.setAttribute('font-weight','900');
+      cr.setAttribute('fill',(isBoth||isMC||isP1||isP2)?'rgba(255,255,255,0.9)':'rgba(0,0,0,0.5)');
+      cr.setAttribute('pointer-events','none');cr.textContent='✕';g.appendChild(cr);
+      if(gem){addGemIcon(g,ns,x,y);}
+    } else {
+      if(t==='M'||t==='BOSS'){
+        const ic=document.createElementNS(ns,'text');
+        ic.setAttribute('x',cx);ic.setAttribute('y',y+(cw||ch?20:10));
+        ic.setAttribute('text-anchor','middle');ic.setAttribute('font-size',cw||ch?18:icos);
+        ic.setAttribute('pointer-events','none');ic.textContent=MICO[mkey]||'👾';g.appendChild(ic);
+        const mon=MONS[mkey];
+        if(mon){
+          const unl=unlocked[mkey]||[];
+          const totalW=cellW-4;
+          const nw=totalW/mon.nums.length;
+          mon.nums.forEach((num,i)=>{
+            const active=unl.includes(num);
+            const nb=document.createElementNS(ns,'rect');
+            nb.setAttribute('x',x+2+i*nw);nb.setAttribute('y',y+cellH-13);
+            nb.setAttribute('width',nw-1);nb.setAttribute('height',11);nb.setAttribute('rx','2');
+            nb.setAttribute('fill',active?'rgba(200,160,20,0.3)':'rgba(0,0,0,0.25)');g.appendChild(nb);
+            const nt=document.createElementNS(ns,'text');
+            nt.setAttribute('x',x+2+i*nw+nw/2);nt.setAttribute('y',y+cellH-4);
+            nt.setAttribute('text-anchor','middle');nt.setAttribute('font-size',active?7:6);
+            nt.setAttribute('font-weight','700');nt.setAttribute('font-family','Cinzel,serif');
+            nt.setAttribute('fill',active?'#f0d060':'#5a5040');nt.setAttribute('pointer-events','none');
+            nt.textContent=num;g.appendChild(nt);
+          });
+          // Monster name label for large cells
+          if(cw||ch){
+            const nl=document.createElementNS(ns,'text');
+            nl.setAttribute('x',cx);nl.setAttribute('y',y+(cw||ch?40:22));
+            nl.setAttribute('text-anchor','middle');nl.setAttribute('font-size','8');
+            nl.setAttribute('font-family','Cinzel,serif');nl.setAttribute('fill','rgba(240,208,96,0.7)');
+            nl.setAttribute('pointer-events','none');nl.textContent=mon.name;g.appendChild(nl);
+          }
+        }
+      } else if(t==='D'){
+        const dt=document.createElementNS(ns,'text');
+        dt.setAttribute('x',cx);dt.setAttribute('y',cy+4);
+        dt.setAttribute('text-anchor','middle');dt.setAttribute('font-size','12');
+        dt.setAttribute('fill','rgba(180,150,80,0.7)');dt.setAttribute('pointer-events','none');
+        dt.textContent='🎲🎲';g.appendChild(dt);
+      } else {
+        const ico=t==='T'?'💰':t==='P'?'✊':'';
+        if(ico){
+          const it=document.createElementNS(ns,'text');
+          it.setAttribute('x',cx);it.setAttribute('y',cy-1);
+          it.setAttribute('text-anchor','middle');it.setAttribute('font-size',icos-1);
+          it.setAttribute('pointer-events','none');it.textContent=ico;g.appendChild(it);
+        }
+        if(n!==null){
+          const nt=document.createElementNS(ns,'text');
+          nt.setAttribute('x',cx);nt.setAttribute('y',ico?y+cellH-5:cy+fs/2);
+          nt.setAttribute('text-anchor','middle');nt.setAttribute('font-size',fs);
+          nt.setAttribute('font-weight','700');nt.setAttribute('font-family','Cinzel,serif');
+          const tf=t==='S'?'#0a2005':t==='T'?'#2a1800':t==='G'?'#1a1408':t==='P'?'#2a1004':'#1a1208';
+          nt.setAttribute('fill',tf);nt.setAttribute('pointer-events','none');nt.textContent=n;g.appendChild(nt);
+        }
+        if(gem){addGemIcon(g,ns,x,y);}
+      }
+    }
+
+    const hit=document.createElementNS(ns,'rect');
+    hit.setAttribute('x',x);hit.setAttribute('y',y);hit.setAttribute('width',cellW);hit.setAttribute('height',cellH);
+    hit.setAttribute('fill','transparent');hit.addEventListener('click',()=>clickCell(k));
+    g.appendChild(hit);
+    svg.appendChild(g);
+  });
+
+  // ─── DISEGNO PONTI VISIVI ───
+  // Funzione helper: centro pixel di una cella
+  function cellCenter(c){
+    const cw2=(c.cw||0),ch2=(c.ch||0);
+    const cellW2=CW*(1+cw2)+cw2,cellH2=CH*(1+ch2)+ch2;
+    return{x:cellPx(c.col)+cellW2/2,y:cellPy(c.row)+cellH2/2};
+  }
+  BRIDGES.forEach(([ka,kb])=>{
+    const ca=CMAP[ka],cb=CMAP[kb];if(!ca||!cb)return;
+    const pa=cellCenter(ca),pb=cellCenter(cb);
+    const bLine=document.createElementNS(ns,'line');
+    bLine.setAttribute('x1',pa.x);bLine.setAttribute('y1',pa.y);
+    bLine.setAttribute('x2',pb.x);bLine.setAttribute('y2',pb.y);
+    bLine.setAttribute('stroke','#c8a020');bLine.setAttribute('stroke-width','2.5');
+    bLine.setAttribute('stroke-dasharray','4,3');bLine.setAttribute('opacity','0.7');
+    bLine.setAttribute('pointer-events','none');
+    svg.insertBefore(bLine,svg.firstChild.nextSibling); // dietro le celle ma sopra lo sfondo
+  });
+
+  const s=getSums();document.getElementById('mhint').textContent=s.length?`Somme: ${s.join(' e ')}`:' ';
+  setTimeout(()=>applyZoom(zoomLevel),30);
+}
+
+function addGemIcon(g,ns,x,y){
+  const gm=document.createElementNS(ns,'text');
+  gm.setAttribute('x',x+CW-2);gm.setAttribute('y',y+9);gm.setAttribute('text-anchor','end');
+  gm.setAttribute('font-size','8');gm.setAttribute('pointer-events','none');gm.textContent='💎';g.appendChild(gm);
+}
+
+// Caselle Start di sinistra (col bassa) e destra (col alta)
+const START_LEFT =['B4_2v','C4_9v','D3_7v','D4_6v','E1_12v','E2_3v'];
+const START_RIGHT=['A17_4v','A19_5v','C19_8v','D19_10v','F19_11v'];
+
+function getMyStarts(){
+  // p1StartSide: 'left' o 'right' per P1; P2 ha il lato opposto
+  const merged=isMerged()||P==='M';
+  if(merged) return [...START_LEFT,...START_RIGHT]; // unificati: tutti
+  let side;
+  if(P===1) side=p1StartSide||'left';
+  else side=(p1StartSide==='left'?'right':'left');
+  return side==='left'?START_LEFT:START_RIGHT;
+}
+
+function canReach(k,marked){
+  const c=CMAP[k];if(!c)return false;
+  if(c.t==='S'){
+    // Solo le Start del proprio lato sono raggiungibili come primo passo
+    const myStarts=getMyStarts();
+    return myStarts.includes(k);
+  }
+  return getAdjKeys(k).some(ak=>marked[ak]);
+}
+
+// ─── DICE ───
+function getBMax(){return ld(P,'bmax',3);}
+function rollDice(){
+  if(rolled){showN('🎲 Dadi già lanciati','Non puoi lanciare di nuovo questo turno.');return;}
+  if(turnCrossed>=MAX_CROSS){showN('✔ Completato','Premi Passa Turno.');return;}
+  dV=[r6(),r6(),r6(),r6(),r6()];dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];bUsedThisTurn=0;bFreeUsedThisTurn=0;
+  pairActions=[[],[]];
+  rolled=true;renderDice();renderPairs();buildSVG();
+}
+const r6=()=>Math.floor(Math.random()*6)+1;
+
+function renderDice(){
+  let h='';
+  for(let i=0;i<5;i++){
+    let cls='die '+(i===4?'b':'w');
+    if(dSel[i])cls+=' sel';if(dUsed[i])cls+=' used';
+    h+=`<div class="${cls}" onclick="clickDie(${i})">${dV[i]||'?'}</div>`;
+  }
+  // Pulsante Lancia: disabilitato dopo il primo lancio
+  if(rolled){
+    h+=`<button class="rollbtn" style="opacity:.35;cursor:not-allowed;" disabled title="Dadi già lanciati questo turno">🎲 Lanciati</button>`;
+  } else {
+    h+=`<button class="rollbtn" onclick="rollDice()">🎲 Lancia</button>`;
+  }
+  document.getElementById('drow').innerHTML=h;
+
+  if(isBlackDieUnlimited()){
+    document.getElementById('buses').innerHTML=`<span style="font-size:7px;color:#50dd50;">⬛ illimitato</span>`;
+  } else {
+    const bmax=getBMax(),bConf=ld(P,'bused_confirmed',0);
+    const paidThisTurn=bUsedThisTurn-bFreeUsedThisTurn;
+    let bh='';for(let i=0;i<bmax;i++)bh+=`<div class="buse ${i<bConf+paidThisTurn?'x':''}">${i<bConf+paidThisTurn?'✕':'⬛'}</div>`;
+    document.getElementById('buses').innerHTML=bh;
+  }
+}
+
+function clickDie(i){
+  if(!rolled||dUsed[i])return;
+  dSel[i]=!dSel[i];
+  const sel=dSel.map((s,j)=>s&&!dUsed[j]?j:-1).filter(x=>x>=0);
+  if(sel.length===2){
+    const pi=pairs[0].length===2?1:0;
+    if(pairs[pi].length<2){
+      if(sel.includes(4)){
+        if(isBlackDieUnlimited()){
+          // Giocatori separati: dado nero sempre gratuito, non conta sugli slot
+          bUsedThisTurn++; // traccia l'uso ma non pesa su bused_confirmed
+          bFreeUsedThisTurn++;
+        } else {
+          // Unificato: alternanza gratuito/pagamento
+          const free=isBlackDieFreeThisTurn();
+          if(free&&bFreeUsedThisTurn===0){
+            bFreeUsedThisTurn=1;
+            bUsedThisTurn++;
+          } else {
+            // Uso a pagamento: controlla slot disponibili (max 3)
+            const paidSoFar=bUsedThisTurn-bFreeUsedThisTurn;
+            if(ld(P,'bused_confirmed',0)+paidSoFar>=getBMax()){showN('⚠ Dado nero esaurito','3 slot usati.');dSel[i]=false;renderDice();return;}
+            bUsedThisTurn++;
+          }
+        }
+      }
+      pairs[pi]=[...sel];sel.forEach(j=>{dUsed[j]=true;dSel[j]=false;});
+    }
+  }
+  renderDice();renderPairs();buildSVG();
+}
+
+function renderPairs(){
+  for(let pi=0;pi<2;pi++){
+    const pr=pairs[pi];
+    const consumed=pairsConsumed[pi];
+    let pHtml=pr.map(i=>`<div class="mdie ${i===4?'b':'w'}" style="${consumed?'opacity:.35':''}">${dV[i]}</div>`).join('');
+    document.getElementById('pd'+pi).innerHTML=pHtml;
+    if(pr.length===2){
+      document.getElementById('pv'+pi).textContent=consumed?'✓':dV[pr[0]]+dV[pr[1]];
+      document.getElementById('pv'+pi).style.opacity=consumed?'0.35':'1';
+      document.getElementById('ps'+pi).className='pslot rdy';
+      document.getElementById('ps'+pi).style.opacity=consumed?'0.45':'1';
+    } else {
+      document.getElementById('pv'+pi).textContent='—';
+      document.getElementById('pv'+pi).style.opacity='1';
+      document.getElementById('ps'+pi).className='pslot';
+      document.getElementById('ps'+pi).style.opacity='1';
+    }
+  }
+  const available=pairs.filter((p,i)=>p.length===2&&!pairsConsumed[i]).length;
+  const formed=pairs.filter(p=>p.length===2).length;
+  document.getElementById('dhint').textContent=
+    !rolled?'Lancia prima':
+    formed===0?'Seleziona 2 dadi — Coppia 1':
+    formed===1?'Seleziona 2 dadi — Coppia 2':
+    available===0?'✓ Entrambe le coppie usate':
+    '✓ Pronto — usa le coppie sulla mappa';
+  updTurnInfo();
+}
+
+function deletePair(pi){
+  const pr=pairs[pi];
+  if(pr.length!==2)return;
+
+  // ── ROLLBACK tutte le azioni prodotte da questa coppia ──
+  const actions=[...pairActions[pi]].reverse(); // annulla in ordine inverso
+  actions.forEach(act=>{
+    if(act.type==='mark'){
+      // Desbarra la casella
+      saveMk(act.k,false);
+      turnMarked.delete(act.k);
+      turnCrossed=Math.max(0,turnCrossed-1);
+      if(act.wasTorch){torchLeft++;torchMode=true;}
+    } else if(act.type==='gem'){
+      sv(P,'gems',Math.max(0,ld(P,'gems',0)-act.amount));
+    } else if(act.type==='fist'){
+      const f=Math.max(0,ld(P,'fists',0)-act.amount);
+      sv(P,'fists',f);
+      if(act.completedFists){
+        fistDoneGlobal=false;
+        localStorage.removeItem(PFX+'fistDone');
+        sv(P,'gems',Math.max(0,ld(P,'gems',0)-3));
+      }
+      renderFists();
+    } else if(act.type==='mhp'){
+      const hp=ld(P,'mhp',{});
+      hp[act.mkey]=Math.max(0,(hp[act.mkey]||0)-act.amount);
+      sv(P,'mhp',hp);
+      if(act.killed){
+        const def=ld(P,'def',{});delete def[act.mkey];sv(P,'def',def);
+        // Ripristina casella mostro come non barrata
+        saveMk(act.mkey,false);
+        sv(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
+        if(act.lifeDmg){
+          const ci=ld(P,'lifeIdx',0);
+          sv(P,'lifeIdx',Math.max(0,ci-act.lifeDmg));
+        }
+        if(act.shieldUsed){
+          sv(P,'shield',ld(P,'shield',0)+act.shieldUsed);
+        }
+      }
+      renderMonsters();renderLife();
+    } else if(act.type==='torch'){
+      torchAvailable=false;
+      torchMode=false;torchLeft=0;
+    } else if(act.type==='tmodal'){
+      // Richiudi il modale tesoro se era aperto e annulla la scelta
+      // La scelta del tesoro va annullata
+      document.getElementById('tmodal').classList.add('hidden');
+      const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+      if(act.tresType==='life'){
+        tres.life=Math.max(0,(tres.life||0)-1);sv(P,'tres',tres);
+        sv(P,'gems',Math.max(0,ld(P,'gems',0)-1));
+        sv(P,'shield',Math.max(0,ld(P,'shield',0)-3));
+        renderLife();
+      } else if(act.tresType==='torch'){
+        tres.torch=Math.max(0,(tres.torch||0)-1);sv(P,'tres',tres);
+        torchAvailable=false;torchMode=false;torchLeft=0;
+      } else if(act.tresType==='dice'){
+        tres.dice=Math.max(0,(tres.dice||0)-1);sv(P,'tres',tres);
+        sv(P,'bmax',3);
+        renderDice();
+      }
+      renderTreasures();
+    }
+  });
+  pairActions[pi]=[];
+  pairsConsumed[pi]=false;
+
+  // Libera i dadi della coppia
+  if(pr.includes(4)){
+    bUsedThisTurn=Math.max(0,bUsedThisTurn-1);
+    if(bFreeUsedThisTurn>0)bFreeUsedThisTurn=Math.max(0,bFreeUsedThisTurn-1);
+  }
+  pr.forEach(j=>{dUsed[j]=false;});
+  pairs[pi]=[];
+
+  updCnts();renderDice();renderPairs();buildSVG();updTurnInfo();
+}
+
+function clearDice(){
+  // Rollback completo al snapshot di inizio turno
+  if(turnSnapshot){
+    sv(1,'gems',turnSnapshot.gems1); sv(2,'gems',turnSnapshot.gems2);
+    sv(1,'shield',turnSnapshot.shield1); sv(2,'shield',turnSnapshot.shield2);
+    sv(1,'tres',JSON.parse(turnSnapshot.tres1)); sv(2,'tres',JSON.parse(turnSnapshot.tres2));
+    sv(1,'bmax',turnSnapshot.bmax1); sv(2,'bmax',turnSnapshot.bmax2);
+    sv(P,'mhp',JSON.parse(turnSnapshot.mhp));
+    sv(P,'def',JSON.parse(turnSnapshot.def));
+    sv(1,'mk',JSON.parse(turnSnapshot.mk1)); sv(2,'mk',JSON.parse(turnSnapshot.mk2));
+    sv(P,'fists',turnSnapshot.fists);
+    fistDoneGlobal=turnSnapshot.fistDone;
+    if(!fistDoneGlobal)localStorage.removeItem(PFX+'fistDone');
+    sv(1,'lifeIdx',turnSnapshot.lifeIdx1); sv(2,'lifeIdx',turnSnapshot.lifeIdx2);
+    torchAvailable=turnSnapshot.torchAvailable;
+    torchLeft=turnSnapshot.torchLeft;
+  }
+  torchMode=false; activeTorchSlot=-1;
+  dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
+  bUsedThisTurn=0;bFreeUsedThisTurn=0;pairActions=[[],[]];
+  turnCrossed=0; turnMarked=new Set();
+  document.getElementById('tmodal').classList.add('hidden');
+  if(rolled)renderDice();
+  renderAll();
+  document.getElementById('mhint').textContent='';
+}
+function getSums(){return pairs.filter((p,i)=>p.length===2&&!pairsConsumed[i]).map(p=>dV[p[0]]+dV[p[1]]);}
+
+// ─── CLICK CELL ───
+// Ogni azione sulla mappa viene registrata in pairActions[pi] per permettere il rollback
+
+// Trova l'indice della coppia "attiva" (quella usata per l'ultima azione)
+// Usa la prima coppia completa disponibile, preferendo quella non ancora usata
+function getActivePairIdx(){
+  for(let pi=0;pi<2;pi++){
+    if(pairs[pi].length===2&&!pairsConsumed[pi])return pi;
+  }
+  return -1;
+}
+
+function clickCell(k){
+  const cell=CMAP[k];if(!cell)return;
+  const marked=effMk();
+  const other=P===1?2:1;
+  const otM=(isMerged()||P==='M')?{}:ld(other,'mk',{});
+
+  // ── DESELEZIONA se barrata in questo turno ──
+  if(marked[k]&&turnMarked.has(k)){
+    // Trova quale coppia ha prodotto questa barratura e rimuovi solo quell'azione
+    for(let pi=0;pi<2;pi++){
+      const idx=pairActions[pi].findIndex(a=>a.type==='mark'&&a.k===k);
+      if(idx>=0){
+        const act=pairActions[pi][idx];
+        saveMk(k,false);turnMarked.delete(k);turnCrossed=Math.max(0,turnCrossed-1);
+        if(act.wasTorch){torchLeft++;torchMode=true;}
+        pairsConsumed[pi]=false;
+        // Annulla anche le azioni collegate (gem, fist, tesoro) della stessa coppia dopo il mark
+        const related=pairActions[pi].splice(idx);
+        related.slice(1).reverse().forEach(ra=>{
+          if(ra.type==='gem')sv(P,'gems',Math.max(0,ld(P,'gems',0)-ra.amount));
+          else if(ra.type==='fist'){
+            const f=Math.max(0,ld(P,'fists',0)-ra.amount);sv(P,'fists',f);
+            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');sv(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
+            renderFists();
+          } else if(ra.type==='tmodal'){
+            document.getElementById('tmodal').classList.add('hidden');
+            const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);sv(P,'tres',tres);sv(P,'gems',Math.max(0,ld(P,'gems',0)-1));sv(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
+            else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-1);sv(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
+            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);sv(P,'tres',tres);sv(P,'bmax',3);renderDice();}
+            renderTreasures();
+          }
+        });
+        updCnts();buildSVG();renderMonsters();updTurnInfo();return;
+      }
+    }
+    // Fallback: rimozione semplice
+    saveMk(k,false);turnMarked.delete(k);turnCrossed=Math.max(0,turnCrossed-1);
+    buildSVG();updCnts();updTurnInfo();return;
+  }
+
+  // ── TORCIA: modalità speciale ──
+  if(torchMode&&activeTorchSlot>=0){
+    if(cell.t==='M'||cell.t==='BOSS'){showN('❌ Non puoi usare la torcia sui mostri','');return;}
+    if(marked[k]){showN('Già barrata','');return;}
+    if(!canReach(k,marked)){showN('❌ Non raggiungibile con la torcia','Deve essere adiacente a una casella già barrata.');return;}
+    // Usa il token: riduce il conteggio torch nel tesoro
+    const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+    tres.torch=Math.max(0,(tres.torch||0)-1);
+    sv(P,'tres',tres);
+    saveMk(k,true);turnMarked.add(k);turnCrossed++;
+    torchMode=false;activeTorchSlot=-1;torchLeft=0;
+    showN('🕯 Torcia usata!','Casella barrata.');
+    buildSVG();updCnts();renderTreasures();updTurnInfo();return;
+  }
+
+  if(turnCrossed>=MAX_CROSS&&!torchMode){showN('✔ Turno completo','Premi Passa Turno.');return;}
+
+  // ── MOSTRO ──
+  if(cell.t==='M'||cell.t==='BOSS'){
+    if(turnCrossed>=MAX_CROSS){showN('✔ Turno completo','Premi Passa Turno.');return;}
+    const sums=getSums();
+    if(!sums.length){showN('👾 '+MONS[cell.mkey]?.name,'Forma prima una coppia di dadi.');return;}
+    const mon=MONS[cell.mkey];if(!mon)return;
+    const adjMarked=getAdjKeys(k).some(ak=>marked[ak]);
+    if(!adjMarked){showN('❌ Mostro non raggiungibile','Devi avere una casella barrata adiacente al mostro per colpirlo.');return;}
+    const unl=getUnlocked(marked)[cell.mkey]||[];
+    if(!unl.length){showN('❌ Nessun numero attivo','Barra prima le caselle grigie di attivazione adiacenti al mostro.');return;}
+    const pairIdx=pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]&&unl.includes(dV[pr[0]]+dV[pr[1]]));
+    if(pairIdx<0){showN('❌ Mancato!',`Numeri attivi: ${unl.join(', ')} · Coppie: ${sums.join(', ')}`);return;}
+    pairsConsumed[pairIdx]=true;
+    const hp=ld(P,'mhp',{});
+    hp[cell.mkey]=(hp[cell.mkey]||0)+1;
+    const killed=hp[cell.mkey]>=mon.hp;
+    if(killed){
+      hp[cell.mkey]=mon.hp;
+      const def=ld(P,'def',{});def[cell.mkey]=true;sv(P,'def',def);
+      saveMk(k,true);
+      const prevGems=ld(P,'gems',0);sv(P,'gems',prevGems+mon.gem);
+      if(mon.isBoss){
+        let dmg=2,shieldUsed=0;
+        const shield=ld(P,'shield',0);
+        if(shield>0){const abs=Math.min(shield,dmg);sv(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
+        const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);sv(P,'lifeIdx',ni);
+        recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed});
+        sv(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();
+        showN('👑 Boss sconfitto! +'+mon.gem+'💎 -2❤','');
+        if(ni>=MAX_LIFE_IDX){triggerGO(P);return;}
+        if(checkVictory())return;
+        return;
+      }
+      recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0});
+      sv(P,'mhp',hp);buildSVG();renderMonsters();renderPairs();updCnts();
+      showN(`🏆 ${mon.name} sconfitto! +${mon.gem}💎`,'');
+      if(checkVictory())return;
+      return;
+    }
+    recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:false,gemGained:0,lifeDmg:0,shieldUsed:0});
+    showN(`⚔ Colpo a ${mon.name}! ${mon.hp-hp[cell.mkey]}/${mon.hp} PV rimasti`,'');
+    sv(P,'mhp',hp);renderMonsters();renderPairs();buildSVG();return;
+  }
+
+  // ── CELLA NORMALE: controllo raggiungibilità ──
+  if(!canReach(k,marked)){showN('❌ Non raggiungibile','Parti da Start o da una casella adiacente già barrata.');return;}
+
+  const sums=getSums();
+  if(!sums.length){showN('🎲 Lancia prima i dadi','');return;}
+
+  // Trova quale coppia verrà usata (numero che matcha)
+  let usedPairIdx=-1;
+
+  // ── CASELLA DOPPIO (DD): adiacente + coppia con due dadi uguali ──
+  if(cell.t==='D'){
+    const pi=pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]&&dV[pr[0]]===dV[pr[1]]);
+    if(pi<0){showN('❌ Serve un doppio!','La coppia deve avere due dadi con lo stesso valore (es. 3+3).');return;}
+    usedPairIdx=pi;
+    saveMk(k,true);turnMarked.add(k);turnCrossed++;
+    recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
+    pairsConsumed[usedPairIdx]=true;
+    buildSVG();updCnts();updTurnInfo();return;
+  }
+
+  // ── CASELLA PUGNO (P): adiacente + coppia doppia (due numeri uguali) con somma = n ──
+  if(cell.t==='P'){
+    const pi=pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]&&dV[pr[0]]===dV[pr[1]]&&(dV[pr[0]]+dV[pr[1]])===cell.n);
+    if(pi<0){
+      const half=cell.n/2;
+      showN(`❌ Serve ${half}+${half}!`,`Entrambi i dadi devono valere ${half} (somma ${cell.n}).`);
+      return;
+    }
+    usedPairIdx=pi;
+    saveMk(k,true);turnMarked.add(k);turnCrossed++;
+    recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
+    pairsConsumed[usedPairIdx]=true;
+    if(!fistDoneGlobal){
+      const f=ld(P,'fists',0)+1;sv(P,'fists',f);
+      const completedFists=f>=5;
+      recordAction(usedPairIdx,{type:'fist',amount:1,completedFists});
+      if(completedFists){
+        fistDoneGlobal=true;localStorage.setItem(PFX+'fistDone','1');
+        sv(P,'gems',ld(P,'gems',0)+3);
+        recordAction(usedPairIdx,{type:'gem',amount:3});
+        showN('✊ 5 Pugni! +3💎','Bonus conquistato!');
+        updCnts();
+      }
+      renderFists();
+    }
+    buildSVG();updCnts();updTurnInfo();return;
+  }
+
+  // ── TUTTE LE ALTRE: S, R (con/senza gemma), G, T ──
+  // Regola: coppia con somma = n (o n===null per caselle senza numero fisso)
+  if(cell.n!==null&&!sums.includes(cell.n)){showN('❌ Numero errato',`Casella: ${cell.n} · Coppie: ${sums.join(', ')}`);return;}
+  // Trova la coppia usata
+  let pi2=cell.n===null?pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]):pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]&&(dV[pr[0]]+dV[pr[1]])===cell.n);
+  if(pi2<0)pi2=getActivePairIdx();
+  if(pi2<0){showN('🎲 Forma prima una coppia','');return;}
+  usedPairIdx=pi2;
+
+  if(marked[k]){return;}
+  saveMk(k,true);turnMarked.add(k);turnCrossed++;
+  recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
+  pairsConsumed[usedPairIdx]=true;
+
+  // Gemma (BX)
+  if(cell.gem){
+    sv(P,'gems',ld(P,'gems',0)+1);
+    recordAction(usedPairIdx,{type:'gem',amount:1});
+    showN('💎 +1 Gemma!','');updCnts();
+  }
+
+  // Tesoro: apre modale ma non fa nulla finché il giocatore non sceglie
+  if(cell.t==='T'){
+    torchAvailable=true;
+    // Il modale tesoro registra l'azione quando il giocatore sceglie (in chooseTres)
+    // Passiamo l'usedPairIdx al modale tramite variabile globale
+    pendingTresPairIdx=usedPairIdx;
+    showTModal();buildSVG();renderTreasures();updCnts();updTurnInfo();return;
+  }
+
+  // Merge
+  if(!isMerged()&&P!=='M'&&otM[k]){
+    const m2=ld(other,'mk',{});const mm={...ld(P,'mk',{}),...m2,[k]:true};
+    sv(1,'mk',mm);sv(2,'mk',mm);
+    sv(1,'gems',ld(1,'gems',0)+1);
+    recordAction(usedPairIdx,{type:'gem',amount:1});
+    showN('⚔ UNIONE! +1💎','I due esploratori si sono incontrati!');
+    buildSVG();updCnts();updTurnInfo();return;
+  }
+
+  buildSVG();updCnts();updTurnInfo();
+}
+
+// Indice della coppia che ha attivato il tesoro (per rollback)
+let pendingTresPairIdx=0;
+
+function saveMk(k,val){
+  if(isMerged()||P==='M'){const m=getMM();if(val)m[k]=true;else delete m[k];sv(1,'mk',m);sv(2,'mk',m);}
+  else{const m=ld(P,'mk',{});if(val)m[k]=true;else delete m[k];sv(P,'mk',m);}
+}
+
+// ─── TESORO ───
+function showTModal(){
+  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  const lifeUsed=tres.life>=1, diceUsed=tres.dice>=1;
+  let h='';
+  h+=`<div class="ropt ${lifeUsed?'disabled':''}" onclick="${lifeUsed?'':'chooseTres(\'life\')'}">
+    <div class="ropt-t">🛡 Vita — +1💎 & 3 Scudi${lifeUsed?' (già usato)':''}</div>
+    <div class="ropt-d">Guadagni 1 Gemma subito. I prossimi 3 danni alla vita vengono annullati (scudo).</div></div>`;
+  h+=`<div class="ropt" onclick="chooseTres('torch')">
+    <div class="ropt-t">🕯 Torcia — +2 token</div>
+    <div class="ropt-d">Aggiungi 2 token torcia. Usane uno quando vuoi: barra una casella adiacente a quelle già barrate senza usare i dadi.</div></div>`;
+  h+=`<div class="ropt ${diceUsed?'disabled':''}" onclick="${diceUsed?'':'chooseTres(\'dice\')'}">
+    <div class="ropt-t">⬛ Dado nero — +3 slot${diceUsed?' (già usato)':''}</div>
+    <div class="ropt-d">Aumenta i dadi neri disponibili di 3 per tutta la partita.</div></div>`;
+  document.getElementById('tropts').innerHTML=h;
+  document.getElementById('tmodal').classList.remove('hidden');
+}
+
+function chooseTres(t){
+  document.getElementById('tmodal').classList.add('hidden');
+  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  if(t==='life'){
+    if(tres.life>=1)return;
+    tres.life++;sv(P,'tres',tres);
+    sv(P,'gems',ld(P,'gems',0)+1);
+    sv(P,'shield',(ld(P,'shield',0)||0)+3);
+    showN('🛡 +1💎 & 3 Scudi!','I prossimi 3 danni alla vita saranno annullati.');
+    renderLife();
+  } else if(t==='torch'){
+    tres.torch=(tres.torch||0)+2; // aggiunge 2 token persistenti
+    sv(P,'tres',tres);
+    showN('🕯 +2 Token Torcia!','Clicca i token nella sezione Tesori per usarli.');
+  } else {
+    if(tres.dice>=1)return;
+    tres.dice++;sv(P,'tres',tres);
+    sv(P,'bmax',(ld(P,'bmax',3)||3)+3);
+    showN('⬛ +3 Dadi Neri!','Il numero di dadi neri disponibili è aumentato di 3.');
+    renderDice();
+  }
+  renderTreasures();updCnts();
+}
+
+// Clicca un token torcia: se è disponibile lo attiva (modalità scelta cella)
+function clickTorchSlot(slotIdx){
+  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  const totalTokens=tres.torch||0;
+  // slot 0..totalTokens-1 sono i token disponibili
+  // Conta quanti sono stati usati (torchLeft tiene quanti rimangono nel turno corrente)
+  // torchAvailable=true significa che c'è un tesoro torcia acquisito
+  if(slotIdx>=totalTokens)return; // slot non ancora acquisito
+
+  // Se il token è già attivo, disattivalo
+  if(activeTorchSlot===slotIdx){
+    activeTorchSlot=-1;torchMode=false;
+    showN('🕯 Torcia disattivata','');
+    buildSVG();renderTreasures();return;
+  }
+  // Attiva questo token
+  activeTorchSlot=slotIdx;torchMode=true;torchLeft=1; // 1 uso per token
+  showN('🕯 Torcia attiva!','Clicca una casella adiacente a quelle già barrate.');
+  buildSVG();renderTreasures();
+}
+
+function renderTreasures(){
+  const merged=isMerged()||P==='M';
+  const t1=ld(1,'tres',{life:0,torch:0,dice:0}),t2=ld(2,'tres',{life:0,torch:0,dice:0});
+  const tres=merged?{life:t1.life+t2.life,torch:t1.torch+t2.torch,dice:t1.dice+t2.dice}:ld(P,'tres',{life:0,torch:0,dice:0});
+
+  // Scudo (life) — mostra quante volte è stato preso
+  const lifeCnt=tres.life||0;
+  let lh='';
+  for(let i=0;i<Math.max(lifeCnt,1);i++)lh+=`<div class="tres-box ${i<lifeCnt?'checked':''}"></div>`;
+  document.getElementById('tres-life').innerHTML=lh;
+
+  // Torcia — token individuali cliccabili
+  const torchTotal=tres.torch||0;
+  let th='<div class="tres-torch-row">';
+  if(torchTotal===0){
+    th+=`<div class="tres-box" style="opacity:.3;cursor:default;" title="Nessun token torcia"></div>`;
+  } else {
+    for(let i=0;i<torchTotal;i++){
+      const isActive=activeTorchSlot===i;
+      th+=`<div class="torch-token ${isActive?'active':'avail'}" onclick="clickTorchSlot(${i})" title="${isActive?'Disattiva':'Usa token torcia'}">🕯</div>`;
+    }
+  }
+  th+='</div>';
+  document.getElementById('tres-torch').innerHTML=th;
+
+  // Dadi neri — mostra quante volte è stato preso
+  const diceCnt=tres.dice||0;
+  let dh='';
+  for(let i=0;i<Math.max(diceCnt,1);i++)dh+=`<div class="tres-box ${i<diceCnt?'checked':''}"></div>`;
+  document.getElementById('tres-dice').innerHTML=dh;
+}
+
+function renderFists(){
+  const merged=isMerged()||P==='M';
+  const fists=merged?ld(1,'fists',0)+ld(2,'fists',0):ld(P,'fists',0);
+  const cur=fistDoneGlobal?5:fists%5;
+  let h=`<div class="fist-row"><div class="fist-boxes">`;
+  for(let i=0;i<5;i++){const checked=i<cur;h+=`<div class="fist-box ${checked?'checked':''}">${checked?'✊':''}</div>`;}
+  h+=`</div><div class="fist-arrow">→</div><div class="fist-reward">+3 💎</div>`;
+  if(fistDoneGlobal)h+=`<div class="fist-done-lbl">✓ Riscattato</div>`;
+  h+=`</div>`;document.getElementById('fist-rows').innerHTML=h;
+}
+
+function renderMonsters(){
+  const marked=effMk(),unl=getUnlocked(marked),hp=ld(P,'mhp',{}),def=ld(P,'def',{});
+  let h='';
+  MK.forEach(mk=>{
+    const mon=MONS[mk],cur=hp[mk]||0,dead=!!def[mk];
+    let hpH='';for(let i=0;i<mon.hp;i++)hpH+=`<div class="hp ${i<cur?'hit':''}"></div>`;
+    const active=unl[mk]||[];
+    const numsH=mon.nums.map(n=>`<span class="mnum ${active.includes(n)?'unlocked':'locked'}">${n}</span>`).join('');
+    h+=`<div class="mcard ${mon.isBoss?'boss':''} ${dead?'dead':''}">
+      <div class="mname">${mon.isBoss?'👑 ':''}${MICO[mk]} ${mon.name}</div>
+      <div class="minfo">PV:${mon.hp} +${mon.gem}💎${mon.isBoss?' · -2❤':''}</div>
+      <div class="mnums">${numsH}</div><div class="hprow">${hpH}</div></div>`;
+  });
+  document.getElementById('mgrid').innerHTML=h;
+}
+
+function updCnts(){
+  const merged=isMerged()||P==='M';
+  const gems=merged?getMGems():ld(P,'gems',0);
+  document.getElementById('vgm').textContent=gems;
+  document.getElementById('vvp').textContent=calcVP(merged?'M':+P||1);
+}
+
+function resetAll(){
+  if(!confirm('Nuova partita?'))return;
+  // In modalità multi-device: notifica l'altro dispositivo di resettare
+  if(deviceRole!=='single'){
+    const payload={type:'reset',ts:Date.now()};
+    try{
+      if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
+      if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
+    }catch(e){}
+  }
+  doReset();
+}
+
+function doReset(){
+  if(syncInterval)clearInterval(syncInterval);
+  syncBinId='';syncRoomCode='';deviceRole='single';
+  hostPeer=null;hostConn=null;joinConn=null;
+  [1,2,'M'].forEach(p=>['mk','mhp','def','lifeIdx','gems','bmax','bused_confirmed','tres','fists','shield'].forEach(k=>localStorage.removeItem(PFX+'p'+p+'_'+k)));
+  localStorage.removeItem(PFX+'fistDone');
+  localStorage.removeItem(PFX+'turnNum');
+  localStorage.removeItem(PFX+'p1side');
+  localStorage.removeItem(PFX+'savedMode');
+  window.location.reload();
+}
+function showN(t,b){
+  document.getElementById('nt').textContent=t;document.getElementById('nb').textContent=b;
+  document.getElementById('notif').classList.remove('hidden');
+  clearTimeout(showN._t);showN._t=setTimeout(()=>document.getElementById('notif').classList.add('hidden'),4e3);
+}
+function closeN(){document.getElementById('notif').classList.add('hidden');}
+function updTurnInfo(){
+  document.getElementById('turn-info').textContent=`Caselle barrate: ${turnCrossed} / ${MAX_CROSS}`;
+  document.getElementById('cross-count').textContent=rolled?`Coppie: ${getSums().join('+')||'—'}`:'' ;
+}
+</script>
+</body>
+</html>
