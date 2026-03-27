@@ -1122,9 +1122,34 @@ function startMultiDevice(role){
   }
 }
 
+function makePeerCfg(id){
+  const cfg={
+    debug:0,
+    config:{iceServers:[
+      {urls:'stun:stun.l.google.com:19302'},
+      {urls:'stun:stun1.l.google.com:19302'},
+    ]}
+  };
+  // Usa il server pubblico PeerJS con parametri espliciti
+  cfg.host='0.peerjs.com';
+  cfg.port=443;
+  cfg.path='/';
+  cfg.secure=true;
+  if(id)cfg.id=id; // non passare id come primo arg, usare opzione
+  return cfg;
+}
+
 function initHostPeer(){
   const peerId=genPeerId();
-  hostPeer=new Peer(peerId,{debug:0});
+  // Passa l'id nelle opzioni invece che come primo argomento
+  hostPeer=new Peer(peerId,{
+    debug:0,
+    host:'0.peerjs.com',port:443,path:'/',secure:true,
+    config:{iceServers:[
+      {urls:'stun:stun.l.google.com:19302'},
+      {urls:'stun:stun1.l.google.com:19302'},
+    ]}
+  });
   hostPeer.on('open', id=>{
     // Mostra solo la parte leggibile (senza prefisso hd6-)
     const shortCode=id.replace('hd6-','');
@@ -1166,7 +1191,14 @@ function joinGame(){
   document.getElementById('join-status').textContent='Connessione in corso…';
   document.getElementById('join-status').className='sync-status wait';
 
-  const joinPeer=new Peer({debug:0});
+  const joinPeer=new Peer({
+    debug:0,
+    host:'0.peerjs.com',port:443,path:'/',secure:true,
+    config:{iceServers:[
+      {urls:'stun:stun.l.google.com:19302'},
+      {urls:'stun:stun1.l.google.com:19302'},
+    ]}
+  });
   joinPeer.on('open', myId=>{
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
@@ -2532,3 +2564,4 @@ function playAudio(eventKey){
 </script>
 </body>
 </html>
+Visualizzazione di AAA_v8_fixed.html.
