@@ -67,7 +67,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .pname-cur.p1{color:#4a9eff;}.pname-cur.p2{color:#ff6b6b;}.pname-cur.pm{color:#c8a020;}
 .vpbox{font-family:'Cinzel',serif;font-size:16px;color:#c8a020;text-align:center;}
 .vplbl{font-size:7px;color:#6a5a3a;text-align:center;}
-.pturn-btn{font-family:'Cinzel',serif;font-size:9px;padding:6px 10px;border-radius:6px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;white-space:nowrap;}
+.pturn-btn{font-family:'Cinzel',serif;font-size:11px;padding:9px 14px;border-radius:7px;border:2px solid #c8a020;background:rgba(200,160,32,.15);color:#c8a020;cursor:pointer;white-space:nowrap;font-weight:600;}
 .slbl{font-size:7px;color:#6a5a3a;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
 .merged-badge{background:rgba(200,160,32,.12);border:1.5px solid #c8a020;border-radius:7px;padding:4px 10px;font-size:8px;color:#c8a020;text-align:center;margin-bottom:4px;font-family:'Cinzel',serif;}
 .lifebar-wrap{margin-bottom:6px;}
@@ -193,6 +193,21 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 @keyframes tpulse{0%,100%{box-shadow:0 0 0 0 rgba(224,128,32,0);}50%{box-shadow:0 0 0 4px rgba(224,128,32,.35);}}
 .torch-slots{font-size:8px;color:#e08020;font-family:'Cinzel',serif;font-weight:700;}
 .torch-toggle.locked-torch{opacity:0.35;cursor:default;}
+/* Manuale regole */
+.manual-wrap{display:none;position:fixed;inset:0;background:rgba(5,3,2,.96);z-index:999;overflow-y:auto;padding:18px 14px 30px;}
+.manual-wrap.open{display:block;}
+.manual-inner{max-width:340px;margin:0 auto;}
+.manual-close-btn{font-family:'Cinzel',serif;font-size:10px;padding:6px 14px;border-radius:6px;border:1.5px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;}
+.manual-title{font-family:'Cinzel',serif;font-size:18px;color:#c8a020;letter-spacing:3px;text-align:center;margin-bottom:4px;}
+.manual-sub{font-size:10px;color:#6a5a3a;text-align:center;margin-bottom:18px;font-style:italic;}
+.manual-section{margin-bottom:14px;}
+.manual-h{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(200,160,32,.25);}
+.manual-p{font-size:10px;color:#c8b880;line-height:1.7;margin-bottom:4px;}
+.manual-p b{color:#f0d060;}
+.manual-table{width:100%;border-collapse:collapse;margin:4px 0;}
+.manual-table th{font-family:'Cinzel',serif;font-size:8px;color:#c8a020;text-align:left;padding:3px 5px;border-bottom:1px solid rgba(200,160,32,.2);}
+.manual-table td{font-size:9px;color:#c8b880;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;}
+.manual-table td:first-child{color:#f0d060;font-weight:bold;white-space:nowrap;}
 .fist-section{background:rgba(80,40,10,.2);border:1.5px solid rgba(150,90,25,.3);border-radius:7px;padding:8px;margin-bottom:7px;}
 .fist-title{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;margin-bottom:4px;letter-spacing:1px;}
 .fist-desc{font-size:7px;color:#8a7a5a;margin-bottom:5px;}
@@ -239,6 +254,100 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
   <div id="ios-banner" style="display:none;margin-top:14px;max-width:260px;background:rgba(200,160,32,.08);border:1px solid rgba(200,160,32,.25);border-radius:8px;padding:10px 12px;font-size:10px;color:#8a7a5a;text-align:center;line-height:1.7;">
     📲 Per installare su iPhone:<br>tocca <b style="color:#c8a020">Condividi</b> → <b style="color:#c8a020">Aggiungi a schermata Home</b>
   </div>
+  <button class="mode-btn" style="margin-top:18px;border-color:#8a7a5a;color:#8a7a5a;background:rgba(138,122,90,.08);font-size:11px;padding:10px 18px;" onclick="document.getElementById('manual-overlay').classList.add('open')">📖 Regole del gioco</button>
+</div>
+
+<!-- ═══ MANUALE REGOLE ═══ -->
+<div id="manual-overlay" class="manual-wrap">
+ <div class="manual-inner">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px;position:sticky;top:0;z-index:2;background:rgba(5,3,2,.96);padding:4px 0;">
+    <button class="manual-close-btn" onclick="document.getElementById('manual-overlay').classList.remove('open')">✕ Chiudi</button>
+  </div>
+  <div class="manual-title">MANUALE</div>
+  <div class="manual-sub">Horror Dungeon — Realm DDD</div>
+
+  <div class="manual-section">
+   <div class="manual-h">🎯 Obiettivo</div>
+   <div class="manual-p">Due esploratori cooperano per eliminare tutti i mostri del dungeon, incluso il boss <b>Pennywise 🎈</b>. I giocatori si alternano a turni. Alla fine ottengono un <b>punteggio comune</b> basato su gemme raccolte, tesori trovati e vita rimasta.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">🎲 Struttura del turno</div>
+   <div class="manual-p">1. <b>Lancia i dadi</b> — 4 bianchi + 1 nero.<br>
+   2. <b>Forma 2 coppie</b> — seleziona 2 dadi per coppia. La somma di ogni coppia è il numero che puoi usare.<br>
+   3. <b>Usa le coppie sulla mappa</b> — barra una casella con quel numero oppure colpisci un mostro.<br>
+   4. <b>Passa il turno</b> — premi "Passa ➜".</div>
+   <div class="manual-p">⚠ Se non barri nessuna casella <b>e</b> non colpisci nessun mostro, subisci <b>2 danni</b> alla vita.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">🗺 Tipi di caselle</div>
+   <table class="manual-table">
+    <tr><th>Tipo</th><th>Regola</th></tr>
+    <tr><td>🟢 Start</td><td>Punto di partenza. Ogni giocatore usa le Start del proprio lato (sx o dx). Da unificati si usano tutte.</td></tr>
+    <tr><td>⬜ Regular</td><td>Barra se adiacente a una casella già barrata e la somma coppia = numero della casella.</td></tr>
+    <tr><td>🟫 Attivazione</td><td>Come le Regular. Quando barrata, <b>sblocca il numero corrispondente del mostro adiacente</b>.</td></tr>
+    <tr><td>💰 Tesoro</td><td>Barra e scegli: Scudo 🛡, Torcia 🕯 o +3 Dadi Neri ⬛.</td></tr>
+    <tr><td>✊ Pugno</td><td>Richiede coppia doppia (es. 3+3) con somma = numero della casella.</td></tr>
+    <tr><td>🎲🎲 Doppio</td><td>Richiede qualsiasi coppia doppia (due dadi uguali).</td></tr>
+    <tr><td>👾 Mostro</td><td>Colpisci se adiacente e la somma coppia = un numero attivo del mostro. Conta come azione del turno.</td></tr>
+   </table>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">👾 Mostri e attivazione</div>
+   <div class="manual-p">Ogni mostro ha numeri <b>attivi</b> (giallo, usabili subito) e numeri <b>bloccati</b> (grigio). Per sbloccare un numero bloccato, barra la <b>casella grigia adiacente al mostro</b> che riporta quel numero.</div>
+   <div class="manual-p">Per colpire: devi avere una casella barrata adiacente al mostro e una coppia con somma uguale a un numero attivo. Ogni colpo toglie 1 PV. A 0 PV il mostro è sconfitto → guadagni Gemme.</div>
+   <div class="manual-p">⚠ Il boss <b>Pennywise</b> quando sconfitto infligge <b>-2 ❤</b>.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">⬛ Dado Nero</div>
+   <div class="manual-p"><b>Giocatori separati:</b> gratuito e illimitato.<br>
+   <b>Unificati:</b> 3 slot totali per partita. Un turno sì e uno no è gratuito.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">💰 Tesori</div>
+   <table class="manual-table">
+    <tr><th>Tesoro</th><th>Effetto</th></tr>
+    <tr><td>🛡 Scudo</td><td>+1💎 subito + i prossimi 3 danni alla vita annullati. (1× per partita)</td></tr>
+    <tr><td>🕯 Torcia</td><td>+2 token. Clicca un token: barra una casella adiacente senza usare i dadi.</td></tr>
+    <tr><td>⬛ Dado Nero</td><td>+3 slot dado nero per tutta la partita. (1× per partita)</td></tr>
+   </table>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">✊ Pugni</div>
+   <div class="manual-p">5 caselle Pugno barrate (tra i due giocatori) → il <b>primo</b> che raggiunge quota 5 guadagna <b>+3💎</b>.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">⚔ Unione</div>
+   <div class="manual-p">I giocatori si uniscono quando barrano la <b>stessa casella</b> oppure fanno <b>danno allo stesso mostro</b>. Da quel momento condividono mappa, gemme, tesori e vita. Tutte le Start diventano disponibili.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">🏆 Punteggio finale (comune)</div>
+   <div class="manual-p">Al termine della partita i due giocatori hanno un <b>unico punteggio condiviso</b>:<br>
+   <b>PV = Gemme totali × 3 + Tesori totali × 2 − Penalità vita</b><br>
+   Le gemme e i tesori di entrambi i giocatori si sommano. La valutazione dipende dal punteggio raggiunto insieme.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">☠ Game Over</div>
+   <div class="manual-p">Se la barra vita raggiunge la fine, il giocatore viene eliminato dal dungeon.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">🌐 Due dispositivi</div>
+   <div class="manual-p">Giocatore 1 crea la partita e condivide il codice. Giocatore 2 lo inserisce. I turni si alternano automaticamente. Dopo l'unione, i turni continuano ad alternarsi tra i due dispositivi.</div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px;">
+   <button class="manual-close-btn" onclick="document.getElementById('manual-overlay').classList.remove('open')">✕ Chiudi Manuale</button>
+  </div>
+ </div>
 </div>
 
 <!-- Schermata host: mostra codice -->
@@ -594,17 +703,14 @@ function getUnlocked(marked){
   MK.forEach(mk=>{
     const mon=MONS[mk];
     const activeArr=[...mon.active];
-    // Ogni casella in greyAdj, se barrata, sblocca il numero corrispondente del mostro.
-    // Non serve che sia geometricamente adiacente al mostro — è il designer che decide quali
-    // caselle grigie attivano quali numeri.
-    mon.greyAdj.forEach(gk=>{
-      const gc=CMAP[gk];
-      if(!gc||gc.t!=='G')return;    // solo caselle grigie
-      if(!marked[gk])return;         // deve essere barrata
+    // Solo caselle grigie (t='G') geometricamente adiacenti al mostro.
+    // Il numero sbloccato è gc.n (il numero scritto sulla casella grigia).
+    CELLS.forEach(gc=>{
+      if(gc.t!=='G')return;
+      if(!marked[gc.k])return;
+      if(!isAdj(gc.k,mk))return;
       const numIdx=mon.nums.indexOf(gc.n);
-      if(numIdx>=0&&!activeArr[numIdx]){
-        activeArr[numIdx]=true;
-      }
+      if(numIdx>=0&&!activeArr[numIdx])activeArr[numIdx]=true;
     });
     res[mk]=mon.nums.filter((_,i)=>activeArr[i]);
   });
@@ -870,7 +976,12 @@ function recordAction(pi, action){ pairActions[pi].push(action); }
 
 function sv(p,k,v){localStorage.setItem(PFX+'p'+p+'_'+k,JSON.stringify(v));}
 function ld(p,k,d){const v=localStorage.getItem(PFX+'p'+p+'_'+k);return v!==null?JSON.parse(v):d;}
-function isMerged(){return Object.keys(ld(1,'mk',{})).some(k=>ld(2,'mk',{})[k]);}
+function isMerged(){
+  const mk1=ld(1,'mk',{}),mk2=ld(2,'mk',{});
+  if(Object.keys(mk1).some(k=>mk2[k]))return true;
+  const mhp1=ld(1,'mhp',{}),mhp2=ld(2,'mhp',{});
+  return MK.some(mk=>(mhp1[mk]||0)>0&&(mhp2[mk]||0)>0);
+}
 function getMM(){return{...ld(1,'mk',{}),...ld(2,'mk',{})};}
 function getMLife(){return Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));}
 function getMGems(){return ld(1,'gems',0)+ld(2,'gems',0);}
@@ -1145,7 +1256,8 @@ function handlePeerData(d, myRole){
   const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:(globalTurnNumber%2===0?1:2);
   // Se il gioco è in corso (sc-game attivo), aggiorna solo il render
   if(document.getElementById('sc-game').className.includes('active')){renderAll();return;}
-  // Altrimenti naviga alla schermata pass corretta
+  // Resetta il pulsante prima di mostrare la schermata pass (gestisce transizione merge)
+  const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=false;
   showPass(nextP);
 }
 
@@ -1238,6 +1350,7 @@ function showPass(nextP){
       } else {
         pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 2 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
       }
+      const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=!isMyTurn;
       return;
     } else {
       // Non-merged: l'host è sempre Giocatore 1
@@ -1274,6 +1387,7 @@ function showPass(nextP){
       } else {
         pm.innerHTML=`<span style="color:#8a7060;">Turno dell'Host — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
       }
+      const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=!isMyTurn;
       return;
     } else {
       // Non-merged: il join è sempre Giocatore 2
@@ -1406,6 +1520,7 @@ function triggerGO(dp){
 
 function showGameOver(dp){
   allScreensOff();
+  playAudio('gameover');
   document.getElementById('sc-gameover').className='screen active';
   document.getElementById('go-player').textContent=`— ${dp==='M'?'Giocatore Unificato':'Giocatore '+dp} —`;
   document.getElementById('go-epitaph').textContent=EPITAPHS[Math.floor(Math.random()*EPITAPHS.length)];
@@ -1438,6 +1553,7 @@ function calcVP(p){
 
 function showVictory(){
   allScreensOff();
+  playAudio('victory');
   document.getElementById('sc-victory').className='screen active';
   const vp1=calcVP(1),vp2=calcVP(2);
   const rows=document.getElementById('vic-scores');
@@ -1907,6 +2023,7 @@ function deletePair(pi){
       const hp=ld(P,'mhp',{});
       hp[act.mkey]=Math.max(0,(hp[act.mkey]||0)-act.amount);
       sv(P,'mhp',hp);
+      if(act.counted)turnCrossed=Math.max(0,turnCrossed-1);
       if(act.killed){
         const def=ld(P,'def',{});delete def[act.mkey];sv(P,'def',def);
         // Ripristina casella mostro come non barrata
@@ -2070,6 +2187,7 @@ function clickCell(k){
     const pairIdx=pairs.findIndex((pr,i)=>pr.length===2&&!pairsConsumed[i]&&unl.includes(dV[pr[0]]+dV[pr[1]]));
     if(pairIdx<0){showN('❌ Mancato!',`Numeri attivi: ${unl.join(', ')} · Coppie: ${sums.join(', ')}`);return;}
     pairsConsumed[pairIdx]=true;
+    turnCrossed++; // colpire un mostro conta come azione del turno (evita penalità)
     const hp=ld(P,'mhp',{});
     hp[cell.mkey]=(hp[cell.mkey]||0)+1;
     const killed=hp[cell.mkey]>=mon.hp;
@@ -2078,27 +2196,29 @@ function clickCell(k){
       const def=ld(P,'def',{});def[cell.mkey]=true;sv(P,'def',def);
       saveMk(k,true);
       const prevGems=ld(P,'gems',0);sv(P,'gems',prevGems+mon.gem);
+      playAudio('kill_'+cell.mkey.toLowerCase());
       if(mon.isBoss){
         let dmg=2,shieldUsed=0;
         const shield=ld(P,'shield',0);
         if(shield>0){const abs=Math.min(shield,dmg);sv(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
         const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);sv(P,'lifeIdx',ni);
-        recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed});
-        sv(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();
+        recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed,counted:true});
+        sv(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();updTurnInfo();
         showN('👑 Boss sconfitto! +'+mon.gem+'💎 -2❤','');
         if(ni>=MAX_LIFE_IDX){triggerGO(P);return;}
         if(checkVictory())return;
         return;
       }
-      recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0});
-      sv(P,'mhp',hp);buildSVG();renderMonsters();renderPairs();updCnts();
+      recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0,counted:true});
+      sv(P,'mhp',hp);buildSVG();renderMonsters();renderPairs();updCnts();updTurnInfo();
       showN(`🏆 ${mon.name} sconfitto! +${mon.gem}💎`,'');
       if(checkVictory())return;
       return;
     }
-    recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:false,gemGained:0,lifeDmg:0,shieldUsed:0});
+    playAudio('hit_'+cell.mkey.toLowerCase());
+    recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:false,gemGained:0,lifeDmg:0,shieldUsed:0,counted:true});
     showN(`⚔ Colpo a ${mon.name}! ${mon.hp-hp[cell.mkey]}/${mon.hp} PV rimasti`,'');
-    sv(P,'mhp',hp);renderMonsters();renderPairs();buildSVG();return;
+    sv(P,'mhp',hp);renderMonsters();renderPairs();buildSVG();updTurnInfo();return;
   }
 
   // ── CELLA NORMALE: controllo raggiungibilità ──
@@ -2173,6 +2293,7 @@ function clickCell(k){
   // Tesoro: apre modale ma non fa nulla finché il giocatore non sceglie
   if(cell.t==='T'){
     torchAvailable=true;
+    playAudio('treasure');
     // Il modale tesoro registra l'azione quando il giocatore sceglie (in chooseTres)
     // Passiamo l'usedPairIdx al modale tramite variabile globale
     pendingTresPairIdx=usedPairIdx;
@@ -2186,6 +2307,7 @@ function clickCell(k){
     sv(1,'gems',ld(1,'gems',0)+1);
     recordAction(usedPairIdx,{type:'gem',amount:1});
     showN('⚔ UNIONE! +1💎','I due esploratori si sono incontrati!');
+    playAudio('merge');
     buildSVG();updCnts();updTurnInfo();return;
   }
 
@@ -2362,6 +2484,50 @@ function closeN(){document.getElementById('notif').classList.add('hidden');}
 function updTurnInfo(){
   document.getElementById('turn-info').textContent=`Caselle barrate: ${turnCrossed} / ${MAX_CROSS}`;
   document.getElementById('cross-count').textContent=rolled?`Coppie: ${getSums().join('+')||'—'}`:'' ;
+}
+
+// ─── SISTEMA AUDIO ───
+// Mappa degli eventi audio → nome file MP3 (senza estensione).
+// Posiziona i file MP3 nella stessa cartella del file HTML con questi nomi.
+// Se un file non è disponibile, l'audio viene silenziosamente ignorato.
+const AUDIO_MAP={
+  // Danni ai mostri (non kill)
+  hit_fk:   'hit_freddy',       // Danno a Freddy Krueger
+  hit_jv:   'hit_jason',        // Danno a Jason Voorhees
+  hit_js:   'hit_jigsaw',       // Danno a Jigsaw
+  hit_mm:   'hit_myers',        // Danno a Michael Myers
+  hit_lf:   'hit_leatherface',  // Danno a Leatherface
+  hit_gf:   'hit_ghostface',    // Danno a Ghostface
+  hit_pw:   'hit_pennywise',    // Danno a Pennywise
+  // Kill mostri
+  kill_fk:  'kill_freddy',      // Kill Freddy Krueger
+  kill_jv:  'kill_jason',       // Kill Jason Voorhees
+  kill_js:  'kill_jigsaw',      // Kill Jigsaw
+  kill_mm:  'kill_myers',       // Kill Michael Myers
+  kill_lf:  'kill_leatherface', // Kill Leatherface
+  kill_gf:  'kill_ghostface',   // Kill Ghostface
+  kill_pw:  'kill_pennywise',   // Kill Pennywise (boss)
+  // Altri eventi
+  merge:    'merge',            // Unione giocatori
+  victory:  'victory',          // Vittoria
+  gameover: 'gameover',         // Game over
+  treasure: 'treasure',         // Tesoro trovato
+};
+
+const _audioCache={};
+function playAudio(eventKey){
+  const filename=AUDIO_MAP[eventKey];
+  if(!filename)return;
+  try{
+    if(!_audioCache[eventKey]){
+      const a=new Audio(filename+'.mp3');
+      a.onerror=()=>{}; // silenzioso se il file non esiste
+      _audioCache[eventKey]=a;
+    }
+    const a=_audioCache[eventKey];
+    a.currentTime=0;
+    a.play().catch(()=>{}); // ignora errori autoplay policy
+  }catch(e){}
 }
 </script>
 </body>
