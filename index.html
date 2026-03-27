@@ -31,119 +31,119 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .screen{display:none;padding:10px;}.screen.active{display:block;}
 #sc-pass{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 #sc-pass.active{display:flex;}
-.pass-title{font-family:'Cinzel',serif;font-size:24px;color:#c8a020;text-align:center;margin-bottom:6px;letter-spacing:3px;}
-.pass-sub{font-size:12px;color:#6a5a3a;text-align:center;margin-bottom:40px;font-style:italic;}
-.pass-player{font-family:'Cinzel',serif;font-size:18px;margin-bottom:10px;text-align:center;}
+.pass-title{font-family:'Cinzel',serif;font-size:25px;color:#c8a020;text-align:center;margin-bottom:6px;letter-spacing:3px;}
+.pass-sub{font-size:13px;color:#6a5a3a;text-align:center;margin-bottom:40px;font-style:italic;}
+.pass-player{font-family:'Cinzel',serif;font-size:19px;margin-bottom:10px;text-align:center;}
 .pass-player.p1{color:#4a9eff;}.pass-player.p2{color:#ff6b6b;}.pass-player.pm{color:#c8a020;}
-.pass-msg{font-size:12px;color:#8a7a5a;text-align:center;margin-bottom:30px;max-width:260px;line-height:1.6;}
-.pass-btn{font-family:'Cinzel',serif;font-size:15px;padding:14px 36px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;letter-spacing:2px;}
+.pass-msg{font-size:13px;color:#8a7a5a;text-align:center;margin-bottom:30px;max-width:260px;line-height:1.6;}
+.pass-btn{font-family:'Cinzel',serif;font-size:16px;padding:14px 36px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;letter-spacing:2px;}
 .pass-btn:hover{background:rgba(200,160,32,.28);}
 #sc-gameover{background:#050302;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
 #sc-gameover.active{display:flex;}
-.go-blood{font-size:58px;margin-bottom:18px;animation:bp 2s ease-in-out infinite;}
+.go-blood{font-size:59px;margin-bottom:18px;animation:bp 2s ease-in-out infinite;}
 @keyframes bp{0%,100%{filter:drop-shadow(0 0 8px #8b0000);}50%{filter:drop-shadow(0 0 28px #cc0000);transform:scale(1.1);}}
-.go-title{font-family:'Cinzel',serif;font-size:18px;color:#8b0000;letter-spacing:5px;margin-bottom:4px;text-shadow:0 0 30px rgba(180,0,0,.9);}
-.go-player{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:20px;letter-spacing:2px;}
-.go-epitaph{font-family:'Crimson Text',Georgia,serif;font-size:13px;color:#a89068;line-height:2;max-width:310px;font-style:italic;margin-bottom:28px;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;}
-.go-score{font-family:'Cinzel',serif;font-size:14px;color:#c8a020;margin-bottom:20px;padding:12px;border:1px solid rgba(200,160,32,.3);border-radius:8px;background:rgba(200,160,32,.06);text-align:center;}
-.go-restart{font-family:'Cinzel',serif;font-size:11px;padding:10px 24px;border-radius:7px;border:1.5px solid #8b0000;background:rgba(139,0,0,.12);color:#cc4040;cursor:pointer;letter-spacing:2px;}
+.go-title{font-family:'Cinzel',serif;font-size:19px;color:#8b0000;letter-spacing:5px;margin-bottom:4px;text-shadow:0 0 30px rgba(180,0,0,.9);}
+.go-player{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;margin-bottom:20px;letter-spacing:2px;}
+.go-epitaph{font-family:'Crimson Text',Georgia,serif;font-size:14px;color:#a89068;line-height:2;max-width:310px;font-style:italic;margin-bottom:28px;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;}
+.go-score{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;margin-bottom:20px;padding:12px;border:1px solid rgba(200,160,32,.3);border-radius:8px;background:rgba(200,160,32,.06);text-align:center;}
+.go-restart{font-family:'Cinzel',serif;font-size:12px;padding:10px 24px;border-radius:7px;border:1.5px solid #8b0000;background:rgba(139,0,0,.12);color:#cc4040;cursor:pointer;letter-spacing:2px;}
 /* VICTORY */
 #sc-victory{background:#050a02;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
 #sc-victory.active{display:flex;}
-.vic-title{font-family:'Cinzel',serif;font-size:22px;color:#c8a020;letter-spacing:4px;margin-bottom:20px;text-shadow:0 0 20px rgba(200,160,32,.8);}
-.vic-trophy{font-size:54px;margin-bottom:16px;animation:trophypulse 1.5s ease-in-out infinite;}
+.vic-title{font-family:'Cinzel',serif;font-size:23px;color:#c8a020;letter-spacing:4px;margin-bottom:20px;text-shadow:0 0 20px rgba(200,160,32,.8);}
+.vic-trophy{font-size:55px;margin-bottom:16px;animation:trophypulse 1.5s ease-in-out infinite;}
 @keyframes trophypulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);filter:drop-shadow(0 0 16px gold);}}
 .vic-scores{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;width:100%;max-width:300px;}
 .vic-score-row{background:rgba(200,160,32,.08);border:1px solid rgba(200,160,32,.25);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
-.vic-player{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;}
-.vic-pts{font-family:'Cinzel',serif;font-size:18px;color:#f0d060;}
+.vic-player{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;}
+.vic-pts{font-family:'Cinzel',serif;font-size:19px;color:#f0d060;}
 .vic-winner{border-color:#c8a020;background:rgba(200,160,32,.15);}
-.vic-restart{font-family:'Cinzel',serif;font-size:11px;padding:10px 24px;border-radius:7px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:2px;}
+.vic-restart{font-family:'Cinzel',serif;font-size:12px;padding:10px 24px;border-radius:7px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:2px;}
 #sc-game{padding:8px 10px;}
 .hdr{text-align:center;margin-bottom:5px;}
-.realm{font-size:7px;letter-spacing:3px;color:#6a5a3a;text-transform:uppercase;}
+.realm{font-size:8px;letter-spacing:3px;color:#6a5a3a;text-transform:uppercase;}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;gap:6px;}
-.pname-cur{font-family:'Cinzel',serif;font-size:13px;font-weight:600;}
+.pname-cur{font-family:'Cinzel',serif;font-size:14px;font-weight:600;}
 .pname-cur.p1{color:#4a9eff;}.pname-cur.p2{color:#ff6b6b;}.pname-cur.pm{color:#c8a020;}
-.vpbox{font-family:'Cinzel',serif;font-size:16px;color:#c8a020;text-align:center;}
-.vplbl{font-size:7px;color:#6a5a3a;text-align:center;}
-.pturn-btn{font-family:'Cinzel',serif;font-size:11px;padding:9px 14px;border-radius:7px;border:2px solid #c8a020;background:rgba(200,160,32,.15);color:#c8a020;cursor:pointer;white-space:nowrap;font-weight:600;}
-.slbl{font-size:7px;color:#6a5a3a;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
-.merged-badge{background:rgba(200,160,32,.12);border:1.5px solid #c8a020;border-radius:7px;padding:4px 10px;font-size:8px;color:#c8a020;text-align:center;margin-bottom:4px;font-family:'Cinzel',serif;}
+.vpbox{font-family:'Cinzel',serif;font-size:17px;color:#c8a020;text-align:center;}
+.vplbl{font-size:8px;color:#6a5a3a;text-align:center;}
+.pturn-btn{font-family:'Cinzel',serif;font-size:12px;padding:9px 14px;border-radius:7px;border:2px solid #c8a020;background:rgba(200,160,32,.15);color:#c8a020;cursor:pointer;white-space:nowrap;font-weight:600;}
+.slbl{font-size:8px;color:#6a5a3a;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.merged-badge{background:rgba(200,160,32,.12);border:1.5px solid #c8a020;border-radius:7px;padding:4px 10px;font-size:9px;color:#c8a020;text-align:center;margin-bottom:4px;font-family:'Cinzel',serif;}
 .lifebar-wrap{margin-bottom:6px;}
 .lifebar{display:flex;gap:0;border-radius:4px;overflow:hidden;border:1.5px solid rgba(200,160,32,.35);}
 .lbcell{flex:1;height:24px;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(0,0,0,.4);position:relative;user-select:none;}
 .lbcell:last-child{border-right:none;}
-.lbval{font-family:'Cinzel',serif;font-size:5.5px;font-weight:600;pointer-events:none;}
+.lbval{font-family:'Cinzel',serif;font-size:6.5px;font-weight:600;pointer-events:none;}
 .lbcell[data-band="safe"]{background:#182e0c;}.lbcell[data-band="safe"] .lbval{color:#70d040;}
 .lbcell[data-band="warn"]{background:#3c2e06;}.lbcell[data-band="warn"] .lbval{color:#c8a828;}
 .lbcell[data-band="danger"]{background:#4a1e06;}.lbcell[data-band="danger"] .lbval{color:#e06020;}
 .lbcell[data-band="dead"]{background:#3a0606;}.lbcell[data-band="dead"] .lbval{color:#ee2020;}
 .lbcell.locked{cursor:default;}
-.lbcell.locked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(100,200,60,.7);pointer-events:none;}
+.lbcell.locked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:rgba(100,200,60,.7);pointer-events:none;}
 .lbcell.cur{outline:2.5px solid #fff;outline-offset:-2px;z-index:2;}
 .lbcell.past{opacity:.55;}
-.lbcell.past::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:rgba(220,40,40,.85);pointer-events:none;}
+.lbcell.past::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:rgba(220,40,40,.85);pointer-events:none;}
 .lbcell.deadspin{background:#8b0000!important;animation:dpulse .45s;}
 @keyframes dpulse{0%,100%{filter:brightness(1);}50%{filter:brightness(2);}}
 .dsec{background:rgba(0,0,0,.3);border:1px solid rgba(200,160,32,.18);border-radius:7px;padding:8px;margin-bottom:7px;}
-.dtitle{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+.dtitle{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
 .drow{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
-.die{width:36px;height:36px;border-radius:6px;border:2px solid;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:'Cinzel',serif;transition:all .12s;user-select:none;flex-shrink:0;}
+.die{width:36px;height:36px;border-radius:6px;border:2px solid;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Cinzel',serif;transition:all .12s;user-select:none;flex-shrink:0;}
 .die.w{background:#f2ede4;border-color:#c0b090;color:#2a1a08;}
 .die.b{background:#222;border-color:#777;color:#eee;}
 .die.sel{transform:translateY(-4px);}
 .die.w.sel{border-color:#c8a020;box-shadow:0 4px 10px rgba(200,160,32,.5);}
 .die.b.sel{border-color:#ccc;box-shadow:0 4px 10px rgba(200,200,200,.4);}
 .die.used{opacity:.3;pointer-events:none;}
-.rollbtn{padding:6px 11px;border-radius:6px;border:1px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;font-family:'Cinzel',serif;font-size:10px;cursor:pointer;}
+.rollbtn{padding:6px 11px;border-radius:6px;border:1px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;font-family:'Cinzel',serif;font-size:11px;cursor:pointer;}
 .brow{display:flex;align-items:center;gap:4px;margin-bottom:5px;flex-wrap:wrap;}
-.bhint{font-size:7px;color:#6a5a3a;}
-.buse{width:16px;height:16px;border-radius:3px;background:#1a1a1a;border:1.5px solid #777;display:flex;align-items:center;justify-content:center;font-size:8px;color:#eee;flex-shrink:0;}
+.bhint{font-size:8px;color:#6a5a3a;}
+.buse{width:16px;height:16px;border-radius:3px;background:#1a1a1a;border:1.5px solid #777;display:flex;align-items:center;justify-content:center;font-size:9px;color:#eee;flex-shrink:0;}
 .buse.x{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.15);}
-.clrbtn{padding:2px 7px;border-radius:4px;border:1px solid rgba(255,80,80,.25);background:rgba(255,80,80,.06);color:#ff9999;font-size:8px;cursor:pointer;margin-left:auto;}
+.clrbtn{padding:2px 7px;border-radius:4px;border:1px solid rgba(255,80,80,.25);background:rgba(255,80,80,.06);color:#ff9999;font-size:9px;cursor:pointer;margin-left:auto;}
 .pairs{display:flex;gap:6px;flex-wrap:wrap;}
 .pslot{background:rgba(255,255,255,.03);border:1.5px dashed rgba(200,160,32,.18);border-radius:5px;padding:3px 6px;min-width:66px;text-align:center;}
 .pslot.rdy{border-color:rgba(200,160,32,.5);background:rgba(200,160,32,.05);}
-.plbl{font-size:6px;color:#6a5a3a;letter-spacing:1px;margin-bottom:1px;}
-.psum{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;}
+.plbl{font-size:7px;color:#6a5a3a;letter-spacing:1px;margin-bottom:1px;}
+.psum{font-family:'Cinzel',serif;font-size:16px;color:#c8a020;}
 .pdice{display:flex;gap:2px;justify-content:center;margin-bottom:1px;}
-.mdie{width:15px;height:15px;border-radius:2px;border:1.5px solid;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.mdie{width:15px;height:15px;border-radius:2px;border:1.5px solid;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
 .mdie.w{background:#f2ede4;border-color:#c0b090;color:#2a1a08;}
 .mdie.b{background:#222;border-color:#777;color:#eee;}
-.dhint{font-size:7px;color:#6a5a3a;font-style:italic;margin-top:2px;}
-.pair-del{font-size:9px;color:#ff7070;cursor:pointer;margin-left:3px;font-weight:700;align-self:center;}
-.turn-info{font-size:8px;color:#c8a020;margin-top:3px;background:rgba(200,160,32,.06);border-radius:4px;padding:3px 6px;text-align:center;}
-.black-die-free{font-size:8px;font-family:'Cinzel',serif;padding:3px 8px;border-radius:4px;margin-top:3px;text-align:center;}
+.dhint{font-size:8px;color:#6a5a3a;font-style:italic;margin-top:2px;}
+.pair-del{font-size:10px;color:#ff7070;cursor:pointer;margin-left:3px;font-weight:700;align-self:center;}
+.turn-info{font-size:9px;color:#c8a020;margin-top:3px;background:rgba(200,160,32,.06);border-radius:4px;padding:3px 6px;text-align:center;}
+.black-die-free{font-size:9px;font-family:'Cinzel',serif;padding:3px 8px;border-radius:4px;margin-top:3px;text-align:center;}
 .black-die-free.yes{background:rgba(50,200,50,.12);border:1px solid rgba(50,200,50,.4);color:#50dd50;}
 .black-die-free.no{background:rgba(200,50,50,.1);border:1px solid rgba(200,50,50,.3);color:#dd6060;}
 /* Schermata modalità */
 #sc-mode{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 #sc-mode.active{display:flex;}
-.mode-btn{font-family:'Cinzel',serif;font-size:13px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;margin-bottom:12px;width:100%;max-width:260px;}
+.mode-btn{font-family:'Cinzel',serif;font-size:14px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;margin-bottom:12px;width:100%;max-width:260px;}
 .mode-btn:hover{background:rgba(200,160,32,.25);}
 .mode-btn.secondary{border-color:#4a9eff;color:#4a9eff;background:rgba(74,158,255,.08);}
 .mode-btn.secondary:hover{background:rgba(74,158,255,.2);}
-.sync-code{font-family:'Cinzel',serif;font-size:28px;letter-spacing:8px;color:#c8a020;background:rgba(200,160,32,.1);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 20px;text-align:center;margin:12px 0;}
-.sync-input{font-family:'Cinzel',serif;font-size:20px;letter-spacing:6px;text-align:center;background:rgba(0,0,0,.3);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 16px;color:#c8a020;width:100%;max-width:220px;text-transform:uppercase;}
-.sync-status{font-size:11px;margin-top:8px;min-height:18px;text-align:center;}
+.sync-code{font-family:'Cinzel',serif;font-size:29px;letter-spacing:8px;color:#c8a020;background:rgba(200,160,32,.1);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 20px;text-align:center;margin:12px 0;}
+.sync-input{font-family:'Cinzel',serif;font-size:21px;letter-spacing:6px;text-align:center;background:rgba(0,0,0,.3);border:2px solid rgba(200,160,32,.4);border-radius:8px;padding:10px 16px;color:#c8a020;width:100%;max-width:220px;text-transform:uppercase;}
+.sync-status{font-size:12px;margin-top:8px;min-height:18px;text-align:center;}
 .sync-status.ok{color:#50dd50;}.sync-status.err{color:#dd5050;}.sync-status.wait{color:#c8a020;}
 #sc-side{background:#0a0806;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 #sc-side.active{display:flex;}
-.side-title{font-family:'Cinzel',serif;font-size:18px;color:#c8a020;text-align:center;margin-bottom:8px;letter-spacing:3px;}
-.side-sub{font-size:11px;color:#6a5a3a;text-align:center;margin-bottom:30px;font-style:italic;max-width:280px;line-height:1.6;}
+.side-title{font-family:'Cinzel',serif;font-size:19px;color:#c8a020;text-align:center;margin-bottom:8px;letter-spacing:3px;}
+.side-sub{font-size:12px;color:#6a5a3a;text-align:center;margin-bottom:30px;font-style:italic;max-width:280px;line-height:1.6;}
 .side-opts{display:flex;gap:14px;}
-.side-btn{font-family:'Cinzel',serif;font-size:13px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;}
+.side-btn{font-family:'Cinzel',serif;font-size:14px;padding:14px 22px;border-radius:10px;border:2px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;text-align:center;}
 .side-btn:hover{background:rgba(200,160,32,.25);}
 /* Victory story */
-.vic-story{font-family:'Crimson Text',Georgia,serif;font-size:12px;color:#a89068;line-height:1.9;max-width:310px;font-style:italic;margin-bottom:20px;border-left:2px solid #6a5a0a;padding-left:14px;text-align:left;}
-.vic-score-detail{font-size:9px;color:#8a7a5a;margin-top:4px;}
+.vic-story{font-family:'Crimson Text',Georgia,serif;font-size:13px;color:#a89068;line-height:1.9;max-width:310px;font-style:italic;margin-bottom:20px;border-left:2px solid #6a5a0a;padding-left:14px;text-align:left;}
+.vic-score-detail{font-size:10px;color:#8a7a5a;margin-top:4px;}
 .mapsec{margin-bottom:7px;}
-.maptitle{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;letter-spacing:1px;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;}
+.maptitle{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;letter-spacing:1px;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;}
 .zoom-ctrls{display:flex;gap:4px;}
-.zbtn{font-family:'Cinzel',serif;font-size:13px;width:24px;height:24px;border-radius:4px;border:1px solid rgba(200,160,32,.4);background:rgba(200,160,32,.08);color:#c8a020;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.zbtn{font-family:'Cinzel',serif;font-size:14px;width:24px;height:24px;border-radius:4px;border:1px solid rgba(200,160,32,.4);background:rgba(200,160,32,.08);color:#c8a020;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .legend{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:3px;}
-.leg{display:flex;align-items:center;gap:2px;font-size:7px;color:#6a5a3a;}
+.leg{display:flex;align-items:center;gap:2px;font-size:8px;color:#6a5a3a;}
 .legdot{width:7px;height:7px;border-radius:1px;flex-shrink:0;}
 /* Map: pinch-to-zoom + scroll */
 .mapwrap{width:100%;max-height:400px;overflow:scroll;-webkit-overflow-scrolling:touch;background:#0d0b06;border-radius:6px;border:1px solid rgba(200,160,32,.2);touch-action:pan-x pan-y;position:relative;}
@@ -152,17 +152,17 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .mapwrap::-webkit-scrollbar-thumb{background:rgba(200,160,32,.4);border-radius:3px;}
 .mapwrap::-webkit-scrollbar-corner{background:rgba(0,0,0,.3);}
 #mapscale{transform-origin:top left;display:inline-block;padding:4px;will-change:transform;}
-.mhint{font-size:7px;color:#6a5a3a;margin-top:2px;min-height:12px;}
+.mhint{font-size:8px;color:#6a5a3a;margin-top:2px;min-height:12px;}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px;}
 .mcard{background:rgba(160,50,30,.07);border:1.5px solid rgba(160,50,30,.22);border-radius:6px;padding:6px 7px;}
 .mcard.boss{background:rgba(180,140,20,.06);border-color:rgba(180,140,20,.35);}
 .mcard.dead{opacity:.28;}
-.mname{font-family:'Cinzel',serif;font-size:8px;color:#d06060;margin-bottom:2px;line-height:1.2;}
+.mname{font-family:'Cinzel',serif;font-size:9px;color:#d06060;margin-bottom:2px;line-height:1.2;}
 .mcard.boss .mname{color:#c8a020;}
 .mcard.dead .mname::after{content:" ✓";color:#4caf50;}
-.minfo{font-size:6px;color:#6a5a3a;margin-bottom:3px;}
+.minfo{font-size:7px;color:#6a5a3a;margin-bottom:3px;}
 .mnums{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:3px;}
-.mnum{font-family:'Cinzel',serif;font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;line-height:1;}
+.mnum{font-family:'Cinzel',serif;font-size:10px;font-weight:700;padding:1px 4px;border-radius:2px;line-height:1;}
 .mnum.locked{color:#5a5040;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
 .mnum.unlocked{color:#f0d060;background:rgba(200,160,20,.15);border:1px solid rgba(200,160,20,.4);}
 .hprow{display:flex;gap:2px;flex-wrap:wrap;}
@@ -171,67 +171,67 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .mcard.boss .hp{border-color:#c8a020;}.mcard.boss .hp.hit{background:#c8a020;}
 .cnts{display:flex;gap:4px;margin-bottom:7px;}
 .cnt{flex:1;background:rgba(0,0,0,.22);border:1px solid rgba(200,160,32,.12);border-radius:5px;padding:4px;text-align:center;}
-.clbl{font-size:6.5px;color:#6a5a3a;margin-bottom:2px;letter-spacing:1px;}
-.cval{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;min-width:18px;text-align:center;}
+.clbl{font-size:7.5px;color:#6a5a3a;margin-bottom:2px;letter-spacing:1px;}
+.cval{font-family:'Cinzel',serif;font-size:16px;color:#c8a020;min-width:18px;text-align:center;}
 .sep{height:1px;background:rgba(255,255,255,.06);margin:6px 0;}
 .treasure-section{background:rgba(200,160,32,.05);border:1.5px solid rgba(200,160,32,.25);border-radius:7px;padding:8px;margin-bottom:7px;}
-.treasure-title{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;margin-bottom:6px;letter-spacing:1px;}
+.treasure-title{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;margin-bottom:6px;letter-spacing:1px;}
 .treasure-items{display:flex;gap:5px;}
 .tres-item{flex:1;background:rgba(0,0,0,.18);border:1.5px solid rgba(200,160,32,.2);border-radius:5px;padding:5px 4px;text-align:center;}
-.tres-ico{font-size:13px;line-height:1;margin-bottom:2px;}
-.tres-lbl{font-size:6px;color:#8a7a5a;line-height:1.3;}
+.tres-ico{font-size:14px;line-height:1;margin-bottom:2px;}
+.tres-lbl{font-size:7px;color:#8a7a5a;line-height:1.3;}
 .tres-boxes{display:flex;gap:2px;justify-content:center;margin-top:3px;flex-wrap:wrap;}
 .tres-box{width:12px;height:12px;border-radius:2px;border:1.5px solid #c8a020;background:transparent;cursor:pointer;position:relative;}
 .tres-box.checked{background:#c8a020;}
-.tres-box.checked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#1a1208;}
+.tres-box.checked::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#1a1208;}
 .tres-torch-row{display:flex;align-items:center;gap:4px;justify-content:center;margin-top:3px;}
-.torch-token{width:16px;height:16px;border-radius:3px;border:1.5px solid #e08020;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative;}
+.torch-token{width:16px;height:16px;border-radius:3px;border:1.5px solid #e08020;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;position:relative;}
 .torch-token.avail{background:rgba(224,128,32,.15);color:#e08020;}
 .torch-token.avail:hover{background:rgba(224,128,32,.35);}
 .torch-token.active{background:#e08020;color:#1a0a00;animation:tpulse .6s ease-in-out infinite;}
 .torch-token.spent{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.15);cursor:default;}
 @keyframes tpulse{0%,100%{box-shadow:0 0 0 0 rgba(224,128,32,0);}50%{box-shadow:0 0 0 4px rgba(224,128,32,.35);}}
-.torch-slots{font-size:8px;color:#e08020;font-family:'Cinzel',serif;font-weight:700;}
+.torch-slots{font-size:9px;color:#e08020;font-family:'Cinzel',serif;font-weight:700;}
 .torch-toggle.locked-torch{opacity:0.35;cursor:default;}
 /* Manuale regole */
 .manual-wrap{display:none;position:fixed;inset:0;background:rgba(5,3,2,.96);z-index:999;overflow-y:auto;padding:18px 14px 30px;}
 .manual-wrap.open{display:block;}
 .manual-inner{max-width:340px;margin:0 auto;}
-.manual-close-btn{font-family:'Cinzel',serif;font-size:10px;padding:6px 14px;border-radius:6px;border:1.5px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;}
-.manual-title{font-family:'Cinzel',serif;font-size:18px;color:#c8a020;letter-spacing:3px;text-align:center;margin-bottom:4px;}
-.manual-sub{font-size:10px;color:#6a5a3a;text-align:center;margin-bottom:18px;font-style:italic;}
+.manual-close-btn{font-family:'Cinzel',serif;font-size:11px;padding:6px 14px;border-radius:6px;border:1.5px solid #c8a020;background:rgba(200,160,32,.12);color:#c8a020;cursor:pointer;}
+.manual-title{font-family:'Cinzel',serif;font-size:19px;color:#c8a020;letter-spacing:3px;text-align:center;margin-bottom:4px;}
+.manual-sub{font-size:11px;color:#6a5a3a;text-align:center;margin-bottom:18px;font-style:italic;}
 .manual-section{margin-bottom:14px;}
-.manual-h{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(200,160,32,.25);}
-.manual-p{font-size:10px;color:#c8b880;line-height:1.7;margin-bottom:4px;}
+.manual-h{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;letter-spacing:1px;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(200,160,32,.25);}
+.manual-p{font-size:11px;color:#c8b880;line-height:1.7;margin-bottom:4px;}
 .manual-p b{color:#f0d060;}
 .manual-table{width:100%;border-collapse:collapse;margin:4px 0;}
-.manual-table th{font-family:'Cinzel',serif;font-size:8px;color:#c8a020;text-align:left;padding:3px 5px;border-bottom:1px solid rgba(200,160,32,.2);}
-.manual-table td{font-size:9px;color:#c8b880;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;}
+.manual-table th{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;text-align:left;padding:3px 5px;border-bottom:1px solid rgba(200,160,32,.2);}
+.manual-table td{font-size:10px;color:#c8b880;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;}
 .manual-table td:first-child{color:#f0d060;font-weight:bold;white-space:nowrap;}
 .fist-section{background:rgba(80,40,10,.2);border:1.5px solid rgba(150,90,25,.3);border-radius:7px;padding:8px;margin-bottom:7px;}
-.fist-title{font-family:'Cinzel',serif;font-size:9px;color:#c8a020;margin-bottom:4px;letter-spacing:1px;}
-.fist-desc{font-size:7px;color:#8a7a5a;margin-bottom:5px;}
+.fist-title{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;margin-bottom:4px;letter-spacing:1px;}
+.fist-desc{font-size:8px;color:#8a7a5a;margin-bottom:5px;}
 .fist-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
 .fist-boxes{display:flex;gap:3px;}
-.fist-box{width:18px;height:18px;border-radius:3px;border:1.5px solid rgba(200,120,30,.5);background:rgba(0,0,0,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.fist-box{width:18px;height:18px;border-radius:3px;border:1.5px solid rgba(200,120,30,.5);background:rgba(0,0,0,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;}
 .fist-box.checked{background:rgba(180,90,15,.32);border-color:#c07818;}
-.fist-arrow{font-size:10px;color:#c8a020;}.fist-reward{font-size:9px;color:#c8a020;font-family:'Cinzel',serif;}
-.fist-done-lbl{font-size:7px;color:#4a9a30;font-family:'Cinzel',serif;margin-left:4px;}
+.fist-arrow{font-size:11px;color:#c8a020;}.fist-reward{font-size:10px;color:#c8a020;font-family:'Cinzel',serif;}
+.fist-done-lbl{font-size:8px;color:#4a9a30;font-family:'Cinzel',serif;margin-left:4px;}
 .modal-wrap{background:rgba(0,0,0,.8);padding:14px;margin:8px auto;max-width:320px;border-radius:10px;}
 .modal-wrap.hidden{display:none;}
 .modal{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:13px;}
-.modal-t{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;margin-bottom:8px;text-align:center;}
+.modal-t{font-family:'Cinzel',serif;font-size:13px;color:#c8a020;margin-bottom:8px;text-align:center;}
 .ropts{display:flex;flex-direction:column;gap:7px;}
 .ropt{background:rgba(255,255,255,.03);border:1.5px solid rgba(200,160,32,.25);border-radius:6px;padding:8px 10px;cursor:pointer;}
 .ropt:hover{background:rgba(200,160,32,.12);}
 .ropt.disabled{opacity:.3;cursor:default;pointer-events:none;}
-.ropt-t{font-family:'Cinzel',serif;font-size:10px;color:#c8a020;margin-bottom:2px;}
-.ropt-d{font-size:8px;color:#8a7a5a;line-height:1.4;}
+.ropt-t{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:2px;}
+.ropt-d{font-size:9px;color:#8a7a5a;line-height:1.4;}
 .notif{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:10px 14px;text-align:center;max-width:280px;margin:6px auto;}
 .notif.hidden{display:none;}
-.nt{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:3px;}
-.nb{font-size:9px;line-height:1.45;}
-.nok{margin-top:5px;background:rgba(200,160,32,.1);border:1px solid rgba(200,160,32,.24);color:#c8a020;padding:3px 10px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:9px;}
+.nt{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;margin-bottom:3px;}
+.nb{font-size:10px;line-height:1.45;}
+.nok{margin-top:5px;background:rgba(200,160,32,.1);border:1px solid rgba(200,160,32,.24);color:#c8a020;padding:3px 10px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:10px;}
 </style>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -268,80 +268,99 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 
   <div class="manual-section">
    <div class="manual-h">🎯 Obiettivo</div>
-   <div class="manual-p">Due esploratori cooperano per eliminare tutti i mostri del dungeon, incluso il boss <b>Pennywise 🎈</b>. I giocatori si alternano a turni. Alla fine ottengono un <b>punteggio comune</b> basato su gemme raccolte, tesori trovati e vita rimasta.</div>
+   <div class="manual-p">Due esploratori cooperano per eliminare <b>tutti i mostri del dungeon</b>, incluso il boss finale <b>Pennywise 🎈</b>. I giocatori si alternano a turni. Vince la squadra, non un singolo: alla fine il punteggio è <b>condiviso</b>.</div>
+   <div class="manual-p">⚠ Se la barra vita di un giocatore si esaurisce, è <b>Game Over</b> per entrambi.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">🎲 Struttura del turno</div>
-   <div class="manual-p">1. <b>Lancia i dadi</b> — 4 bianchi + 1 nero.<br>
-   2. <b>Forma 2 coppie</b> — seleziona 2 dadi per coppia. La somma di ogni coppia è il numero che puoi usare.<br>
-   3. <b>Usa le coppie sulla mappa</b> — barra una casella con quel numero oppure colpisci un mostro.<br>
-   4. <b>Passa il turno</b> — premi "Passa ➜".</div>
-   <div class="manual-p">⚠ Se non barri nessuna casella <b>e</b> non colpisci nessun mostro, subisci <b>2 danni</b> alla vita.</div>
+   <div class="manual-h">🎲 Un turno, passo per passo</div>
+   <div class="manual-p"><b>1. Lancia i dadi</b><br>Premi il pulsante 🎲 Lancia. Otterrai 4 dadi bianchi e 1 dado nero. I dadi si lanciano <b>una sola volta</b> per turno e non possono essere rilasciati.</div>
+   <div class="manual-p"><b>2. Forma 2 coppie</b><br>Tocca 2 dadi per formare una coppia: si alzano e vengono bloccati. Poi seleziona altri 2 dadi per la seconda coppia. La <b>somma</b> di ogni coppia è il numero che puoi usare sulla mappa. Esempio: dadi 3 e 4 → coppia con valore 7.</div>
+   <div class="manual-p"><b>3. Usa le coppie sulla mappa</b><br>Ogni coppia ti permette di fare <b>una sola azione</b>: barrare una casella con quel numero oppure colpire un mostro con quel numero attivo. Puoi usare le due coppie in ordine qualsiasi. Le caselle evidenziate in <b style="color:#50ff70">verde</b> sono quelle raggiungibili.</div>
+   <div class="manual-p"><b>4. Passa il turno</b><br>Quando hai fatto le tue azioni, premi <b>Passa ➜</b>. Se non hai barrato nessuna casella e non hai colpito nessun mostro, subisci <b>-2 ❤ alla vita</b> come penalità.</div>
+   <div class="manual-p">💡 Puoi annullare una coppia già usata premendo il pulsante ✕ rosso vicino alla coppia. Puoi annullare tutto il turno con <b>↺ Reset turno</b>.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">🗺 Tipi di caselle</div>
    <table class="manual-table">
-    <tr><th>Tipo</th><th>Regola</th></tr>
-    <tr><td>🟢 Start</td><td>Punto di partenza. Ogni giocatore usa le Start del proprio lato (sx o dx). Da unificati si usano tutte.</td></tr>
-    <tr><td>⬜ Regular</td><td>Barra se adiacente a una casella già barrata e la somma coppia = numero della casella.</td></tr>
-    <tr><td>🟫 Attivazione</td><td>Come le Regular. Quando barrata, <b>sblocca il numero corrispondente del mostro adiacente</b>.</td></tr>
-    <tr><td>💰 Tesoro</td><td>Barra e scegli: Scudo 🛡, Torcia 🕯 o +3 Dadi Neri ⬛.</td></tr>
-    <tr><td>✊ Pugno</td><td>Richiede coppia doppia (es. 3+3) con somma = numero della casella.</td></tr>
-    <tr><td>🎲🎲 Doppio</td><td>Richiede qualsiasi coppia doppia (due dadi uguali).</td></tr>
-    <tr><td>👾 Mostro</td><td>Colpisci se adiacente e la somma coppia = un numero attivo del mostro. Conta come azione del turno.</td></tr>
+    <tr><th>Colore</th><th>Tipo</th><th>Come si barra</th></tr>
+    <tr><td style="color:#5a9e38">🟢 Verde</td><td>Start</td><td>Punto di partenza. Non richiede adiacenza. Ogni giocatore usa le Start del proprio lato (sinistra o destra). Da unificati si usano tutte.</td></tr>
+    <tr><td style="color:#e8e0cc">⬜ Chiaro</td><td>Regular</td><td>Deve essere adiacente a una casella già barrata. La somma della coppia deve essere uguale al numero scritto sulla casella.</td></tr>
+    <tr><td style="color:#9a9080">🟫 Grigio</td><td>Attivazione</td><td>Come le Regular. Quando barrata, <b>sblocca il numero corrispondente</b> del mostro adiacente (il numero diventa giallo).</td></tr>
+    <tr><td style="color:#c8b018">🟡 Giallo</td><td>Tesoro</td><td>Come le Regular. Quando barrata, si apre un menu per scegliere una ricompensa tra tre opzioni.</td></tr>
+    <tr><td style="color:#b86820">🟠 Arancio</td><td>Pugno</td><td>Richiede una <b>coppia doppia</b> (due dadi con lo stesso valore) la cui somma sia uguale al numero della casella. Es: per il 10 servono due 5.</td></tr>
+    <tr><td style="color:#c0b898">🔘 Beige</td><td>Mostro</td><td>Non si barra normalmente. Si colpisce con una coppia il cui valore corrisponde a un numero attivo del mostro.</td></tr>
+    <tr><td style="color:#444">⬛ Scuro</td><td>Doppio</td><td>Richiede qualsiasi coppia doppia (due dadi uguali), indipendentemente dal valore.</td></tr>
    </table>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">👾 Mostri e attivazione</div>
-   <div class="manual-p">Ogni mostro ha numeri <b>attivi</b> (giallo, usabili subito) e numeri <b>bloccati</b> (grigio). Per sbloccare un numero bloccato, barra la <b>casella grigia adiacente al mostro</b> che riporta quel numero.</div>
-   <div class="manual-p">Per colpire: devi avere una casella barrata adiacente al mostro e una coppia con somma uguale a un numero attivo. Ogni colpo toglie 1 PV. A 0 PV il mostro è sconfitto → guadagni Gemme.</div>
-   <div class="manual-p">⚠ Il boss <b>Pennywise</b> quando sconfitto infligge <b>-2 ❤</b>.</div>
+   <div class="manual-h">🔗 Raggiungibilità delle caselle</div>
+   <div class="manual-p">Una casella può essere barrata solo se è <b>adiacente</b> (tocca il bordo) a una casella già barrata dal tuo giocatore — oppure se è una casella <b>Start</b>. Le caselle collegate da un <b>ponte</b> (linea tratteggiata sul bordo della mappa) sono considerate adiacenti anche se non si toccano fisicamente.</div>
+   <div class="manual-p">Le caselle evidenziate in <b style="color:#ff9900">arancio</b> non sono ancora raggiungibili. Le caselle in <b style="color:#50ff70">verde</b> sono raggiungibili con le coppie attuali. Le caselle in <b style="color:#00eeff">ciano</b> possono essere de-selezionate.</div>
+  </div>
+
+  <div class="manual-section">
+   <div class="manual-h">👾 Mostri: attivazione e combattimento</div>
+   <div class="manual-p"><b>Numeri attivi vs bloccati:</b> Ogni mostro ha una lista di numeri. Quelli in <b style="color:#f0d060">giallo</b> sono attivi (usabili subito). Quelli in grigio sono bloccati. Per sbloccare un numero bloccato, devi barrare la <b>casella grigia adiacente al mostro</b> che porta quel numero.</div>
+   <div class="manual-p"><b>Come colpire un mostro:</b><br>
+   1. Devi avere almeno una casella barrata <b>adiacente al mostro</b>.<br>
+   2. Devi avere una coppia la cui somma sia uguale a un <b>numero attivo</b> del mostro.<br>
+   3. Tocca la casella del mostro sulla mappa: viene tolto 1 PV.<br>
+   Colpire un mostro conta come azione del turno (evita la penalità -2❤).</div>
+   <div class="manual-p"><b>Morte del mostro:</b> quando i PV arrivano a 0, il mostro è sconfitto e guadagni le sue <b>Gemme 💎</b>. La casella del mostro viene barrata.</div>
+   <div class="manual-p">⚠ <b>Pennywise 🎈</b> è il boss: ha 12 PV e quando viene sconfitto infligge <b>-2❤</b> ai giocatori. Sconfiggerlo completa la partita.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">⬛ Dado Nero</div>
-   <div class="manual-p"><b>Giocatori separati:</b> gratuito e illimitato.<br>
-   <b>Unificati:</b> 3 slot totali per partita. Un turno sì e uno no è gratuito.</div>
+   <div class="manual-p">Il dado nero può essere combinato con qualsiasi dado bianco per formare una coppia.<br>
+   <b>Giocatori separati:</b> il dado nero è sempre <b>gratuito e illimitato</b>.<br>
+   <b>Giocatori unificati:</b> segue un ciclo alternato — G1(gratuito) → G2(non gratuito) → G1(non gratuito) → G2(gratuito) → e così via. Hai 3 slot totali per gli usi a pagamento (espandibili con il tesoro Dado Nero).</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">💰 Tesori</div>
+   <div class="manual-p">Quando barri una casella Tesoro 🟡, scegli subito una delle tre ricompense:</div>
    <table class="manual-table">
-    <tr><th>Tesoro</th><th>Effetto</th></tr>
-    <tr><td>🛡 Scudo</td><td>+1💎 subito + i prossimi 3 danni alla vita annullati. (1× per partita)</td></tr>
-    <tr><td>🕯 Torcia</td><td>+2 token. Clicca un token: barra una casella adiacente senza usare i dadi.</td></tr>
-    <tr><td>⬛ Dado Nero</td><td>+3 slot dado nero per tutta la partita. (1× per partita)</td></tr>
+    <tr><th>Ricompensa</th><th>Effetto</th><th>Limite</th></tr>
+    <tr><td>🛡 Scudo Vita</td><td>Guadagni <b>+1💎</b> subito. I prossimi <b>3 danni alla vita</b> vengono annullati automaticamente (gli slot scudo sono visibili nella sezione Tesori).</td><td>1 volta per partita</td></tr>
+    <tr><td>🕯 Torcia</td><td>Ricevi <b>2 token torcia</b>. Clicca un token nella sezione Tesori per attivarlo: poi tocca una casella adiacente a quelle già barrate per barrarla <b>senza usare i dadi</b>.</td><td>Illimitato</td></tr>
+    <tr><td>⬛ Dado Nero</td><td>Aumenta di <b>3 il numero di slot</b> per il dado nero (modalità unificata).</td><td>1 volta per partita</td></tr>
    </table>
+   <div class="manual-p">Se annulli la casella Tesoro o resetti il turno, anche la ricompensa scelta viene annullata.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">✊ Pugni</div>
-   <div class="manual-p">5 caselle Pugno barrate (tra i due giocatori) → il <b>primo</b> che raggiunge quota 5 guadagna <b>+3💎</b>.</div>
+   <div class="manual-p">Le caselle <b>Pugno 🟠</b> richiedono una coppia doppia (es. 5+5 per la casella 10). Ogni volta che barri una casella pugno:</div>
+   <div class="manual-p">• Viene segnato un segno nella <b>barra pugni</b> (visibile nella sezione Pugni).<br>• Ogni mostro <b>ancora vivo</b> subisce automaticamente <b>1 danno</b>.<br>• Quando la barra raggiunge 5, <b>la prima volta</b> guadagni +3💎 bonus.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">⚔ Unione</div>
-   <div class="manual-p">I giocatori si uniscono quando barrano la <b>stessa casella</b> oppure fanno <b>danno allo stesso mostro</b>. Da quel momento condividono mappa, gemme, tesori e vita. Tutte le Start diventano disponibili.</div>
+   <div class="manual-h">❤ Barra Vita</div>
+   <div class="manual-p">La barra vita va da sinistra (sicuro) a destra (morte). Le celle hanno penalità crescenti: 0, -1, -2, -4, -6, -9, -12, -16, -20. La penalità vita viene sottratta dal punteggio finale. Se raggiungi l'ultima cella, è <b>Game Over</b>.</div>
+   <div class="manual-p">Ricevi danni se: non fai azioni in un turno (-2❤), sconfiggi Pennywise (-2❤), o perdi scambi con i mostri.</div>
+   <div class="manual-p">Gli scudi 🛡 (tesoro vita) assorbono i danni automaticamente prima che avanzino sulla barra.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">🏆 Punteggio finale (comune)</div>
-   <div class="manual-p">Al termine della partita i due giocatori hanno un <b>unico punteggio condiviso</b>:<br>
-   <b>PV = Gemme totali × 3 + Tesori totali × 2 − Penalità vita</b><br>
-   Le gemme e i tesori di entrambi i giocatori si sommano. La valutazione dipende dal punteggio raggiunto insieme.</div>
+   <div class="manual-h">⚔ Unione dei giocatori</div>
+   <div class="manual-p">I due giocatori si <b>uniscono</b> quando barrano la stessa casella oppure infliggono danno allo stesso mostro. Al momento dell'unione:</div>
+   <div class="manual-p">• Le <b>mappe si fondono</b>: tutte le caselle barrate da entrambi diventano condivise.<br>• Le <b>gemme si sommano</b> (+ 1 bonus unione).<br>• La <b>vita</b> viene allineata a quella del giocatore che ne aveva di <b>meno</b>.<br>• I <b>tesori, scudi e danni ai mostri</b> vengono unificati.<br>• Tutte le caselle <b>Start</b> diventano disponibili.</div>
+   <div class="manual-p">Da quel momento in poi, ogni azione di un giocatore vale per entrambi. I turni continuano ad alternarsi.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">☠ Game Over</div>
-   <div class="manual-p">Se la barra vita raggiunge la fine, il giocatore viene eliminato dal dungeon.</div>
+   <div class="manual-h">🏆 Punteggio finale</div>
+   <div class="manual-p"><b>PV = Gemme totali × 3 + Tesori totali × 2 − Penalità vita</b></div>
+   <div class="manual-p">Le gemme e i tesori di entrambi i giocatori si sommano. La penalità è determinata dalla posizione sulla barra vita. Più alto è il punteggio, più epica è stata la vostra avventura nel dungeon.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">🌐 Due dispositivi</div>
-   <div class="manual-p">Giocatore 1 crea la partita e condivide il codice. Giocatore 2 lo inserisce. I turni si alternano automaticamente. Dopo l'unione, i turni continuano ad alternarsi tra i due dispositivi.</div>
+   <div class="manual-h">🌐 Modalità due dispositivi</div>
+   <div class="manual-p">Il Giocatore 1 sceglie <b>"Due dispositivi — Giocatore 1"</b> e condivide il codice visualizzato. Il Giocatore 2 sceglie <b>"Due dispositivi — Giocatore 2"</b> e inserisce il codice. I turni si alternano automaticamente: ognuno vede solo il proprio turno. Lo stato si sincronizza in tempo reale. Dopo l'unione, i turni continuano ad alternarsi tra i due dispositivi.</div>
   </div>
 
   <div style="text-align:center;margin-top:20px;">
@@ -394,7 +413,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 
 <div id="sc-gameover" class="screen">
   <div class="go-blood">🩸</div>
-  <div class="go-title">IL REALM TI HA RECLAMATO</div>
+  <div class="go-title">LA MORTE TI HA RECLAMATO</div>
   <div class="go-player" id="go-player"></div>
   <div class="go-epitaph" id="go-epitaph"></div>
   <div class="go-score" id="go-score"></div>
@@ -411,11 +430,11 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 
 <div id="sc-game" class="screen">
   <div class="hdr"><div class="realm">HORROR DUNGEON — DDD</div></div>
-  <div style="text-align:right;margin-bottom:4px;">
-    <button onclick="resetAll()" style="font-size:8px;color:#5a4a2a;background:none;border:1px solid rgba(90,74,42,.3);border-radius:4px;padding:3px 8px;cursor:pointer;">🔄 Reset</button>
-  </div>
   <div class="topbar">
-    <div><div class="pname-cur" id="pcur">Giocatore 1</div><div style="font-size:7px;color:#6a5a3a;">Turno in corso</div></div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <button onclick="resetAll()" style="font-size:9px;color:#5a4a2a;background:none;border:1px solid rgba(90,74,42,.3);border-radius:4px;padding:3px 8px;cursor:pointer;">🔄 Reset</button>
+      <div><div class="pname-cur" id="pcur">Giocatore 1</div><div style="font-size:8px;color:#6a5a3a;">Turno in corso</div></div>
+    </div>
     <div><div class="vpbox" id="vpv">0</div><div class="vplbl">PV</div></div>
     <button class="pturn-btn" onclick="passTurn()">Passa ➜</button>
   </div>
@@ -462,7 +481,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
   <div class="treasure-section" style="margin-bottom:6px;">
     <div class="treasure-title">💰 TESORI TROVATI</div>
     <div class="treasure-items">
-      <div class="tres-item"><div class="tres-ico">🛡</div><div class="tres-lbl">+1💎<br>3 Scudi<br><span style="font-size:5px;color:#6a4a3a">(1×)</span></div><div class="tres-boxes" id="tres-life"></div></div>
+      <div class="tres-item"><div class="tres-ico">🛡</div><div class="tres-lbl">+1💎<br>3 Scudi<br><span style="font-size:5px;color:#6a4a3a">(1×)</span></div><div class="tres-boxes" id="tres-life"></div><div id="tres-shield-slots" style="display:flex;gap:2px;justify-content:center;margin-top:3px;flex-wrap:wrap;"></div></div>
       <div class="tres-item"><div class="tres-ico">🕯</div><div class="tres-lbl">Token<br>Torcia<br><span style="font-size:5px;color:#6a4a3a">(clicca)</span></div><div class="tres-boxes" id="tres-torch"></div></div>
       <div class="tres-item"><div class="tres-ico">⬛</div><div class="tres-lbl">+3 Dadi<br>Neri<br><span style="font-size:5px;color:#6a4a3a">(1×)</span></div><div class="tres-boxes" id="tres-dice"></div></div>
     </div>
@@ -470,7 +489,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
   <div class="sep"></div>
   <div class="fist-section">
     <div class="fist-title">✊ PUGNI</div>
-    <div class="fist-desc">5 pugni → +3💎 (primo giocatore che completa)</div>
+    <div class="fist-desc">5 pugni → +3💎 solo la prima volta che viene completata</div>
     <div id="fist-rows"></div>
   </div>
   <div class="sep"></div>
@@ -645,6 +664,7 @@ const BRIDGES_ADJ=[
   ['GF','H17_4g'],       // H17 attiva GF
   ['GF','I17_7b'],       // I17 attiva GF
   ['GF','I19_9b'],       // I19 raggiunge GF
+  ['E4_10g','PW'],       // E4 grigio attiva il 4 di Pennywise (ponte)
 ];
 // EDGES auto-costruito: geometria + ponti
 const EDGES=(()=>{
@@ -675,6 +695,7 @@ const BRIDGES=[
   ['JS','I5_5b'],        // G5↔I5
   ['G18_3t','H17_4g'],   // G18↔H17
   ['K9_7b','LF'],        // K10↔K12
+  ['E4_10g','PW'],       // E4↔PW (ponte attivazione)
 ];
 // ─── MOSTRI ───
 // active: true=nero(attivo subito), false=bianco(bloccato finché greyAdj non barrata)
@@ -694,7 +715,7 @@ const MONS={
   LF:{name:'Leatherface',   nums:[2,12],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['K9_7b','J15_8g']},
   GF:{name:'Ghostface',     nums:[3,11],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['H17_4g','I17_7b']},
   PW:{name:'Pennywise',     nums:[3,4,5,8,11],active:[false,false,false,false,false],hp:12,gem:6,isBoss:true,
-      greyAdj:['F9_3g','E12_11g','H9_5g','I5_5b','F19_11v']},
+      greyAdj:['F9_3g','E12_11g','H9_5g','I5_5b','F19_11v','E4_10g']},
 };
 const MK=['FK','JV','JS','MM','LF','GF','PW'];
 
@@ -976,6 +997,11 @@ function recordAction(pi, action){ pairActions[pi].push(action); }
 
 function sv(p,k,v){localStorage.setItem(PFX+'p'+p+'_'+k,JSON.stringify(v));}
 function ld(p,k,d){const v=localStorage.getItem(PFX+'p'+p+'_'+k);return v!==null?JSON.parse(v):d;}
+// svS: salva su entrambi i giocatori quando unificati
+function svS(p,k,v){
+  sv(p,k,v);
+  if(isMerged()||P==='M'){const other=p===1?2:1;sv(other,k,v);}
+}
 function isMerged(){
   const mk1=ld(1,'mk',{}),mk2=ld(2,'mk',{});
   if(Object.keys(mk1).some(k=>mk2[k]))return true;
@@ -992,10 +1018,11 @@ function effMk(){return(isMerged()||P==='M')?getMM():ld(P,'mk',{});}
 // Giocatore unificato: 3 slot totali, dado nero gratuito un turno sì e uno no
 function isBlackDieFreeThisTurn(){
   if(isMerged()||P==='M'){
-    // Unificato: alterna ogni turno (globalTurnNumber pari = gratuito)
-    return globalTurnNumber%2===0;
+    // Unificato: ciclo di 4 turni — G1(sì) G2(no) G1(no) G2(sì) poi ripete
+    // turno%4==0 → G1 free, turno%4==3 → G2 free
+    const t=globalTurnNumber%4;
+    return t===0||t===3;
   }
-  // Giocatori separati: sempre gratuito
   return true;
 }
 
@@ -1122,34 +1149,9 @@ function startMultiDevice(role){
   }
 }
 
-function makePeerCfg(id){
-  const cfg={
-    debug:0,
-    config:{iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-    ]}
-  };
-  // Usa il server pubblico PeerJS con parametri espliciti
-  cfg.host='0.peerjs.com';
-  cfg.port=443;
-  cfg.path='/';
-  cfg.secure=true;
-  if(id)cfg.id=id; // non passare id come primo arg, usare opzione
-  return cfg;
-}
-
 function initHostPeer(){
   const peerId=genPeerId();
-  // Passa l'id nelle opzioni invece che come primo argomento
-  hostPeer=new Peer(peerId,{
-    debug:0,
-    host:'0.peerjs.com',port:443,path:'/',secure:true,
-    config:{iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-    ]}
-  });
+  hostPeer=new Peer(peerId,{debug:0});
   hostPeer.on('open', id=>{
     // Mostra solo la parte leggibile (senza prefisso hd6-)
     const shortCode=id.replace('hd6-','');
@@ -1191,14 +1193,7 @@ function joinGame(){
   document.getElementById('join-status').textContent='Connessione in corso…';
   document.getElementById('join-status').className='sync-status wait';
 
-  const joinPeer=new Peer({
-    debug:0,
-    host:'0.peerjs.com',port:443,path:'/',secure:true,
-    config:{iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-    ]}
-  });
+  const joinPeer=new Peer({debug:0});
   joinPeer.on('open', myId=>{
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
@@ -2041,32 +2036,32 @@ function deletePair(pi){
       turnCrossed=Math.max(0,turnCrossed-1);
       if(act.wasTorch){torchLeft++;torchMode=true;}
     } else if(act.type==='gem'){
-      sv(P,'gems',Math.max(0,ld(P,'gems',0)-act.amount));
+      svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.amount));
     } else if(act.type==='fist'){
       const f=Math.max(0,ld(P,'fists',0)-act.amount);
-      sv(P,'fists',f);
+      svS(P,'fists',f);
       if(act.completedFists){
         fistDoneGlobal=false;
         localStorage.removeItem(PFX+'fistDone');
-        sv(P,'gems',Math.max(0,ld(P,'gems',0)-3));
+        svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));
       }
       renderFists();
     } else if(act.type==='mhp'){
       const hp=ld(P,'mhp',{});
       hp[act.mkey]=Math.max(0,(hp[act.mkey]||0)-act.amount);
-      sv(P,'mhp',hp);
+      svS(P,'mhp',hp);
       if(act.counted)turnCrossed=Math.max(0,turnCrossed-1);
       if(act.killed){
-        const def=ld(P,'def',{});delete def[act.mkey];sv(P,'def',def);
+        const def=ld(P,'def',{});delete def[act.mkey];svS(P,'def',def);
         // Ripristina casella mostro come non barrata
         saveMk(act.mkey,false);
-        sv(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
+        svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
         if(act.lifeDmg){
           const ci=ld(P,'lifeIdx',0);
-          sv(P,'lifeIdx',Math.max(0,ci-act.lifeDmg));
+          svS(P,'lifeIdx',Math.max(0,ci-act.lifeDmg));
         }
         if(act.shieldUsed){
-          sv(P,'shield',ld(P,'shield',0)+act.shieldUsed);
+          svS(P,'shield',ld(P,'shield',0)+act.shieldUsed);
         }
       }
       renderMonsters();renderLife();
@@ -2079,16 +2074,16 @@ function deletePair(pi){
       document.getElementById('tmodal').classList.add('hidden');
       const tres=ld(P,'tres',{life:0,torch:0,dice:0});
       if(act.tresType==='life'){
-        tres.life=Math.max(0,(tres.life||0)-1);sv(P,'tres',tres);
-        sv(P,'gems',Math.max(0,ld(P,'gems',0)-1));
-        sv(P,'shield',Math.max(0,ld(P,'shield',0)-3));
+        tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);
+        svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));
+        svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));
         renderLife();
       } else if(act.tresType==='torch'){
-        tres.torch=Math.max(0,(tres.torch||0)-1);sv(P,'tres',tres);
+        tres.torch=Math.max(0,(tres.torch||0)-1);svS(P,'tres',tres);
         torchAvailable=false;torchMode=false;torchLeft=0;
       } else if(act.tresType==='dice'){
-        tres.dice=Math.max(0,(tres.dice||0)-1);sv(P,'tres',tres);
-        sv(P,'bmax',3);
+        tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);
+        svS(P,'bmax',3);
         renderDice();
       }
       renderTreasures();
@@ -2115,10 +2110,10 @@ function clearDice(){
     sv(1,'shield',turnSnapshot.shield1); sv(2,'shield',turnSnapshot.shield2);
     sv(1,'tres',JSON.parse(turnSnapshot.tres1)); sv(2,'tres',JSON.parse(turnSnapshot.tres2));
     sv(1,'bmax',turnSnapshot.bmax1); sv(2,'bmax',turnSnapshot.bmax2);
-    sv(P,'mhp',JSON.parse(turnSnapshot.mhp));
-    sv(P,'def',JSON.parse(turnSnapshot.def));
+    svS(P,'mhp',JSON.parse(turnSnapshot.mhp));
+    svS(P,'def',JSON.parse(turnSnapshot.def));
     sv(1,'mk',JSON.parse(turnSnapshot.mk1)); sv(2,'mk',JSON.parse(turnSnapshot.mk2));
-    sv(P,'fists',turnSnapshot.fists);
+    svS(P,'fists',turnSnapshot.fists);
     fistDoneGlobal=turnSnapshot.fistDone;
     if(!fistDoneGlobal)localStorage.removeItem(PFX+'fistDone');
     sv(1,'lifeIdx',turnSnapshot.lifeIdx1); sv(2,'lifeIdx',turnSnapshot.lifeIdx2);
@@ -2167,17 +2162,17 @@ function clickCell(k){
         // Annulla anche le azioni collegate (gem, fist, tesoro) della stessa coppia dopo il mark
         const related=pairActions[pi].splice(idx);
         related.slice(1).reverse().forEach(ra=>{
-          if(ra.type==='gem')sv(P,'gems',Math.max(0,ld(P,'gems',0)-ra.amount));
+          if(ra.type==='gem')svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.amount));
           else if(ra.type==='fist'){
-            const f=Math.max(0,ld(P,'fists',0)-ra.amount);sv(P,'fists',f);
-            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');sv(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
+            const f=Math.max(0,ld(P,'fists',0)-ra.amount);svS(P,'fists',f);
+            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
             renderFists();
           } else if(ra.type==='tmodal'){
             document.getElementById('tmodal').classList.add('hidden');
             const tres=ld(P,'tres',{life:0,torch:0,dice:0});
-            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);sv(P,'tres',tres);sv(P,'gems',Math.max(0,ld(P,'gems',0)-1));sv(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
-            else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-1);sv(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
-            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);sv(P,'tres',tres);sv(P,'bmax',3);renderDice();}
+            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
+            else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-1);svS(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
+            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);svS(P,'bmax',3);renderDice();}
             renderTreasures();
           }
         });
@@ -2197,7 +2192,7 @@ function clickCell(k){
     // Usa il token: riduce il conteggio torch nel tesoro
     const tres=ld(P,'tres',{life:0,torch:0,dice:0});
     tres.torch=Math.max(0,(tres.torch||0)-1);
-    sv(P,'tres',tres);
+    svS(P,'tres',tres);
     saveMk(k,true);turnMarked.add(k);turnCrossed++;
     torchMode=false;activeTorchSlot=-1;torchLeft=0;
     showN('🕯 Torcia usata!','Casella barrata.');
@@ -2225,24 +2220,24 @@ function clickCell(k){
     const killed=hp[cell.mkey]>=mon.hp;
     if(killed){
       hp[cell.mkey]=mon.hp;
-      const def=ld(P,'def',{});def[cell.mkey]=true;sv(P,'def',def);
+      const def=ld(P,'def',{});def[cell.mkey]=true;svS(P,'def',def);
       saveMk(k,true);
-      const prevGems=ld(P,'gems',0);sv(P,'gems',prevGems+mon.gem);
+      const prevGems=ld(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
       playAudio('kill_'+cell.mkey.toLowerCase());
       if(mon.isBoss){
         let dmg=2,shieldUsed=0;
         const shield=ld(P,'shield',0);
-        if(shield>0){const abs=Math.min(shield,dmg);sv(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
-        const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);sv(P,'lifeIdx',ni);
+        if(shield>0){const abs=Math.min(shield,dmg);svS(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
+        const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);svS(P,'lifeIdx',ni);
         recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed,counted:true});
-        sv(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();updTurnInfo();
+        svS(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();updTurnInfo();
         showN('👑 Boss sconfitto! +'+mon.gem+'💎 -2❤','');
         if(ni>=MAX_LIFE_IDX){triggerGO(P);return;}
         if(checkVictory())return;
         return;
       }
       recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0,counted:true});
-      sv(P,'mhp',hp);buildSVG();renderMonsters();renderPairs();updCnts();updTurnInfo();
+      svS(P,'mhp',hp);buildSVG();renderMonsters();renderPairs();updCnts();updTurnInfo();
       showN(`🏆 ${mon.name} sconfitto! +${mon.gem}💎`,'');
       if(checkVictory())return;
       return;
@@ -2250,7 +2245,7 @@ function clickCell(k){
     playAudio('hit_'+cell.mkey.toLowerCase());
     recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:false,gemGained:0,lifeDmg:0,shieldUsed:0,counted:true});
     showN(`⚔ Colpo a ${mon.name}! ${mon.hp-hp[cell.mkey]}/${mon.hp} PV rimasti`,'');
-    sv(P,'mhp',hp);renderMonsters();renderPairs();buildSVG();updTurnInfo();return;
+    svS(P,'mhp',hp);renderMonsters();renderPairs();buildSVG();updTurnInfo();return;
   }
 
   // ── CELLA NORMALE: controllo raggiungibilità ──
@@ -2285,20 +2280,45 @@ function clickCell(k){
     saveMk(k,true);turnMarked.add(k);turnCrossed++;
     recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
     pairsConsumed[usedPairIdx]=true;
-    if(!fistDoneGlobal){
-      const f=ld(P,'fists',0)+1;sv(P,'fists',f);
-      const completedFists=f>=5;
-      recordAction(usedPairIdx,{type:'fist',amount:1,completedFists});
-      if(completedFists){
-        fistDoneGlobal=true;localStorage.setItem(PFX+'fistDone','1');
-        sv(P,'gems',ld(P,'gems',0)+3);
-        recordAction(usedPairIdx,{type:'gem',amount:3});
-        showN('✊ 5 Pugni! +3💎','Bonus conquistato!');
-        updCnts();
-      }
-      renderFists();
+
+    // ── Segna sempre la barra pugni ──
+    const f=ld(P,'fists',0)+1;svS(P,'fists',f);
+    const completedFists=f>=5;
+    recordAction(usedPairIdx,{type:'fist',amount:1,completedFists});
+    if(completedFists&&!fistDoneGlobal){
+      fistDoneGlobal=true;localStorage.setItem(PFX+'fistDone','1');
+      svS(P,'gems',ld(P,'gems',0)+3);
+      recordAction(usedPairIdx,{type:'gem',amount:3});
+      showN('✊ 5 Pugni! +3💎','Bonus conquistato! (solo la prima volta)');
+      updCnts();
     }
-    buildSVG();updCnts();updTurnInfo();return;
+    renderFists();
+
+    // ── Ogni mostro vivo subisce 1 danno ──
+    const hp=ld(P,'mhp',{});
+    const def=ld(P,'def',{});
+    let monsHit=[];
+    MK.forEach(mk=>{
+      if(def[mk])return; // già morto
+      hp[mk]=(hp[mk]||0)+1;
+      const mon=MONS[mk];
+      if(hp[mk]>=mon.hp){
+        hp[mk]=mon.hp;
+        def[mk]=true;
+        saveMk(mk,true);
+        svS(P,'gems',ld(P,'gems',0)+mon.gem);
+        recordAction(usedPairIdx,{type:'mhp',mkey:mk,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0,counted:false});
+        monsHit.push(mon.name+' ☠');
+      } else {
+        recordAction(usedPairIdx,{type:'mhp',mkey:mk,amount:1,killed:false,gemGained:0,lifeDmg:0,shieldUsed:0,counted:false});
+        monsHit.push(mon.name);
+      }
+    });
+    svS(P,'mhp',hp);svS(P,'def',def);
+    if(monsHit.length)showN('✊ Pugno! Danno a tutti i mostri','');
+    buildSVG();renderMonsters();updCnts();updTurnInfo();
+    if(checkVictory())return;
+    return;
   }
 
   // ── TUTTE LE ALTRE: S, R (con/senza gemma), G, T ──
@@ -2317,7 +2337,7 @@ function clickCell(k){
 
   // Gemma (BX)
   if(cell.gem){
-    sv(P,'gems',ld(P,'gems',0)+1);
+    svS(P,'gems',ld(P,'gems',0)+1);
     recordAction(usedPairIdx,{type:'gem',amount:1});
     showN('💎 +1 Gemma!','');updCnts();
   }
@@ -2334,13 +2354,57 @@ function clickCell(k){
 
   // Merge
   if(!isMerged()&&P!=='M'&&otM[k]){
-    const m2=ld(other,'mk',{});const mm={...ld(P,'mk',{}),...m2,[k]:true};
+    const other2=P===1?2:1;
+    const m2=ld(other2,'mk',{});const mm={...ld(P,'mk',{}),...m2,[k]:true};
     sv(1,'mk',mm);sv(2,'mk',mm);
-    sv(1,'gems',ld(1,'gems',0)+1);
+
+    // Unifica gemme (somma)
+    const totalGems=ld(1,'gems',0)+ld(2,'gems',0)+1; // +1 bonus unione
+    sv(1,'gems',totalGems);sv(2,'gems',totalGems);
     recordAction(usedPairIdx,{type:'gem',amount:1});
-    showN('⚔ UNIONE! +1💎','I due esploratori si sono incontrati!');
+
+    // Unifica vita: prende la peggiore (indice più alto)
+    const li1=ld(1,'lifeIdx',0),li2=ld(2,'lifeIdx',0);
+    const worstLife=Math.max(li1,li2);
+    sv(1,'lifeIdx',worstLife);sv(2,'lifeIdx',worstLife);
+
+    // Unifica tesori: somma torch, prende il max per life e dice
+    const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+    const mergedTres={
+      life:Math.max(tr1.life||0,tr2.life||0),
+      torch:(tr1.torch||0)+(tr2.torch||0),
+      dice:Math.max(tr1.dice||0,tr2.dice||0)
+    };
+    sv(1,'tres',mergedTres);sv(2,'tres',mergedTres);
+
+    // Unifica scudo: prende il massimo
+    const sh1=ld(1,'shield',0),sh2=ld(2,'shield',0);
+    const mergedShield=Math.max(sh1,sh2);
+    sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
+
+    // Unifica dadi neri slot
+    const bmax=Math.max(ld(1,'bmax',3),ld(2,'bmax',3));
+    sv(1,'bmax',bmax);sv(2,'bmax',bmax);
+
+    // Unifica danni mostri: prende il massimo per ogni mostro
+    const mhp1=ld(1,'mhp',{}),mhp2=ld(2,'mhp',{});
+    const def1=ld(1,'def',{}),def2=ld(2,'def',{});
+    const mergedMhp={},mergedDef={};
+    MK.forEach(mk=>{
+      mergedMhp[mk]=Math.max(mhp1[mk]||0,mhp2[mk]||0);
+      if(def1[mk]||def2[mk])mergedDef[mk]=true;
+    });
+    sv(1,'mhp',mergedMhp);sv(2,'mhp',mergedMhp);
+    sv(1,'def',mergedDef);sv(2,'def',mergedDef);
+
+    // Unifica pugni
+    const f1=ld(1,'fists',0),f2=ld(2,'fists',0);
+    const mergedFists=f1+f2;
+    sv(1,'fists',mergedFists);sv(2,'fists',mergedFists);
+
+    showN('⚔ UNIONE! +1💎','I due esploratori si sono incontrati! Vita, gemme e tesori unificati.');
     playAudio('merge');
-    buildSVG();updCnts();updTurnInfo();return;
+    buildSVG();renderLife();renderMonsters();renderTreasures();renderFists();updCnts();updTurnInfo();return;
   }
 
   buildSVG();updCnts();updTurnInfo();
@@ -2377,19 +2441,22 @@ function chooseTres(t){
   const tres=ld(P,'tres',{life:0,torch:0,dice:0});
   if(t==='life'){
     if(tres.life>=1)return;
-    tres.life++;sv(P,'tres',tres);
-    sv(P,'gems',ld(P,'gems',0)+1);
-    sv(P,'shield',(ld(P,'shield',0)||0)+3);
+    tres.life++;svS(P,'tres',tres);
+    svS(P,'gems',ld(P,'gems',0)+1);
+    svS(P,'shield',(ld(P,'shield',0)||0)+3);
+    recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'life'});
     showN('🛡 +1💎 & 3 Scudi!','I prossimi 3 danni alla vita saranno annullati.');
     renderLife();
   } else if(t==='torch'){
-    tres.torch=(tres.torch||0)+2; // aggiunge 2 token persistenti
-    sv(P,'tres',tres);
+    tres.torch=(tres.torch||0)+2;
+    svS(P,'tres',tres);
+    recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'torch'});
     showN('🕯 +2 Token Torcia!','Clicca i token nella sezione Tesori per usarli.');
   } else {
     if(tres.dice>=1)return;
-    tres.dice++;sv(P,'tres',tres);
-    sv(P,'bmax',(ld(P,'bmax',3)||3)+3);
+    tres.dice++;svS(P,'tres',tres);
+    svS(P,'bmax',(ld(P,'bmax',3)||3)+3);
+    recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'dice'});
     showN('⬛ +3 Dadi Neri!','Il numero di dadi neri disponibili è aumentato di 3.');
     renderDice();
   }
@@ -2427,6 +2494,27 @@ function renderTreasures(){
   let lh='';
   for(let i=0;i<Math.max(lifeCnt,1);i++)lh+=`<div class="tres-box ${i<lifeCnt?'checked':''}"></div>`;
   document.getElementById('tres-life').innerHTML=lh;
+
+  // Slot scudo: mostra i 3 slot con quanti sono stati usati
+  const shieldEl=document.getElementById('tres-shield-slots');
+  if(shieldEl){
+    if(lifeCnt>0){
+      const totalShield=3; // 3 scudi per tesoro vita
+      const shieldLeft=merged?Math.max(ld(1,'shield',0),ld(2,'shield',0)):ld(P,'shield',0);
+      const shieldUsed=totalShield-Math.min(totalShield,shieldLeft);
+      let sh='';
+      for(let i=0;i<totalShield;i++){
+        const used=i<shieldUsed;
+        sh+=`<div style="width:10px;height:10px;border-radius:2px;border:1.5px solid #4a9eff;background:${used?'rgba(74,158,255,.12)':'rgba(74,158,255,.5)'};position:relative;">
+          ${used?`<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(74,158,255,.4);">✕</span>`:''}
+        </div>`;
+      }
+      shieldEl.innerHTML=sh;
+      shieldEl.title=`Scudi rimasti: ${Math.min(totalShield,shieldLeft)}/${totalShield}`;
+    } else {
+      shieldEl.innerHTML='';
+    }
+  }
 
   // Torcia — token individuali cliccabili
   const torchTotal=tres.torch||0;
@@ -2564,4 +2652,3 @@ function playAudio(eventKey){
 </script>
 </body>
 </html>
-Visualizzazione di AAA_v8_fixed.html.
