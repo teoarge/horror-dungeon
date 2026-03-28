@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>Horror Dungeon — DDD</title>
+<title>Horror Hospital</title>
 <!-- PWA -->
 <meta name="theme-color" content="#0a0806">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Horror Dungeon">
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Horror Dungeon — DDD&quot;,&quot;short_name&quot;:&quot;HorrorDDD&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%230a0806&quot;,&quot;theme_color&quot;:&quot;%230a0806&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230a0806'/%3E%3Ctext x='256' y='340' font-size='300' text-anchor='middle'%3E🎲%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+<meta name="apple-mobile-web-app-title" content="Horror Hospital">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Horror Hospital&quot;,&quot;short_name&quot;:&quot;HorrorHospital&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%230a0806&quot;,&quot;theme_color&quot;:&quot;%230a0806&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230a0806'/%3E%3Ctext x='256' y='340' font-size='300' text-anchor='middle'%3E🎲%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
 <script>
 if('serviceWorker' in navigator){
   const sw=`
@@ -227,7 +227,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .ropt.disabled{opacity:.3;cursor:default;pointer-events:none;}
 .ropt-t{font-family:'Cinzel',serif;font-size:11px;color:#c8a020;margin-bottom:2px;}
 .ropt-d{font-size:9px;color:#8a7a5a;line-height:1.4;}
-.notif{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:10px 14px;text-align:center;max-width:280px;margin:6px auto;}
+.notif{background:#0a0806;border:2px solid #c8a020;border-radius:9px;padding:10px 14px;text-align:center;max-width:300px;position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.7);}
 .notif.hidden{display:none;}
 .nt{font-family:'Cinzel',serif;font-size:12px;color:#c8a020;margin-bottom:3px;}
 .nb{font-size:10px;line-height:1.45;}
@@ -238,8 +238,8 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 <body>
 
 <div id="sc-mode" class="active">
-  <div class="side-title">HORROR<br>DUNGEON</div>
-  <div class="pass-sub">Realm · DDD</div>
+  <div class="side-title">HORROR<br>HOSPITAL</div>
+  <div class="pass-sub">La Morte</div>
   <div class="side-title" style="font-size:14px;margin-bottom:16px;">Modalità di gioco</div>
   <div id="continue-btn-wrap" style="display:none;width:100%;max-width:260px;margin-bottom:6px;">
     <button class="mode-btn" style="border-color:#50dd50;color:#50dd50;background:rgba(80,221,80,.08);" onclick="continueSavedGame()">▶ Continua partita<br><span style="font-size:9px;color:#3a9a3a;">Riprendi da dove avevi lasciato</span></button>
@@ -264,103 +264,127 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
     <button class="manual-close-btn" onclick="document.getElementById('manual-overlay').classList.remove('open')">✕ Chiudi</button>
   </div>
   <div class="manual-title">MANUALE</div>
-  <div class="manual-sub">Horror Dungeon — Realm DDD</div>
+  <div class="manual-sub">Horror Hospital — La morte ti attende</div>
 
   <div class="manual-section">
    <div class="manual-h">🎯 Obiettivo</div>
-   <div class="manual-p">Due esploratori cooperano per eliminare <b>tutti i mostri del dungeon</b>, incluso il boss finale <b>Pennywise 🎈</b>. I giocatori si alternano a turni. Vince la squadra, non un singolo: alla fine il punteggio è <b>condiviso</b>.</div>
-   <div class="manual-p">⚠ Se la barra vita di un giocatore si esaurisce, è <b>Game Over</b> per entrambi.</div>
+   <div class="manual-p">Due avidi collezionisti del macabro cooperano per saccheggiare un ospedale psichiatrico abbandonato, in cerca di cimeli introvabili. L'ospedale sarà davvero abbandonato o dovranno fare i conti con presenze oscure?</div>
+   <div class="manual-p">I giocatori si alternano a turni partendo da lati opposti dell'edificio ed esplorano le stanze. Appena una stanza viene esplorata da entrambi i giocatori, formano una squadra e continuano il viaggio insieme condividendo le risorse. A questo punto la riuscita o la disfatta è condivisa, così come il punteggio finale.</div>
+   <div class="manual-p" style="border-left:2px solid #8b0000;padding-left:10px;color:#cc6060;">⚠ Se la barra vita di un giocatore si esaurisce, è <b>Game Over</b> per entrambi.</div>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">🎲 Un turno, passo per passo</div>
-   <div class="manual-p"><b>1. Lancia i dadi</b><br>Premi il pulsante 🎲 Lancia. Otterrai 4 dadi bianchi e 1 dado nero. I dadi si lanciano <b>una sola volta</b> per turno e non possono essere rilasciati.</div>
-   <div class="manual-p"><b>2. Forma 2 coppie</b><br>Tocca 2 dadi per formare una coppia: si alzano e vengono bloccati. Poi seleziona altri 2 dadi per la seconda coppia. La <b>somma</b> di ogni coppia è il numero che puoi usare sulla mappa. Esempio: dadi 3 e 4 → coppia con valore 7.</div>
-   <div class="manual-p"><b>3. Usa le coppie sulla mappa</b><br>Ogni coppia ti permette di fare <b>una sola azione</b>: barrare una casella con quel numero oppure colpire un mostro con quel numero attivo. Puoi usare le due coppie in ordine qualsiasi. Le caselle evidenziate in <b style="color:#50ff70">verde</b> sono quelle raggiungibili.</div>
-   <div class="manual-p"><b>4. Passa il turno</b><br>Quando hai fatto le tue azioni, premi <b>Passa ➜</b>. Se non hai barrato nessuna casella e non hai colpito nessun mostro, subisci <b>-2 ❤ alla vita</b> come penalità.</div>
-   <div class="manual-p">💡 Puoi annullare una coppia già usata premendo il pulsante ✕ rosso vicino alla coppia. Puoi annullare tutto il turno con <b>↺ Reset turno</b>.</div>
+   <div class="manual-h">🎲 Spiegazione di un turno di gioco</div>
+
+   <div class="manual-p"><b>1. Lancia i dadi</b><br>
+   Premi il pulsante 🎲 Lancia. Otterrai 4 dadi bianchi e 1 dado nero. I dadi si lanciano <b>una sola volta</b> per turno e non possono essere rilanciati.<br><br>
+   I dadi bianchi sono sempre utilizzabili gratuitamente, mentre il <b>dado nero è gratuito</b> fino a quando i due giocatori non si incontrano. Da quel momento in poi sarà gratuito per ogni giocatore <b>solo a turni alterni</b>.<br>
+   Nei turni in cui non è gratuito, la squadra può comunque scegliere di utilizzare il dado nero per un massimo di <b>3 volte</b>.</div>
+
+   <div class="manual-p"><b>2. Forma 2 coppie</b><br>
+   Tocca 2 dadi per formare la prima coppia. Poi seleziona altri 2 dadi per la seconda coppia. La <b>somma</b> di ogni coppia sarà il numero della stanza che potrai esplorare sulla mappa.</div>
+
+   <div class="manual-p"><b>3. Esplora stanze</b><br>
+   Per ogni coppia potrai effettuare una delle due seguenti azioni: <b>barrare una casella</b> con quel numero oppure <b>colpire un mostro</b> con quel numero attivo. Puoi usare le due coppie in ordine qualsiasi. Le caselle bordate di <b style="color:#50ff70">verde</b> sono quelle raggiungibili.</div>
+
+   <div class="manual-p" style="background:rgba(200,160,32,.06);border-radius:6px;padding:6px 10px;">💡 È possibile annullare tutto il turno con <b>↺ Reset turno</b>.</div>
+
+   <div class="manual-p"><b>4. Passa il turno</b><br>
+   Dopo le scelte definitive, premi <b>Passa ➜</b>. Se non hai barrato nessuna casella e non hai colpito nessun mostro, subisci <b>-2 ❤ alla vita</b> come penalità.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">🗺 Tipi di caselle</div>
+   <div class="manual-p" style="color:#8a7a5a;font-style:italic;margin-bottom:8px;">Tutte le caselle, per essere esplorate, devono essere adiacenti ad una già visitata e il numero deve essere uguale ad una somma di dadi scelta. Le caselle collegate da un <b style="color:#c8b060;font-style:normal;">ponte</b> (linea tratteggiata) sono considerate adiacenti.</div>
    <table class="manual-table">
-    <tr><th>Colore</th><th>Tipo</th><th>Come si barra</th></tr>
-    <tr><td style="color:#5a9e38">🟢 Verde</td><td>Start</td><td>Punto di partenza. Non richiede adiacenza. Ogni giocatore usa le Start del proprio lato (sinistra o destra). Da unificati si usano tutte.</td></tr>
-    <tr><td style="color:#e8e0cc">⬜ Chiaro</td><td>Regular</td><td>Deve essere adiacente a una casella già barrata. La somma della coppia deve essere uguale al numero scritto sulla casella.</td></tr>
-    <tr><td style="color:#9a9080">🟫 Grigio</td><td>Attivazione</td><td>Come le Regular. Quando barrata, <b>sblocca il numero corrispondente</b> del mostro adiacente (il numero diventa giallo).</td></tr>
-    <tr><td style="color:#c8b018">🟡 Giallo</td><td>Tesoro</td><td>Come le Regular. Quando barrata, si apre un menu per scegliere una ricompensa tra tre opzioni.</td></tr>
-    <tr><td style="color:#b86820">🟠 Arancio</td><td>Pugno</td><td>Richiede una <b>coppia doppia</b> (due dadi con lo stesso valore) la cui somma sia uguale al numero della casella. Es: per il 10 servono due 5.</td></tr>
-    <tr><td style="color:#c0b898">🔘 Beige</td><td>Mostro</td><td>Non si barra normalmente. Si colpisce con una coppia il cui valore corrisponde a un numero attivo del mostro.</td></tr>
-    <tr><td style="color:#444">⬛ Scuro</td><td>Doppio</td><td>Richiede qualsiasi coppia doppia (due dadi uguali), indipendentemente dal valore.</td></tr>
+    <tr><th>Colore</th><th>Tipo</th><th>Come si esplora</th></tr>
+    <tr>
+     <td><span style="color:#5a9e38;font-weight:700;">🟢 Verde</span></td>
+     <td style="color:#c8a020;font-weight:600;">Start</td>
+     <td>Aree di partenza per l'accesso all'edificio. Uniche sempre esplorabili che non rispettano la regola di adiacenza. Ogni giocatore usa le Start del proprio lato. Una volta incontrati si possono usare tutte.</td>
+    </tr>
+    <tr>
+     <td><span style="color:#e8e0cc;font-weight:700;">⬜ Bianco</span></td>
+     <td style="color:#c8a020;font-weight:600;">Normale</td>
+     <td>Una stanza senza pericoli! Un'ottima occasione per cercare cimeli. Qualche stanza contiene delle gemme 💎.</td>
+    </tr>
+    <tr>
+     <td><span style="color:#9a9080;font-weight:700;">🟫 Grigio</span></td>
+     <td style="color:#c8a020;font-weight:600;">Attivazione</td>
+     <td>Hai trovato un punto debole del nemico! Quando esplorata, <b>sblocca il numero corrispondente</b> del mostro adiacente (diventa giallo). A quel punto potrà essere colpito anche con quella somma.</td>
+    </tr>
+    <tr>
+     <td><span style="color:#c8b018;font-weight:700;">🟡 Giallo</span></td>
+     <td style="color:#c8a020;font-weight:600;">Tesoro</td>
+     <td>Hai trovato uno scrigno! Quando esplorata, sarà possibile scegliere una ricompensa tra 3 opzioni (vedi sezione Tesori).</td>
+    </tr>
+    <tr>
+     <td><span style="color:#b86820;font-weight:700;">🟠 Arancio</span></td>
+     <td style="color:#c8a020;font-weight:600;">Pugno</td>
+     <td>Hai trovato una stanza di controllo! Richiede una coppia formata da <b>due numeri uguali</b>. Es: per il 10 servono due 5. <b>Infligge un danno ad ogni mostro.</b> Trovate 5 stanze di controllo → <b>+3💎 bonus</b>.</td>
+    </tr>
+    <tr>
+     <td><span style="color:#c0b898;font-weight:700;">🔘 Beige</span></td>
+     <td style="color:#c8a020;font-weight:600;">Mostro</td>
+     <td>A quanto pare l'edificio non era abbandonato! Questa stanza non può essere esplorata finché il mostro non viene sconfitto. Per infliggere un danno serve una coppia la cui somma corrisponda a uno dei numeri <b style="color:#f0d060;">attivi (gialli)</b>.</td>
+    </tr>
+    <tr>
+     <td><span style="color:#888;font-weight:700;">⬛ Scuro</span></td>
+     <td style="color:#c8a020;font-weight:600;">Doppio</td>
+     <td>Questa stanza è chiusa a chiave! Per sfondare la porta serve una qualsiasi coppia con lo stesso valore, indipendentemente da esso.</td>
+    </tr>
    </table>
   </div>
 
   <div class="manual-section">
-   <div class="manual-h">🔗 Raggiungibilità delle caselle</div>
-   <div class="manual-p">Una casella può essere barrata solo se è <b>adiacente</b> (tocca il bordo) a una casella già barrata dal tuo giocatore — oppure se è una casella <b>Start</b>. Le caselle collegate da un <b>ponte</b> (linea tratteggiata sul bordo della mappa) sono considerate adiacenti anche se non si toccano fisicamente.</div>
-   <div class="manual-p">Le caselle evidenziate in <b style="color:#ff9900">arancio</b> non sono ancora raggiungibili. Le caselle in <b style="color:#50ff70">verde</b> sono raggiungibili con le coppie attuali. Le caselle in <b style="color:#00eeff">ciano</b> possono essere de-selezionate.</div>
-  </div>
-
-  <div class="manual-section">
-   <div class="manual-h">👾 Mostri: attivazione e combattimento</div>
-   <div class="manual-p"><b>Numeri attivi vs bloccati:</b> Ogni mostro ha una lista di numeri. Quelli in <b style="color:#f0d060">giallo</b> sono attivi (usabili subito). Quelli in grigio sono bloccati. Per sbloccare un numero bloccato, devi barrare la <b>casella grigia adiacente al mostro</b> che porta quel numero.</div>
-   <div class="manual-p"><b>Come colpire un mostro:</b><br>
-   1. Devi avere almeno una casella barrata <b>adiacente al mostro</b>.<br>
-   2. Devi avere una coppia la cui somma sia uguale a un <b>numero attivo</b> del mostro.<br>
-   3. Tocca la casella del mostro sulla mappa: viene tolto 1 PV.<br>
-   Colpire un mostro conta come azione del turno (evita la penalità -2❤).</div>
-   <div class="manual-p"><b>Morte del mostro:</b> quando i PV arrivano a 0, il mostro è sconfitto e guadagni le sue <b>Gemme 💎</b>. La casella del mostro viene barrata.</div>
-   <div class="manual-p">⚠ <b>Pennywise 🎈</b> è il boss: ha 12 PV e quando viene sconfitto infligge <b>-2❤</b> ai giocatori. Sconfiggerlo completa la partita.</div>
-  </div>
-
-  <div class="manual-section">
-   <div class="manual-h">⬛ Dado Nero</div>
-   <div class="manual-p">Il dado nero può essere combinato con qualsiasi dado bianco per formare una coppia.<br>
-   <b>Giocatori separati:</b> il dado nero è sempre <b>gratuito e illimitato</b>.<br>
-   <b>Giocatori unificati:</b> segue un ciclo alternato — G1(gratuito) → G2(non gratuito) → G1(non gratuito) → G2(gratuito) → e così via. Hai 3 slot totali per gli usi a pagamento (espandibili con il tesoro Dado Nero).</div>
+   <div class="manual-h">👾 Mostri</div>
+   <div class="manual-p">Ogni mostro ha un numero di <b>punti vita</b> e una serie di <b>punti deboli</b> (lista di numeri). Quelli in <b style="color:#f0d060;">giallo</b> sono conosciuti (utilizzabili per colpirlo), quelli in grigio non sono ancora stati scoperti. Per scoprirli, è necessario esplorare le stanze attivazione adiacenti con il numero corrispondente.</div>
+   <div class="manual-p"><b>Morte del mostro:</b> quando i PV arrivano a 0, il mostro è sconfitto e raccogli tutti i suoi cimeli (le sue <b>Gemme 💎</b>). La stanza è ora esplorata.</div>
+   <div class="manual-p" style="border-left:2px solid #8b0000;padding-left:10px;color:#cc6060;">⚠ <b>Pennywise 🎈</b> è il nemico più ostico: ha ben <b>12 PV</b> e una volta sconfitto infligge <b>-2❤</b> ai giocatori.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">💰 Tesori</div>
-   <div class="manual-p">Quando barri una casella Tesoro 🟡, scegli subito una delle tre ricompense:</div>
+   <div class="manual-p" style="color:#8a7a5a;font-style:italic;">Quando trovi uno scrigno 🟡, scegli una delle tre ricompense. Ogni ricompensa è selezionabile solo <b style="font-style:normal;color:#c8a020;">una volta per partita</b>:</div>
    <table class="manual-table">
-    <tr><th>Ricompensa</th><th>Effetto</th><th>Limite</th></tr>
-    <tr><td>🛡 Scudo Vita</td><td>Guadagni <b>+1💎</b> subito. I prossimi <b>3 danni alla vita</b> vengono annullati automaticamente (gli slot scudo sono visibili nella sezione Tesori).</td><td>1 volta per partita</td></tr>
-    <tr><td>🕯 Torcia</td><td>Ricevi <b>2 token torcia</b>. Clicca un token nella sezione Tesori per attivarlo: poi tocca una casella adiacente a quelle già barrate per barrarla <b>senza usare i dadi</b>.</td><td>Illimitato</td></tr>
-    <tr><td>⬛ Dado Nero</td><td>Aumenta di <b>3 il numero di slot</b> per il dado nero (modalità unificata).</td><td>1 volta per partita</td></tr>
+    <tr><th>Ricompensa</th><th>Effetto</th></tr>
+    <tr>
+     <td style="white-space:nowrap;">🛡 Scudo Vita</td>
+     <td>Hai trovato un cimelio ancora in buono stato! Guadagni <b>+1💎</b> subito. Riesci ad evitare i prossimi <b>3 danni</b>.</td>
+    </tr>
+    <tr>
+     <td style="white-space:nowrap;">🕯 Torcia</td>
+     <td>Trovi 2 torce quasi scariche! Ricevi <b>2 token torcia</b>. Cliccando un token, puoi esplorare una stanza adiacente a quelle già esplorate, <b>senza usare i dadi</b>.</td>
+    </tr>
+    <tr>
+     <td style="white-space:nowrap;">⬛ Dado Nero</td>
+     <td>Hai trovato 3 oggetti utili... Aumenta di <b>3 il numero di utilizzi</b> per il dado nero.</td>
+    </tr>
    </table>
-   <div class="manual-p">Se annulli la casella Tesoro o resetti il turno, anche la ricompensa scelta viene annullata.</div>
-  </div>
-
-  <div class="manual-section">
-   <div class="manual-h">✊ Pugni</div>
-   <div class="manual-p">Le caselle <b>Pugno 🟠</b> richiedono una coppia doppia (es. 5+5 per la casella 10). Ogni volta che barri una casella pugno:</div>
-   <div class="manual-p">• Viene segnato un segno nella <b>barra pugni</b> (visibile nella sezione Pugni).<br>• Ogni mostro <b>ancora vivo</b> subisce automaticamente <b>1 danno</b>.<br>• Quando la barra raggiunge 5, <b>la prima volta</b> guadagni +3💎 bonus.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">❤ Barra Vita</div>
-   <div class="manual-p">La barra vita va da sinistra (sicuro) a destra (morte). Le celle hanno penalità crescenti: 0, -1, -2, -4, -6, -9, -12, -16, -20. La penalità vita viene sottratta dal punteggio finale. Se raggiungi l'ultima cella, è <b>Game Over</b>.</div>
-   <div class="manual-p">Ricevi danni se: non fai azioni in un turno (-2❤), sconfiggi Pennywise (-2❤), o perdi scambi con i mostri.</div>
-   <div class="manual-p">Gli scudi 🛡 (tesoro vita) assorbono i danni automaticamente prima che avanzino sulla barra.</div>
+   <div class="manual-p">Se durante il turno non è stata esplorata nessuna stanza e non è stato ferito nessun mostro, subisci <b>-2 ❤</b>. Nel calcolo del punteggio finale viene sottratta la penalità indicata nella barra vita.</div>
+   <div class="manual-p" style="border-left:2px solid #8b0000;padding-left:10px;color:#cc6060;">Attento a non rimanerne senza!</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">⚔ Unione dei giocatori</div>
-   <div class="manual-p">I due giocatori si <b>uniscono</b> quando barrano la stessa casella oppure infliggono danno allo stesso mostro. Al momento dell'unione:</div>
-   <div class="manual-p">• Le <b>mappe si fondono</b>: tutte le caselle barrate da entrambi diventano condivise.<br>• Le <b>gemme si sommano</b> (+ 1 bonus unione).<br>• La <b>vita</b> viene allineata a quella del giocatore che ne aveva di <b>meno</b>.<br>• I <b>tesori, scudi e danni ai mostri</b> vengono unificati.<br>• Tutte le caselle <b>Start</b> diventano disponibili.</div>
-   <div class="manual-p">Da quel momento in poi, ogni azione di un giocatore vale per entrambi. I turni continuano ad alternarsi.</div>
+   <div class="manual-p">I due giocatori si uniscono quando <b>esplorano la stessa stanza</b> oppure quando <b>colpiscono lo stesso mostro</b>. Nel turno in cui avviene l'incontro, il giocatore di turno gioca normalmente. Al Passa Turno scatta l'unione:</div>
+   <div class="manual-p">
+    <span style="display:block;padding:3px 0;">🗺 Tutte le stanze esplorate da entrambi diventano condivise</span>
+    <span style="display:block;padding:3px 0;">💎 Le gemme si sommano <b>+ 1 bonus unione</b></span>
+    <span style="display:block;padding:3px 0;">❤ La vita viene allineata a quella del giocatore <b>più ferito</b></span>
+    <span style="display:block;padding:3px 0;">🛡 Tesori, scudi e danni ai mostri vengono unificati</span>
+    <span style="display:block;padding:3px 0;">🟢 Tutte le caselle Start diventano disponibili</span>
+   </div>
+   <div class="manual-p">Da quel momento ogni azione vale per entrambi. I turni continuano ad alternarsi.</div>
   </div>
 
   <div class="manual-section">
    <div class="manual-h">🏆 Punteggio finale</div>
-   <div class="manual-p"><b>PV = Gemme totali × 3 + Tesori totali × 2 − Penalità vita</b></div>
-   <div class="manual-p">Le gemme e i tesori di entrambi i giocatori si sommano. La penalità è determinata dalla posizione sulla barra vita. Più alto è il punteggio, più epica è stata la vostra avventura nel dungeon.</div>
-  </div>
-
-  <div class="manual-section">
-   <div class="manual-h">🌐 Modalità due dispositivi</div>
-   <div class="manual-p">Il Giocatore 1 sceglie <b>"Due dispositivi — Giocatore 1"</b> e condivide il codice visualizzato. Il Giocatore 2 sceglie <b>"Due dispositivi — Giocatore 2"</b> e inserisce il codice. I turni si alternano automaticamente: ognuno vede solo il proprio turno. Lo stato si sincronizza in tempo reale. Dopo l'unione, i turni continuano ad alternarsi tra i due dispositivi.</div>
+   <div class="manual-p" style="font-family:'Cinzel',serif;font-size:12px;color:#f0d060;text-align:center;padding:10px;background:rgba(200,160,32,.08);border-radius:6px;border:1px solid rgba(200,160,32,.25);">PV = 💎 totali × 3 − penalità vita</div>
   </div>
 
   <div style="text-align:center;margin-top:20px;">
@@ -369,23 +393,33 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
  </div>
 </div>
 
+<!-- Schermata disconnessione -->
+<div id="sc-disconnect" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;text-align:center;">
+    <div style="font-size:52px;margin-bottom:20px;animation:bp 2s ease-in-out infinite;">📡</div>
+    <div style="font-family:'Cinzel',serif;font-size:18px;color:#8b0000;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 20px rgba(180,0,0,.7);">CONNESSIONE PERSA</div>
+    <div id="disconnect-msg" style="font-family:'Crimson Text',Georgia,serif;font-size:13px;color:#a89068;line-height:1.8;max-width:300px;margin-bottom:30px;font-style:italic;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;">L'altro giocatore si è disconnesso dall'ospedale.</div>
+    <button class="go-restart" onclick="goToMainMenu()" style="margin-bottom:12px;">↩ Torna al menu principale</button>
+  </div>
+</div>
+
 <!-- Schermata host: mostra codice -->
 <div id="sc-host" class="screen">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;">
-    <div class="side-title">HORROR DUNGEON</div>
-    <div class="pass-sub" style="margin-bottom:20px;">Codice partita — condividilo con il Giocatore 2</div>
+    <div class="side-title">HORROR HOSPITAL</div>
+    <div class="pass-sub" style="margin-bottom:20px;">Codice partita — condividilo con il tuo compagno</div>
     <div class="sync-code" id="host-code" style="font-size:16px;letter-spacing:2px;word-break:break-all;">——</div>
     <button class="mode-btn" style="margin-top:8px;padding:8px 18px;font-size:11px;" onclick="copyHostCode()">📋 Copia codice</button>
     <div class="sync-status wait" id="host-status">In attesa della connessione…</div>
-    <div style="font-size:10px;color:#6a5a3a;margin-top:16px;text-align:center;max-width:280px;">Il Giocatore 2 deve aprire lo stesso file HTML, scegliere <b style="color:#c8a020">"Due dispositivi — Giocatore 2"</b> e incollare il codice completo mostrato qui sopra.</div>
+    <div style="font-size:10px;color:#6a5a3a;margin-top:16px;text-align:center;max-width:280px;">Il tuo compagno deve aprire lo stesso file HTML, scegliere <b style="color:#c8a020">"Due dispositivi — Giocatore 2"</b> e incollare il codice completo mostrato qui sopra.</div>
   </div>
 </div>
 
 <!-- Schermata join: inserisci codice -->
 <div id="sc-join" class="screen">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;">
-    <div class="side-title">HORROR DUNGEON</div>
-    <div class="pass-sub" style="margin-bottom:20px;">Inserisci il codice numerico del Giocatore 1</div>
+    <div class="side-title">HORROR HOSPITAL</div>
+    <div class="pass-sub" style="margin-bottom:20px;">Inserisci il codice numerico del tuo compagno</div>
     <input class="sync-input" id="join-code" maxlength="6" placeholder="ABCDEF">
     <button class="mode-btn" style="margin-top:14px;" onclick="joinGame()">Connetti ➜</button>
     <div class="sync-status" id="join-status"></div>
@@ -393,21 +427,44 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 </div>
 
 <div id="sc-side" class="screen">
-  <div class="side-title">HORROR<br>DUNGEON</div>
-  <div class="pass-sub">Realm · DDD</div>
+  <div class="side-title">HORROR<br>HOSPITAL</div>
+  <div class="pass-sub">La Morte</div>
   <div class="side-title" style="font-size:14px;margin-bottom:6px;">⚔ Scelta Posizione Iniziale</div>
-  <div class="side-sub">Giocatore 1: scegli da quale lato vuoi partire. Giocatore 2 partirà dal lato opposto.</div>
+  <div class="side-sub">Scegli da quale lato vuoi partire. Il tuo compagno partirà dal lato opposto.</div>
   <div class="side-opts">
     <button class="side-btn" onclick="chooseStartSide('left')">← Sinistra<br><span style="font-size:9px;color:#8a7a5a;">P1 sx · P2 dx</span></button>
     <button class="side-btn" onclick="chooseStartSide('right')">Destra →<br><span style="font-size:9px;color:#8a7a5a;">P1 dx · P2 sx</span></button>
   </div>
 </div>
 
+<!-- Schermata inserimento nomi -->
+<div id="sc-names" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;gap:0;">
+    <div class="side-title">HORROR<br>HOSPITAL</div>
+    <div class="pass-sub" style="margin-bottom:28px;">La Morte</div>
+    <div class="side-title" style="font-size:13px;margin-bottom:20px;letter-spacing:2px;">⚔ Come vi chiamate?</div>
+    <div id="name-p1-wrap" style="width:100%;max-width:260px;margin-bottom:16px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;color:#4a9eff;letter-spacing:2px;margin-bottom:6px;">GIOCATORE 1</div>
+      <input id="name-p1-input" type="text" maxlength="16" placeholder="Nome Giocatore 1"
+        style="font-family:'Cinzel',serif;font-size:14px;width:100%;background:rgba(74,158,255,.07);border:1.5px solid rgba(74,158,255,.4);border-radius:8px;padding:10px 14px;color:#4a9eff;outline:none;text-align:center;letter-spacing:1px;">
+    </div>
+    <div id="name-p2-wrap" style="width:100%;max-width:260px;margin-bottom:28px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;color:#ff6b6b;letter-spacing:2px;margin-bottom:6px;">GIOCATORE 2</div>
+      <input id="name-p2-input" type="text" maxlength="16" placeholder="Nome Giocatore 2"
+        style="font-family:'Cinzel',serif;font-size:14px;width:100%;background:rgba(255,107,107,.07);border:1.5px solid rgba(255,107,107,.4);border-radius:8px;padding:10px 14px;color:#ff6b6b;outline:none;text-align:center;letter-spacing:1px;">
+    </div>
+    <button class="pass-btn" onclick="confirmNames()" style="font-size:13px;padding:12px 32px;">⚔ Entra nell'ospedale</button>
+  </div>
+</div>
+
 <div id="sc-pass">
-  <div class="pass-title">HORROR<br>DUNGEON</div>
-  <div class="pass-sub">Realm · DDD</div>
+  <div class="pass-title">HORROR<br>HOSPITAL</div>
+  <div class="pass-sub">La Morte</div>
+  <div id="merge-story" style="display:none;font-family:'Crimson Text',Georgia,serif;font-size:15px;color:#c8b060;line-height:1.8;max-width:300px;text-align:center;margin-bottom:22px;font-style:italic;padding:14px 16px;border:1px solid rgba(200,160,32,.3);border-radius:8px;background:rgba(200,160,32,.06);">
+    All'improvviso senti un rumore alle tue spalle...<br>Ti giri di scatto pronto a sferrare un colpo...<br>Ma ti fermi giusto in tempo per capire che era solo il tuo compagno...<br><span style="color:#c8a020;font-style:normal;font-size:13px;">Per fortuna...</span>
+  </div>
   <div class="pass-player" id="pass-who">Turno di: Giocatore 1</div>
-  <div class="pass-msg" id="pass-msg">Passa il dispositivo al Giocatore 1 e premi Inizia Turno.</div>
+  <div class="pass-msg" id="pass-msg">Inizia il tuo turno.</div>
   <button class="pass-btn" id="pass-btn-start" onclick="startTurn()">⚔ Inizia Turno</button>
 </div>
 
@@ -429,11 +486,11 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 </div>
 
 <div id="sc-game" class="screen">
-  <div class="hdr"><div class="realm">HORROR DUNGEON — DDD</div></div>
+  <div class="hdr"><div class="realm">HORROR HOSPITAL</div></div>
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:6px;">
       <button onclick="resetAll()" style="font-size:9px;color:#5a4a2a;background:none;border:1px solid rgba(90,74,42,.3);border-radius:4px;padding:3px 8px;cursor:pointer;">🔄 Reset</button>
-      <div><div class="pname-cur" id="pcur">Giocatore 1</div><div style="font-size:8px;color:#6a5a3a;">Turno in corso</div></div>
+      <div><div class="pname-cur" id="pcur">—</div><div style="font-size:8px;color:#6a5a3a;">Turno in corso</div></div>
     </div>
     <div><div class="vpbox" id="vpv">0</div><div class="vplbl">PV</div></div>
     <button class="pturn-btn" onclick="passTurn()">Passa ➜</button>
@@ -500,16 +557,17 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
     <div class="cnt"><div class="clbl">💎 GEMME</div><div class="cval" id="vgm">0</div></div>
     <div class="cnt"><div class="clbl">⭐ PV TOT</div><div class="cval" id="vvp">0</div></div>
   </div>
-  <div class="notif hidden" id="notif">
-    <div class="nt" id="nt"></div><div class="nb" id="nb"></div>
-    <button class="nok" onclick="closeN()">OK</button>
-  </div>
   <div style="height:16px;"></div>
+</div>
+
+<div class="notif hidden" id="notif">
+  <div class="nt" id="nt"></div><div class="nb" id="nb"></div>
+  <button class="nok" onclick="closeN()">OK</button>
 </div>
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  HORROR DUNGEON — DDD
+//  HORROR HOSPITAL
 //  Mappa SVG con sistema bordi+passaggi
 //  Coordinate in unità mezzo-cella (step = 0.5) per sfalsamento
 // ══════════════════════════════════════════════════════════════
@@ -664,7 +722,7 @@ const BRIDGES_ADJ=[
   ['GF','H17_4g'],       // H17 attiva GF
   ['GF','I17_7b'],       // I17 attiva GF
   ['GF','I19_9b'],       // I19 raggiunge GF
-  ['E4_10g','PW'],       // E4 grigio attiva il 4 di Pennywise (ponte)
+  ['H17_4g','PW'],       // H17 grigio attiva il 4 di Pennywise (ponte)
 ];
 // EDGES auto-costruito: geometria + ponti
 const EDGES=(()=>{
@@ -695,7 +753,7 @@ const BRIDGES=[
   ['JS','I5_5b'],        // G5↔I5
   ['G18_3t','H17_4g'],   // G18↔H17
   ['K9_7b','LF'],        // K10↔K12
-  ['E4_10g','PW'],       // E4↔PW (ponte attivazione)
+  ['H17_4g','PW'],       // H17↔PW (ponte attivazione)
 ];
 // ─── MOSTRI ───
 // active: true=nero(attivo subito), false=bianco(bloccato finché greyAdj non barrata)
@@ -715,7 +773,7 @@ const MONS={
   LF:{name:'Leatherface',   nums:[2,12],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['K9_7b','J15_8g']},
   GF:{name:'Ghostface',     nums:[3,11],    active:[true,true],                     hp:5, gem:3,isBoss:false,greyAdj:['H17_4g','I17_7b']},
   PW:{name:'Pennywise',     nums:[3,4,5,8,11],active:[false,false,false,false,false],hp:12,gem:6,isBoss:true,
-      greyAdj:['F9_3g','E12_11g','H9_5g','I5_5b','F19_11v','E4_10g']},
+      greyAdj:['F9_3g','E12_11g','H9_5g','I5_5b','F19_11v','H17_4g']},
 };
 const MK=['FK','JV','JS','MM','LF','GF','PW'];
 
@@ -748,26 +806,26 @@ const LIFE_STEPS=[
 const MAX_LIFE_IDX=LIFE_STEPS.length-1;
 
 const EPITAPHS=[
-  `Freddy lo trovò nei sogni prima ancora che chiudesse gli occhi. L'ultima cosa che vide fu quella mano di lame che scendeva lenta, quasi rassicurante. Il Realm aveva scelto il momento giusto.`,
+  `Freddy lo trovò nei sogni prima ancora che chiudesse gli occhi. L'ultima cosa che vide fu quella mano di lame che scendeva lenta, quasi rassicurante. La Morte aveva scelto il momento giusto.`,
   `Jason non fa rumore quando cammina. Lo capì troppo tardi, quando sentì il respiro attraverso la maschera proprio dietro la sua nuca. Nel bosco non c'è nessuno da chiamare.`,
   `Jigsaw non uccide. Fa scegliere. E lui scelse male, ogni volta, fino all'ultima. La trappola scattò con un clic gentile, quasi musicale.`,
   `Michael Myers stava in piedi nell'ombra da ore. Immobile. Paziente. Quando finalmente si mosse, fu così veloce che l'esploratore non ebbe nemmeno il tempo di urlare.`,
-  `Leatherface non parla. Cammina e basta. Quando lo sentì arrivare tra le foglie secche, era già troppo tardi per correre. I dungeon non hanno uscite per i perdenti.`,
+  `Leatherface non parla. Cammina e basta. Quando lo sentì arrivare tra le foglie secche, era già troppo tardi per correre. Gli ospedali non hanno uscite per i perdenti.`,
   `Ghostface chiamò prima di attaccare. Sembrava quasi sportivo. "Qual è il tuo film horror preferito?" Era la domanda sbagliata nel momento sbagliato nel posto sbagliato.`,
   `Pennywise rise quando lo vide arrivare. Aveva aspettato. Si era nutrito della paura per settimane. Quando finalmente aprì quella bocca enorme, il clown sembrava quasi contento.`,
   `La nebbia arrivò all'improvviso e si fermò, disorientato. Quando si diradò, c'era soltanto una sagoma davanti a lui. Alta. Silenziosa. Con una maschera bianca e una lama lunga così.`,
-  `Trovarono il suo zaino sul bordo del dungeon. Dentro: una torcia spenta, un dado ancora caldo, e qualcosa che nessuno volle toccare. Nessuno si chiese mai cosa fosse successo davvero.`,
+  `Trovarono il suo zaino sul bordo dell'ospedale. Dentro: una torcia spenta, un dado ancora caldo, e qualcosa che nessuno volle toccare. Nessuno si chiese mai cosa fosse successo davvero.`,
   `Il dado uscì male tre volte di fila. Sapeva cosa significava. Guardò la barra della vita scendere e pensò: "Ancora un turno". Non ci fu nessun altro turno.`,
-  `Le gemme luccicavano ancora nella sua borsa quando il Realm lo reclamò. Ricchezze inutili. L'oro non compra un'uscita da questi corridoi. Non per lui. Non quella notte.`,
+  `Le gemme luccicavano ancora nella sua borsa quando la Morte lo reclamò. Ricchezze inutili. L'oro non compra un'uscita da questi corridoi. Non per lui. Non quella notte.`,
   `Aveva quasi ucciso il boss. Quasi. Pennywise era a un colpo dalla morte quando rise di nuovo, più forte. "Quasi non conta, qui sotto," disse il clown, e spense la luce.`,
   `Sentì i passi nell'oscurità e credette fosse il secondo giocatore. Si girò con un sorriso. Non era il secondo giocatore. Non indossava neanche un volto umano.`,
-  `La torcia si spense nel momento sbagliato. Nel buio totale del dungeon, senti qualcosa di bagnato sul pavimento. Poi niente. Poi buio per sempre.`,
-  `Jason Voorhees non dimentica. Non perdona. E soprattutto, non si stanca mai. L'esploratore si fermò per riprendere fiato. Fu il suo ultimo errore in questo realm.`,
-  `Il Realm non ha pietà per chi sbaglia i conti. Due caselle da barrare, un dado che tradisce, una vita che scivola. La matematica del dungeon è sempre implacabile.`,
+  `La torcia si spense nel momento sbagliato. Nel buio totale dell'ospedale, senti qualcosa di bagnato sul pavimento. Poi niente. Poi buio per sempre.`,
+  `Jason Voorhees non dimentica. Non perdona. E soprattutto, non si stanca mai. L'esploratore si fermò per riprendere fiato. Fu il suo ultimo errore in questo ospedale.`,
+  `La Morte non ha pietà per chi sbaglia i conti. Due caselle da barrare, un dado che tradisce, una vita che scivola. La matematica dell'ospedale è sempre implacabile.`,
   `Credeva di aver trovato un pattern sicuro. Credeva di poter calcolare ogni mossa. Freddy Krueger sorrise, perché sa benissimo che i sogni non obbediscono alla logica.`,
-  `L'ultima casella era quella giusta. Il numero era perfetto. Ma la creatura era già lì, ad aspettare nell'ombra. Il Realm aveva previsto la sua mossa prima ancora che la facesse.`,
-  `Rimase paralizzato dalla paura quando vide la sagoma emergere dal buio. Leatherface è lento ma non si ferma mai. E il dungeon è piccolo quando non puoi correre.`,
-  `Dissero che aveva lottato bene. Dissero che era arrivato lontano. Ma alla fine il Realm tende sempre le sue trappole, e quella notte erano state tese proprio per lui.`,
+  `L'ultima casella era quella giusta. Il numero era perfetto. Ma la creatura era già lì, ad aspettare nell'ombra. La Morte aveva previsto la sua mossa prima ancora che la facesse.`,
+  `Rimase paralizzato dalla paura quando vide la sagoma emergere dal buio. Leatherface è lento ma non si ferma mai. E l'ospedale è piccolo quando non puoi correre.`,
+  `Dissero che aveva lottato bene. Dissero che era arrivato lontano. Ma alla fine la Morte tende sempre le sue trappole, e quella notte erano state tese proprio per lui.`,
 ];
 
 // ─── STORIE VITTORIA PER FASCIA PUNTEGGIO ───
@@ -775,180 +833,180 @@ const EPITAPHS=[
 // 20 storie per fascia
 const VICTORY_STORIES={
   r0:[
-    `Il dungeon è stato ripulito, ma a quale costo. Ogni passo è stato una lotta, ogni respiro un miracolo. Le creature sono morte, ma il Realm vi ha quasi inghiottiti con loro. Siete vivi — per poco.`,
+    `L'ospedale è stato ripulito, ma a quale costo. Ogni passo è stato una lotta, ogni respiro un miracolo. Le creature sono morte, ma la Morte vi ha quasi inghiottiti con loro. Siete vivi — per poco.`,
     `Pennywise è caduto per ultimo, con un sorriso. Come se sapesse qualcosa che voi non sapete ancora. Siete usciti con le ossa rotte e le tasche vuote, ma almeno siete usciti.`,
-    `Avete vinto. Tecnicamente. Ma il Realm ha preso quasi tutto quello che avevate da dare. Le piaghe del dungeon vi seguiranno nei sogni per molto, molto tempo.`,
-    `La vittoria sa di sangue stantio e torce bruciate. Avete abbattuto ogni creatura, ma il prezzo pagato in carne e vita è stato altissimo. Il Realm vi ha segnati per sempre.`,
-    `Freddy Krueger è caduto per primo, sorridendo. Sapeva che anche nella vittoria sareste stati perdenti. Aveva ragione — siete vivi, ma il dungeon ha vinto lo stesso.`,
-    `L'ultimo mostro si è dissolto nell'oscurità. Avete guardato le vostre mani tremanti. Gemme? Poche. Vita? Quasi nulla. Ma siete in piedi. In questo realm, basta quello.`,
-    `La porta del dungeon si è aperta lentamente. Fuori c'era solo nebbia. Vi siete trascinati fuori, a malapena, portando con voi le cicatrici di ogni battaglia persa di poco.`,
+    `Avete vinto. Tecnicamente. Ma la Morte ha preso quasi tutto quello che avevate da dare. Le piaghe dell'ospedale vi seguiranno nei sogni per molto, molto tempo.`,
+    `La vittoria sa di sangue stantio e torce bruciate. Avete abbattuto ogni creatura, ma il prezzo pagato in carne e vita è stato altissimo. La Morte vi ha segnati per sempre.`,
+    `Freddy Krueger è caduto per primo, sorridendo. Sapeva che anche nella vittoria sareste stati perdenti. Aveva ragione — siete vivi, ma l'ospedale ha vinto lo stesso.`,
+    `L'ultimo mostro si è dissolto nell'oscurità. Avete guardato le vostre mani tremanti. Gemme? Poche. Vita? Quasi nulla. Ma siete in piedi. In questo ospedale, basta quello.`,
+    `La porta dell'ospedale si è aperta lentamente. Fuori c'era solo nebbia. Vi siete trascinati fuori, a malapena, portando con voi le cicatrici di ogni battaglia persa di poco.`,
     `Michael Myers è caduto, ma non senza lasciarvi il segno. La barra della vita era quasi vuota quando avete inferto l'ultimo colpo. Una vittoria che sembra una sconfitta.`,
-    `Avete completato il dungeon come due fantasmi esausti. Nessuna gemma abbastanza per dimenticare le ferite, nessun tesoro abbastanza per pagare il debito con il Realm.`,
-    `Leatherface era l'ultimo. È caduto in silenzio, come sempre. E voi siete rimasti in silenzio anche dopo, troppo stanchi persino per esultare. Questo è il dungeon. Questo è tutto.`,
-    `Siete sopravvissuti. Appena. Le pareti del dungeon sembravano stringersi ad ogni turno. Avete infilato l'uscita per un pelo, con le mani vuote e le ginocchia a pezzi.`,
-    `La vittoria è arrivata, grigia e pesante come la pietra del dungeon. Nessun trionfo, solo sollievo. E la certezza che non tornerete mai più in questi corridoi maledetti.`,
+    `Avete completato l'ospedale come due fantasmi esausti. Nessuna gemma abbastanza per dimenticare le ferite, nessun tesoro abbastanza per pagare il debito con la Morte.`,
+    `Leatherface era l'ultimo. È caduto in silenzio, come sempre. E voi siete rimasti in silenzio anche dopo, troppo stanchi persino per esultare. Questo è l'ospedale. Questo è tutto.`,
+    `Siete sopravvissuti. Appena. Le pareti dell'ospedale sembravano stringersi ad ogni turno. Avete infilato l'uscita per un pelo, con le mani vuote e le ginocchia a pezzi.`,
+    `La vittoria è arrivata, grigia e pesante come la pietra dell'ospedale. Nessun trionfo, solo sollievo. E la certezza che non tornerete mai più in questi corridoi maledetti.`,
     `Avete vinto barrando l'ultima casella con le ultime forze rimaste. Ghostface si è dissolto ridendo. "Tornerete," ha detto. Sperate di no. Ma nel profondo, sapete che forse sì.`,
-    `Il Realm vi ha restituiti al mondo, malconci e vuoti. Ogni creatura è morta, ma le loro urla riecheggiano ancora nelle orecchie. Una vittoria pagata a carissimo prezzo.`,
-    `Jigsaw aveva detto che avreste imparato qualcosa. Aveva ragione. Avete imparato che vincere in questo dungeon fa quasi più male che perdere.`,
+    `La Morte vi ha restituiti al mondo, malconci e vuoti. Ogni creatura è morta, ma le loro urla riecheggiano ancora nelle orecchie. Una vittoria pagata a carissimo prezzo.`,
+    `Jigsaw aveva detto che avreste imparato qualcosa. Aveva ragione. Avete imparato che vincere in questo ospedale fa quasi più male che perdere.`,
     `L'ultimo colpo è stato tremante, disperato. Il boss è caduto. Voi siete crollati un secondo dopo. Qualcuno ha dovuto portarvi fuori di peso. Vittoria. Di misura.`,
     `Pennywise ha riso fino all'ultimo respiro. Un riso che conosceva il vostro punteggio ancor prima di voi. Avete vinto, ma il clown sembrava comunque soddisfatto.`,
-    `Siete usciti dal dungeon trascinando le gambe. Le gemme raccolte erano poche, i danni ricevuti tanti. Una vittoria di pura resistenza, senza grazia né gloria.`,
-    `La fine del dungeon vi ha accolti con silenzio. Non c'era nessuno ad aspettarvi. Avete vinto, ma il Realm vi ha consumati quasi completamente. Forse era questo il piano.`,
-    `Ogni creatura è morta per mano vostra, ma il dungeon ha tenuto il conto. Le ferite sono reali. Il punteggio lo conferma. Avete vinto il minimo indispensabile.`,
+    `Siete usciti dall'ospedale trascinando le gambe. Le gemme raccolte erano poche, i danni ricevuti tanti. Una vittoria di pura resistenza, senza grazia né gloria.`,
+    `La fine dell'ospedale vi ha accolti con silenzio. Non c'era nessuno ad aspettarvi. Avete vinto, ma la Morte vi ha consumati quasi completamente. Forse era questo il piano.`,
+    `Ogni creatura è morta per mano vostra, ma l'ospedale ha tenuto il conto. Le ferite sono reali. Il punteggio lo conferma. Avete vinto il minimo indispensabile.`,
   ],
   r10:[
-    `Il dungeon è stato un calvario, ma avete tenuto. Le creature giacciono sparse per le sale oscure e voi siete ancora in piedi, doloranti ma integri. Un'impresa da raccontare — con qualche omissione.`,
+    `L'ospedale è stato un calvario, ma avete tenuto. Le creature giacciono sparse per le sale oscure e voi siete ancora in piedi, doloranti ma integri. Un'impresa da raccontare — con qualche omissione.`,
     `Freddy Krueger ha puntato sui vostri sogni spezzati. Ha sbagliato calcolo. Avete resistito abbastanza a lungo da abbatterlo, e siete usciti con qualcosa di più di niente.`,
-    `Jason vi ha inseguiti per metà dungeon. Alla fine siete stati voi a cacciare lui. Non è andata benissimo, ma non è andata male. Il Realm vi ha testati e avete retto.`,
-    `Leatherface è caduto per ultimo. Anche lui sembrava stanco. Forse il dungeon è stanco di voi. O forse no — ma il punteggio dice che vi siete difesi dignitosamente.`,
-    `Avete attraversato il dungeon come soldati in ritirata che improvvisamente capiscono di aver vinto. Non elegante, non glorioso, ma sufficiente. Il Realm vi rispetta — poco.`,
+    `Jason vi ha inseguiti per metà ospedale. Alla fine siete stati voi a cacciare lui. Non è andata benissimo, ma non è andata male. La Morte vi ha testati e avete retto.`,
+    `Leatherface è caduto per ultimo. Anche lui sembrava stanco. Forse l'ospedale è stanco di voi. O forse no — ma il punteggio dice che vi siete difesi dignitosamente.`,
+    `Avete attraversato l'ospedale come soldati in ritirata che improvvisamente capiscono di aver vinto. Non elegante, non glorioso, ma sufficiente. La Morte vi rispetta — poco.`,
     `Michael Myers è rimasto in piedi più a lungo del previsto. Ma alla fine ha ceduto. Voi no. Questo conta. Le gemme erano poche, i danni tanti, ma la vittoria è reale.`,
     `Il boss si è preso i suoi colpi prima di cadere. E voi avete incassato i suoi. Pari. Anzi, leggermente a vostro vantaggio. Una partita giocata col cuore, non con la testa.`,
-    `Ghostface ha provato a distrarvi con le domande sbagliate. Avete risposto con i dadi. Non sempre bene, ma abbastanza. Uscite dal dungeon con qualche ammaccatura di troppo.`,
-    `Il dungeon vi ha messi alla prova e avete risposto presente — non brillantemente, ma con costanza. Le creatura sono tutte morte. Voi no. È già una notizia.`,
+    `Ghostface ha provato a distrarvi con le domande sbagliate. Avete risposto con i dadi. Non sempre bene, ma abbastanza. Uscite dall'ospedale con qualche ammaccatura di troppo.`,
+    `L'ospedale vi ha messi alla prova e avete risposto presente — non brillantemente, ma con costanza. Le creatura sono tutte morte. Voi no. È già una notizia.`,
     `Jigsaw aveva costruito le sue trappole con cura. Ne avete evitate abbastanza. La partita è stata combattuta, il punteggio è onesto. Non un trionfo, ma neanche una disfatta.`,
-    `Avete gestito il dungeon come si gestisce una tempesta: abbassando la testa e andando avanti. Qualche danno, qualche perdita, ma siete arrivati dall'altra parte.`,
-    `Le creature del Realm hanno lottato bene. Voi avete lottato meglio. Di poco, ma meglio. Il punteggio lo dice chiaro: vittoria sudata, meritata, e non dimenticabile.`,
+    `Avete gestito l'ospedale come si gestisce una tempesta: abbassando la testa e andando avanti. Qualche danno, qualche perdita, ma siete arrivati dall'altra parte.`,
+    `Le creature del La Morte hanno lottato bene. Voi avete lottato meglio. Di poco, ma meglio. Il punteggio lo dice chiaro: vittoria sudata, meritata, e non dimenticabile.`,
     `Pennywise ha tentato ogni trucco del suo repertorio. Alcuni hanno funzionato — abbastanza da lasciare il segno. Ma non abbastanza da fermarvi. Siete ancora vivi.`,
-    `La torcia ha illuminato i corridoi giusti. I dadi sono usciti abbastanza bene. Il dungeon è pulito. Non siete eroi, ma non siete nemmeno vittime. Qualcosa nel mezzo.`,
-    `Ogni mostro è caduto dopo la resistenza che si meritava. Voi avete resistito di più. Non di molto, ma di più. Questo è il dungeon: un millimetro alla volta.`,
-    `Il Realm vi ha testati senza pietà. Avete risposto senza troppa grazia ma con sufficiente determinazione. La vittoria è vostra. Il dungeon ne prende atto, cupo.`,
-    `Siete usciti vivi e con qualche gemma in tasca. Non il bottino con cui si torna da eroi, ma abbastanza per sapere che valete più di quanto il dungeon pensasse.`,
-    `Jason è caduto con un tonfo sordo. Come sempre. Avete tirato un sospiro di sollievo e guardato il vostro punteggio. Modesto, ma onesto. Un dungeon che vi ha formato.`,
-    `Le sale del dungeon sono silenziose ora. Le creature sono morte, i tesori raccolti — qualcuno. Uscite a testa alta, con qualche cicatrice in più e un rispetto nuovo per il Realm.`,
-    `Non avete vinto con stile, ma avete vinto con sostanza. Il dungeon ha fatto di tutto per fermarvi. Non ci è riuscito. Un risultato che vale più di quanto il punteggio mostri.`,
+    `La torcia ha illuminato i corridoi giusti. I dadi sono usciti abbastanza bene. L'ospedale è pulito. Non siete eroi, ma non siete nemmeno vittime. Qualcosa nel mezzo.`,
+    `Ogni mostro è caduto dopo la resistenza che si meritava. Voi avete resistito di più. Non di molto, ma di più. Questo è l'ospedale: un millimetro alla volta.`,
+    `La Morte vi ha testati senza pietà. Avete risposto senza troppa grazia ma con sufficiente determinazione. La vittoria è vostra. L'ospedale ne prende atto, cupo.`,
+    `Siete usciti vivi e con qualche gemma in tasca. Non il bottino con cui si torna da eroi, ma abbastanza per sapere che valete più di quanto l'ospedale pensasse.`,
+    `Jason è caduto con un tonfo sordo. Come sempre. Avete tirato un sospiro di sollievo e guardato il vostro punteggio. Modesto, ma onesto. Un ospedale che vi ha formato.`,
+    `Le sale dell'ospedale sono silenziose ora. Le creature sono morte, i tesori raccolti — qualcuno. Uscite a testa alta, con qualche cicatrice in più e un rispetto nuovo per la Morte.`,
+    `Non avete vinto con stile, ma avete vinto con sostanza. L'ospedale ha fatto di tutto per fermarvi. Non ci è riuscito. Un risultato che vale più di quanto il punteggio mostri.`,
   ],
   r25:[
-    `Il dungeon è stato duro, ma voi siete stati più duri. Le creature sono cadute una dopo l'altra, e voi siete usciti con gemme sufficienti per dire che ne valeva la pena.`,
-    `Freddy Krueger ha trovato i suoi sogni trasformati in incubi — per lui. Avete navigato il dungeon con competenza crescente e un punteggio che riflette un'impresa solida.`,
-    `Michael Myers non aveva fatto i conti con la vostra coordinazione. Le coppie di dadi erano precise, le caselle scelte bene. Un dungeon completato con metodo e soddisfazione.`,
-    `Avete costruito il vostro percorso sul dungeon come architetti del caos. Non tutto è andato secondo i piani, ma abbastanza. Il punteggio lo dice: bravi, ma potevate fare meglio.`,
-    `Jigsaw ha apprezzato la vostra logica. Non abbastanza da lasciarvi passare senza graffi, ma abbastanza da morire con un certo rispetto. Il dungeon era difficile — voi di più.`,
-    `Il boss è caduto dopo una lunga battaglia. Ogni colpo era calcolato, ogni turno sfruttato al meglio. Non perfetti, ma decisamente competenti. Il Realm vi riconosce.`,
-    `Leatherface era l'ultimo ostacolo. Non il più difficile, alla fine. Avete trovato il ritmo giusto a metà partita e non l'avete più perso. Un bel risultato in un dungeon cattivo.`,
+    `L'ospedale è stato duro, ma voi siete stati più duri. Le creature sono cadute una dopo l'altra, e voi siete usciti con gemme sufficienti per dire che ne valeva la pena.`,
+    `Freddy Krueger ha trovato i suoi sogni trasformati in incubi — per lui. Avete navigato l'ospedale con competenza crescente e un punteggio che riflette un'impresa solida.`,
+    `Michael Myers non aveva fatto i conti con la vostra coordinazione. Le coppie di dadi erano precise, le caselle scelte bene. Un ospedale completato con metodo e soddisfazione.`,
+    `Avete costruito il vostro percorso sul ospedale come architetti del caos. Non tutto è andato secondo i piani, ma abbastanza. Il punteggio lo dice: bravi, ma potevate fare meglio.`,
+    `Jigsaw ha apprezzato la vostra logica. Non abbastanza da lasciarvi passare senza graffi, ma abbastanza da morire con un certo rispetto. L'ospedale era difficile — voi di più.`,
+    `Il boss è caduto dopo una lunga battaglia. Ogni colpo era calcolato, ogni turno sfruttato al meglio. Non perfetti, ma decisamente competenti. La Morte vi riconosce.`,
+    `Leatherface era l'ultimo ostacolo. Non il più difficile, alla fine. Avete trovato il ritmo giusto a metà partita e non l'avete più perso. Un bel risultato in un ospedale cattivo.`,
     `Le gemme brillano nella vostra borsa. I mostri giacciono nelle loro sale. Siete usciti con un punteggio che racconta di scelte intelligenti e dadi non troppo avari.`,
-    `Ghostface ha chiamato una volta sola. Avete riagganciato. Poi lo avete cercato voi, con i dadi, e lui non ha risposto più. Bel dungeon. Belle decisioni. Bella vittoria.`,
-    `Il Realm vi ha sfidati con sette creature e voi avete risposto con strategia. Non impeccabile, ma solida. Un punteggio da esploratori esperti che iniziano a capire il dungeon.`,
-    `Avete attraversato il dungeon senza risparmiarvi. Ogni turno usato bene, ogni coppia di dadi sfruttata. Il risultato è un punteggio dignitoso che racconta un'avventura vera.`,
+    `Ghostface ha chiamato una volta sola. Avete riagganciato. Poi lo avete cercato voi, con i dadi, e lui non ha risposto più. Bel ospedale. Belle decisioni. Bella vittoria.`,
+    `La Morte vi ha sfidati con sette creature e voi avete risposto con strategia. Non impeccabile, ma solida. Un punteggio da esploratori esperti che iniziano a capire l'ospedale.`,
+    `Avete attraversato l'ospedale senza risparmiarvi. Ogni turno usato bene, ogni coppia di dadi sfruttata. Il risultato è un punteggio dignitoso che racconta un'avventura vera.`,
     `Jason è caduto silenzioso come era arrivato. A differenza di lui, voi avete lasciato tracce: gemme raccolte, mostri abbattuti, vita conservata abbastanza. Ben fatto.`,
-    `Il dungeon vi ha insegnato qualcosa. Lo si vede nel punteggio: non eccezionale, ma costruito con cura. Avete imparato a leggere la mappa e a rispettare le creature.`,
-    `Pennywise è stato l'ultimo a ridere — e anche il primo a smettere. Il boss è caduto sotto colpi precisi. Uscite dal dungeon con la soddisfazione di chi sa di aver fatto bene.`,
-    `Le sale del dungeon vi hanno riservato sorprese. Le avete gestite tutte. Non sempre elegantemente, ma efficacemente. Un punteggio che racconta di adattamento e coraggio.`,
-    `Il Realm non vi ha regalato nulla. Ogni punto è stato guadagnato sul campo, ogni gemma conquistata con i dadi. Un risultato onesto di una partita giocata con testa.`,
-    `Avete lavorato bene insieme. Le caselle barrate al momento giusto, i mostri colpiti quando possibile. Il dungeon era vostro già da metà partita. Il punteggio lo conferma.`,
+    `L'ospedale vi ha insegnato qualcosa. Lo si vede nel punteggio: non eccezionale, ma costruito con cura. Avete imparato a leggere la mappa e a rispettare le creature.`,
+    `Pennywise è stato l'ultimo a ridere — e anche il primo a smettere. Il boss è caduto sotto colpi precisi. Uscite dall'ospedale con la soddisfazione di chi sa di aver fatto bene.`,
+    `Le sale dell'ospedale vi hanno riservato sorprese. Le avete gestite tutte. Non sempre elegantemente, ma efficacemente. Un punteggio che racconta di adattamento e coraggio.`,
+    `La Morte non vi ha regalato nulla. Ogni punto è stato guadagnato sul campo, ogni gemma conquistata con i dadi. Un risultato onesto di una partita giocata con testa.`,
+    `Avete lavorato bene insieme. Le caselle barrate al momento giusto, i mostri colpiti quando possibile. L'ospedale era vostro già da metà partita. Il punteggio lo conferma.`,
     `Michael Myers è stato il più ostinato. Ma anche lui ha ceduto. Voi avete tenuto il passo per tutta la partita e siete usciti con un punteggio che racconta un buon lavoro.`,
     `Non avete lasciato gemme per terra se potevate raccoglierle. Non avete sprecato turni se potevate usarli. Il risultato è un punteggio solido da esploratori che sanno il fatto loro.`,
-    `Il dungeon è finito. Le creature sono morte. Il punteggio è buono. Siete stanchi, qualche cicatrice di troppo, ma soprattutto — siete soddisfatti. Meritatamente.`,
+    `L'ospedale è finito. Le creature sono morte. Il punteggio è buono. Siete stanchi, qualche cicatrice di troppo, ma soprattutto — siete soddisfatti. Meritatamente.`,
   ],
   r40:[
-    `Il dungeon vi ha visti arrivare e ha fatto del suo meglio per fermarvi. Non ci è riuscito. Le gemme riempiono la borsa, i mostri tacciono, e il punteggio racconta di una bella impresa.`,
-    `Freddy Krueger è caduto presto. Jason dopo. Uno alla volta, con metodo. Avete letto il dungeon come una mappa familiare e lo avete percorso con sicurezza crescente.`,
+    `L'ospedale vi ha visti arrivare e ha fatto del suo meglio per fermarvi. Non ci è riuscito. Le gemme riempiono la borsa, i mostri tacciono, e il punteggio racconta di una bella impresa.`,
+    `Freddy Krueger è caduto presto. Jason dopo. Uno alla volta, con metodo. Avete letto l'ospedale come una mappa familiare e lo avete percorso con sicurezza crescente.`,
     `Il boss non si è aspettato tanta determinazione. Ha dato tutto quello che aveva — voi avete dato di più. Un punteggio che riflette una vittoria costruita con intelligenza e coraggio.`,
-    `Avete giocato il dungeon come se lo conosceste da sempre. Le coppie di dadi erano quasi sempre quelle giuste, le caselle scelte con criterio. Un'esplorazione da manuale.`,
+    `Avete giocato l'ospedale come se lo conosceste da sempre. Le coppie di dadi erano quasi sempre quelle giuste, le caselle scelte con criterio. Un'esplorazione da manuale.`,
     `Michael Myers non ha trovato crepe nelle vostre difese. Avete chiuso ogni corridoio con le caselle giuste e lo avete abbattuto quando era il momento. Bello. Molto bello.`,
-    `Il Realm vi ha testati con tutte e sette le creature. Voi avete risposto con tattiche diverse per ognuna. Il punteggio è la prova che ogni scelta ha avuto senso.`,
-    `Leatherface era il più imprevedibile. Lo avete preso comunque. Come tutti gli altri. Uscite dal dungeon con la certezza di aver dominato la situazione per quasi tutta la partita.`,
+    `La Morte vi ha testati con tutte e sette le creature. Voi avete risposto con tattiche diverse per ognuna. Il punteggio è la prova che ogni scelta ha avuto senso.`,
+    `Leatherface era il più imprevedibile. Lo avete preso comunque. Come tutti gli altri. Uscite dall'ospedale con la certezza di aver dominato la situazione per quasi tutta la partita.`,
     `Le gemme sono molte. I danni sono stati contenuti. I mostri sono tutti morti. Siete stanchi ma soddisfatti — ed è una soddisfazione che si vede nel punteggio finale.`,
     `Jigsaw aveva preparato le sue trappole meglio del solito. Le avete smontate meglio del solito. Una partita di livello superiore, con un punteggio che lo riflette chiaramente.`,
     `Ghostface non ha mai avuto il controllo della situazione. Voi sì — per quasi tutta la partita. La vittoria è stata costruita mattone su mattone, turno su turno.`,
-    `Il dungeon ha capitolato davanti alla vostra coordinazione. Avete bilanciato attacco e difesa, gemme e vita, rischio e prudenza. Un equilibrio difficile da raggiungere — e voi ci siete riusciti.`,
+    `L'ospedale ha capitolato davanti alla vostra coordinazione. Avete bilanciato attacco e difesa, gemme e vita, rischio e prudenza. Un equilibrio difficile da raggiungere — e voi ci siete riusciti.`,
     `Pennywise ha capito di aver perso molto prima dell'ultimo colpo. Lo si vedeva nei suoi occhi gialli. Voi avete chiuso la partita con stile e con un punteggio da ricordare.`,
-    `Le sale del dungeon raccontano la vostra storia: caselle barrate con precisione, mostri abbattuti al momento giusto, vita conservata con cura. Un'avventura di alto livello.`,
-    `Il Realm vi guarderà tornare con rispetto. Non timore — rispetto. Il punteggio che portate fuori da questi corridoi dice che siete esploratori veri, non turisti del terrore.`,
+    `Le sale dell'ospedale raccontano la vostra storia: caselle barrate con precisione, mostri abbattuti al momento giusto, vita conservata con cura. Un'avventura di alto livello.`,
+    `La Morte vi guarderà tornare con rispetto. Non timore — rispetto. Il punteggio che portate fuori da questi corridoi dice che siete esploratori veri, non turisti del terrore.`,
     `Ogni turno è stato una scelta consapevole. Ogni dado una opportunità colta. Il risultato è un punteggio forte che riflette una partita giocata con maturità e competenza.`,
     `Jason è caduto con quella maschera ancora sul viso. Avete continuato senza guardare. C'erano altri mostri da abbattere e voi sapevate esattamente come farlo. E l'avete fatto.`,
-    `Non avete perso tempo né energie. Ogni mossa aveva uno scopo. Il dungeon vi ha messo alla prova e voi avete superato l'esame con un voto decisamente alto.`,
+    `Non avete perso tempo né energie. Ogni mossa aveva uno scopo. L'ospedale vi ha messo alla prova e voi avete superato l'esame con un voto decisamente alto.`,
     `Il boss è caduto dopo una sequenza di colpi precisi e ben calcolati. Un finale degno di una partita costruita con testa. Siete esploratori esperti — e il punteggio lo sa.`,
-    `Avete lasciato il dungeon in silenzio assoluto. Nessuna creatura viva, nessuna opportunità sprecata. Un punteggio che racconta di una vittoria pulita, netta, meritata.`,
-    `Il Realm non vi ha regalato nulla — e voi non avete chiesto niente. Avete preso tutto con i dadi e la strategia. Un risultato eccellente per esploratori di questo calibro.`,
+    `Avete lasciato l'ospedale in silenzio assoluto. Nessuna creatura viva, nessuna opportunità sprecata. Un punteggio che racconta di una vittoria pulita, netta, meritata.`,
+    `La Morte non vi ha regalato nulla — e voi non avete chiesto niente. Avete preso tutto con i dadi e la strategia. Un risultato eccellente per esploratori di questo calibro.`,
   ],
   r55:[
-    `Il dungeon è caduto ai vostri piedi come se fosse stato costruito apposta per voi. Gemme abbondanti, vita conservata, mostri abbattuti con eleganza. Una partita da ricordare.`,
-    `Freddy non ha mai trovato i vostri punti deboli. Li avevate coperti tutti. Una difesa solida e un attacco preciso hanno trasformato il dungeon in un campo di vittoria personale.`,
-    `Avete dominato il Realm con un'efficienza che ha lasciato le creature senza parole — o quasi. Il punteggio che portate fuori è il racconto di una partita giocata alla grande.`,
-    `Michael Myers non aveva mai incontrato giocatori così precisi. Ogni coppia di dadi al punto giusto, ogni casella barrata con intenzione. Un dungeon risolto con maestria.`,
-    `Il boss è caduto come doveva: sotto una pioggia di colpi precisi, dopo un'attivazione perfetta. Avete letto il dungeon come un testo familiare e lo avete chiuso alla grande.`,
+    `L'ospedale è caduto ai vostri piedi come se fosse stato costruito apposta per voi. Gemme abbondanti, vita conservata, mostri abbattuti con eleganza. Una partita da ricordare.`,
+    `Freddy non ha mai trovato i vostri punti deboli. Li avevate coperti tutti. Una difesa solida e un attacco preciso hanno trasformato l'ospedale in un campo di vittoria personale.`,
+    `Avete dominato la Morte con un'efficienza che ha lasciato le creature senza parole — o quasi. Il punteggio che portate fuori è il racconto di una partita giocata alla grande.`,
+    `Michael Myers non aveva mai incontrato giocatori così precisi. Ogni coppia di dadi al punto giusto, ogni casella barrata con intenzione. Un ospedale risolto con maestria.`,
+    `Il boss è caduto come doveva: sotto una pioggia di colpi precisi, dopo un'attivazione perfetta. Avete letto l'ospedale come un testo familiare e lo avete chiuso alla grande.`,
     `Leatherface, Ghostface, Pennywise — tutti abbattuti con metodo e decisione. Le gemme sono tante. La vita è alta. Il punteggio è alto. Benvenuti nel tier degli esploratori veri.`,
-    `Jigsaw ha provato ogni variazione dei suoi giochi. Voi avete giocato il vostro: caselle precise, dadi sfruttati, mostri eliminati. Una vittoria netta in un dungeon cattivissimo.`,
-    `Il Realm vi ha rispettati dopo il primo turno e non ha smesso. Ogni scelta era quella giusta, ogni turno ben usato. Un punteggio che parla da solo — forte e chiaro.`,
-    `Siete usciti dal dungeon con la sicurezza di chi sa di aver giocato una partita eccellente. I numeri lo confermano: gemme molte, danni pochi, mostri morti. Perfezione quasi totale.`,
-    `Il dungeon non aveva abbastanza ombre per nascondere le creature dal vostro radar. Avete illuminato ogni angolo e abbattuto ogni pericolo. Una vittoria luminosa.`,
+    `Jigsaw ha provato ogni variazione dei suoi giochi. Voi avete giocato il vostro: caselle precise, dadi sfruttati, mostri eliminati. Una vittoria netta in un ospedale cattivissimo.`,
+    `La Morte vi ha rispettati dopo il primo turno e non ha smesso. Ogni scelta era quella giusta, ogni turno ben usato. Un punteggio che parla da solo — forte e chiaro.`,
+    `Siete usciti dall'ospedale con la sicurezza di chi sa di aver giocato una partita eccellente. I numeri lo confermano: gemme molte, danni pochi, mostri morti. Perfezione quasi totale.`,
+    `L'ospedale non aveva abbastanza ombre per nascondere le creature dal vostro radar. Avete illuminato ogni angolo e abbattuto ogni pericolo. Una vittoria luminosa.`,
     `Jason è caduto prima che potesse costruire tensione. Come tutti gli altri. Avete giocato con una fluidità rara, trasformando ogni turno in un'opportunità sfruttata al massimo.`,
-    `Le gemme riempiono le tasche. Il corpo è quasi intatto. Il dungeon è silenzioso. Questo è ciò che si sente quando si gioca davvero bene in un posto davvero pericoloso.`,
+    `Le gemme riempiono le tasche. Il corpo è quasi intatto. L'ospedale è silenzioso. Questo è ciò che si sente quando si gioca davvero bene in un posto davvero pericoloso.`,
     `Pennywise ha perso il suo sorriso al secondo turno. Lo avevate già smontato mentalmente. La partita fisica è stata solo la conferma di quello che sapevate già: sareste vincitori.`,
-    `Il Realm vi ha messo ogni ostacolo possibile. Voi li avete superati tutti con un punteggio che racconta di talento, pratica e una lettura del dungeon quasi soprannaturale.`,
+    `La Morte vi ha messo ogni ostacolo possibile. Voi li avete superati tutti con un punteggio che racconta di talento, pratica e una lettura dell'ospedale quasi soprannaturale.`,
     `Non avete sprecato un turno. Non avete perso una gemma evitabile. Non avete subito un danno non necessario. Un punteggio da giocatori esperti in forma perfetta.`,
-    `Le creature del dungeon hanno capito di essere in svantaggio molto presto. Voi lo avete capito ancora prima. La partita è stata dominata con stile e intelligenza.`,
-    `Il boss aveva 12 punti vita. Ne ha persi uno alla volta, con calma, con metodo. Come tutto il resto del dungeon. Siete stati impeccabili — e il punteggio lo certifica.`,
-    `Uscite dal dungeon come esploratori leggendari. Non lo siete ancora del tutto, ma ci siete vicini. Questo punteggio è la prova che siete sulla strada giusta. Molto sulla strada.`,
-    `Ogni gemma raccolta era programmata. Ogni mostro abbattuto era inevitabile. Avete trasformato il dungeon in uno spazio familiare e lo avete conquistato con serena determinazione.`,
-    `Il Realm non vi ha mai spaventati abbastanza. Avete risposto ad ogni paura con una scelta giusta. Un dungeon eccellente meritava esploratori eccellenti — e li ha trovati.`,
+    `Le creature dell'ospedale hanno capito di essere in svantaggio molto presto. Voi lo avete capito ancora prima. La partita è stata dominata con stile e intelligenza.`,
+    `Il boss aveva 12 punti vita. Ne ha persi uno alla volta, con calma, con metodo. Come tutto il resto dell'ospedale. Siete stati impeccabili — e il punteggio lo certifica.`,
+    `Uscite dall'ospedale come esploratori leggendari. Non lo siete ancora del tutto, ma ci siete vicini. Questo punteggio è la prova che siete sulla strada giusta. Molto sulla strada.`,
+    `Ogni gemma raccolta era programmata. Ogni mostro abbattuto era inevitabile. Avete trasformato l'ospedale in uno spazio familiare e lo avete conquistato con serena determinazione.`,
+    `La Morte non vi ha mai spaventati abbastanza. Avete risposto ad ogni paura con una scelta giusta. Un ospedale eccellente meritava esploratori eccellenti — e li ha trovati.`,
   ],
   r70:[
-    `Il dungeon non aveva segreti per voi. Avete letto ogni corridoio, anticipato ogni creatura, massimizzato ogni turno. Un punteggio straordinario per una partita straordinaria.`,
+    `L'ospedale non aveva segreti per voi. Avete letto ogni corridoio, anticipato ogni creatura, massimizzato ogni turno. Un punteggio straordinario per una partita straordinaria.`,
     `Freddy Krueger è rimasto senza sogni con cui spaventarvi. Avevate già immaginato la vittoria dal primo turno — e l'avete realizzata quasi alla perfezione. Quasi.`,
-    `Le creature del Realm hanno combattuto bene. Ma voi avete combattuto meglio. Il punteggio riflette una padronanza del dungeon che pochi esploratori raggiungono in tutta la loro carriera.`,
-    `Michael Myers non ha trovato nemmeno un'ombra abbastanza lunga per nascondersi. Avete illuminato ogni angolo del dungeon e conquistato ogni sala con precisione chirurgica.`,
+    `Le creature del La Morte hanno combattuto bene. Ma voi avete combattuto meglio. Il punteggio riflette una padronanza dell'ospedale che pochi esploratori raggiungono in tutta la loro carriera.`,
+    `Michael Myers non ha trovato nemmeno un'ombra abbastanza lunga per nascondersi. Avete illuminato ogni angolo dell'ospedale e conquistato ogni sala con precisione chirurgica.`,
     `Il boss è caduto esattamente quando avevate pianificato. Le sue 12 vite si sono esaurite sistematicamente, colpo dopo colpo. Un'esecuzione quasi perfetta di una strategia quasi perfetta.`,
-    `Avete trasformato il dungeon in un esercizio di efficienza pura. Gemme massimizzate, danni minimizzati, mostri eliminati nell'ordine ottimale. Una partita da studio.`,
+    `Avete trasformato l'ospedale in un esercizio di efficienza pura. Gemme massimizzate, danni minimizzati, mostri eliminati nell'ordine ottimale. Una partita da studio.`,
     `Jigsaw avrebbe apprezzato la vostra logica — se non fosse stato troppo impegnato a morire. Le trappole non vi hanno mai sorpresi. Le avevate già risolte mentalmente.`,
-    `Il Realm vi guarderà andare via con qualcosa di simile all'invidia. Pochi esploratori portano fuori un punteggio così. Siete tra quei pochi. Godetevelo.`,
-    `Le gemme scintillano. La vita è alta. Il dungeon è silenzioso. Questo è come deve sembrare la vittoria quando la si gioca davvero bene. Avete alzato l'asticella del Realm.`,
+    `La Morte vi guarderà andare via con qualcosa di simile all'invidia. Pochi esploratori portano fuori un punteggio così. Siete tra quei pochi. Godetevelo.`,
+    `Le gemme scintillano. La vita è alta. L'ospedale è silenzioso. Questo è come deve sembrare la vittoria quando la si gioca davvero bene. Avete alzato l'asticella della Morte.`,
     `Ghostface non ha mai avuto la risposta giusta al modo in cui avete giocato. Ogni sua mossa era già stata prevista e contromossa. Una partita di livello superiore.`,
-    `Avete completato il dungeon con una pulizia che lascia stupefatti. Nessun turno sprecato, nessuna gemma lasciata, nessun danno inutile. Un'impresa quasi leggendaria.`,
-    `Jason è caduto per primo. O per ultimo. Non importa — è caduto come doveva. Come tutti. Voi avete scelto l'ordine e il momento. Il dungeon ha obbedito.`,
-    `Il Realm ha visto molti esploratori. Pochi hanno lasciato dietro di sé un dungeon così silenzioso e un punteggio così alto. Siete nella memoria del dungeon ora.`,
+    `Avete completato l'ospedale con una pulizia che lascia stupefatti. Nessun turno sprecato, nessuna gemma lasciata, nessun danno inutile. Un'impresa quasi leggendaria.`,
+    `Jason è caduto per primo. O per ultimo. Non importa — è caduto come doveva. Come tutti. Voi avete scelto l'ordine e il momento. L'ospedale ha obbedito.`,
+    `La Morte ha visto molti esploratori. Pochi hanno lasciato dietro di sé un ospedale così silenzioso e un punteggio così alto. Siete nella memoria dell'ospedale ora.`,
     `Pennywise ha riso per la prima e ultima volta al vostro ingresso. Non ha più riso dopo. Avete spento il suo sorriso con la precisione di chi sa esattamente cosa sta facendo.`,
-    `Ogni scelta è stata quella ottimale. Non per caso — per capacità. Il punteggio che portate fuori dal dungeon non è fortuna: è la prova di una partita dominata con intelligenza.`,
-    `Le creature non hanno trovato una sola fessura nelle vostre difese. Non una gemma sprecata, non un danno evitabile subito. Un dungeon dominato ai massimi livelli.`,
+    `Ogni scelta è stata quella ottimale. Non per caso — per capacità. Il punteggio che portate fuori dall'ospedale non è fortuna: è la prova di una partita dominata con intelligenza.`,
+    `Le creature non hanno trovato una sola fessura nelle vostre difese. Non una gemma sprecata, non un danno evitabile subito. Un ospedale dominato ai massimi livelli.`,
     `Il boss aveva 12 punti vita e voi ne avevate molti di più di determinazione. La battaglia è stata bellissima. La vittoria era scritta già prima che iniziasse. Lo sapevate.`,
-    `Siete usciti dal dungeon come vincitori totali. Non in stile — in sostanza. Ogni numero del punteggio finale racconta una scelta precisa, un turno ben giocato, una gemma guadagnata.`,
-    `Il Realm non dimentica i grandi esploratori. Il vostro nome è inciso nei corridoi di pietra. Un punteggio come questo non si ottiene per caso — si costruisce con dedizione.`,
-    `Avete giocato il dungeon come si suona uno strumento: con tecnica, con sensibilità, con ritmo. Il risultato è una partitura perfetta. Il Realm inchina la testa.`,
+    `Siete usciti dall'ospedale come vincitori totali. Non in stile — in sostanza. Ogni numero del punteggio finale racconta una scelta precisa, un turno ben giocato, una gemma guadagnata.`,
+    `La Morte non dimentica i grandi esploratori. Il vostro nome è inciso nei corridoi di pietra. Un punteggio come questo non si ottiene per caso — si costruisce con dedizione.`,
+    `Avete giocato l'ospedale come si suona uno strumento: con tecnica, con sensibilità, con ritmo. Il risultato è una partitura perfetta. La Morte inchina la testa.`,
   ],
   r85:[
-    `Il dungeon non ha mai avuto una chance. Avete dominato ogni sala, massimizzato ogni risorsa, eliminato ogni creatura nell'ordine ideale. Un punteggio da leggenda del Realm.`,
-    `Freddy Krueger non ha trovato nemmeno un sogno con cui tormentarvi. Avevate già trasformato il dungeon in un sogno — il vostro. Un'impresa vicina alla perfezione.`,
-    `Le creature del Realm hanno combattuto con tutta la loro ferocia. Non è bastato. Avete risposto ad ogni minaccia con la mossa migliore possibile. Un'impresa rarissima.`,
+    `L'ospedale non ha mai avuto una chance. Avete dominato ogni sala, massimizzato ogni risorsa, eliminato ogni creatura nell'ordine ideale. Un punteggio da leggenda della Morte.`,
+    `Freddy Krueger non ha trovato nemmeno un sogno con cui tormentarvi. Avevate già trasformato l'ospedale in un sogno — il vostro. Un'impresa vicina alla perfezione.`,
+    `Le creature del La Morte hanno combattuto con tutta la loro ferocia. Non è bastato. Avete risposto ad ogni minaccia con la mossa migliore possibile. Un'impresa rarissima.`,
     `Michael Myers è caduto per primo o per ultimo, poco importa — nel vostro piano era già previsto tutto. Una partita di livello quasi irraggiungibile in questi corridoi maledetti.`,
     `Il boss era il culmine. L'avete affrontato con le gemme già in tasca, la vita quasi intatta, e una sequenza di colpi che sembrava coreografata. Quasi perfetti.`,
-    `Avete portato il dungeon al limite di ciò che può essere dominato. Il punteggio che uscite con voi è nella fascia più alta mai registrata in questi corridoi. Benvenuti nell'olimpo.`,
-    `Jigsaw ha visto la sua sconfitta disegnata nelle vostre caselle barrate. Ogni mossa era quella giusta. Ogni turno era quello ideale. Un dungeon risolto ai massimi livelli assoluti.`,
-    `Il Realm vi guarda andare via con qualcosa che si avvicina alla paura. Pochi esploratori hanno mai estratto così tanto valore da questi corridoi. Voi ci siete riusciti.`,
-    `Le gemme scintillano. Il corpo è quasi intatto. Il punteggio supera le aspettative più alte. Avete scritto una delle pagine più brillanti nella storia del dungeon.`,
+    `Avete portato l'ospedale al limite di ciò che può essere dominato. Il punteggio che uscite con voi è nella fascia più alta mai registrata in questi corridoi. Benvenuti nell'olimpo.`,
+    `Jigsaw ha visto la sua sconfitta disegnata nelle vostre caselle barrate. Ogni mossa era quella giusta. Ogni turno era quello ideale. Un ospedale risolto ai massimi livelli assoluti.`,
+    `La Morte vi guarda andare via con qualcosa che si avvicina alla paura. Pochi esploratori hanno mai estratto così tanto valore da questi corridoi. Voi ci siete riusciti.`,
+    `Le gemme scintillano. Il corpo è quasi intatto. Il punteggio supera le aspettative più alte. Avete scritto una delle pagine più brillanti nella storia dell'ospedale.`,
     `Ghostface non ha mai avuto una domanda abbastanza difficile. Voi avevate già le risposte — e i dadi giusti, e le caselle giuste, e la strategia giusta. Quasi leggendari.`,
-    `Siete usciti dal dungeon con un punteggio che mette il silenzio. Chi lo vedrà capirà immediatamente: questi esploratori sapevano esattamente cosa stavano facendo.`,
-    `Il dungeon è stato vostro dalla prima casella barrata. Non avete mai perso il controllo, mai sprecato un'opportunità, mai subito un danno che non fosse inevitabile.`,
+    `Siete usciti dall'ospedale con un punteggio che mette il silenzio. Chi lo vedrà capirà immediatamente: questi esploratori sapevano esattamente cosa stavano facendo.`,
+    `L'ospedale è stato vostro dalla prima casella barrata. Non avete mai perso il controllo, mai sprecato un'opportunità, mai subito un danno che non fosse inevitabile.`,
     `Jason non ha mai visto avversari così determinati. Lo si è capito dalla velocità con cui è caduto. Come tutti gli altri. Sequenzialmente. Sistematicamente. Splendidamente.`,
-    `Pennywise ha perso il suo sorriso per la prima e unica volta. Davanti a voi. In questo dungeon. Con questo punteggio. È stata la più bella punizione che il Realm potesse vedere.`,
-    `Ogni risorsa ottimizzata. Ogni scelta azzeccata. Ogni mostro eliminato al momento giusto. Un dungeon affrontato con una competenza che rasenta il soprannaturale.`,
-    `Il Realm non ha più segreti per voi. Li avete scoperti tutti, usati tutti, sfruttati tutti. Un punteggio quasi perfetto per una partita quasi perfetta in un dungeon davvero difficile.`,
+    `Pennywise ha perso il suo sorriso per la prima e unica volta. Davanti a voi. In questo ospedale. Con questo punteggio. È stata la più bella punizione che la Morte potesse vedere.`,
+    `Ogni risorsa ottimizzata. Ogni scelta azzeccata. Ogni mostro eliminato al momento giusto. Un ospedale affrontato con una competenza che rasenta il soprannaturale.`,
+    `La Morte non ha più segreti per voi. Li avete scoperti tutti, usati tutti, sfruttati tutti. Un punteggio quasi perfetto per una partita quasi perfetta in un ospedale davvero difficile.`,
     `Le creature non hanno trovato nemmeno un centimetro di spazio in cui infilarsi. Le vostre difese erano impenetrabili, i vostri attacchi devastanti. Un'impresa memorabile.`,
     `Il boss è caduto con la dignità che meritava — lentamente, sotto colpi precisi, in un momento scelto da voi. Un finale magnifico per una partita magnificamente costruita.`,
-    `Siete nella storia del Realm. Non metaforicamente — letteralmente. Il vostro punteggio è inciso nelle pietre del dungeon per avvertire le creature di ciò che può arrivare.`,
-    `Avete giocato il dungeon come pochi sanno fare. Quasi alla perfezione assoluta. Un risultato che pochi raggiungono e che racconta di due esploratori ai vertici assoluti del gioco.`,
+    `Siete nella storia della Morte. Non metaforicamente — letteralmente. Il vostro punteggio è inciso nelle pietre dell'ospedale per avvertire le creature di ciò che può arrivare.`,
+    `Avete giocato l'ospedale come pochi sanno fare. Quasi alla perfezione assoluta. Un risultato che pochi raggiungono e che racconta di due esploratori ai vertici assoluti del gioco.`,
   ],
   r95:[
-    `La perfezione si avvicina e voi le siete andati incontro. Punteggio massimo. Gemme massime. Vita quasi intatta. Il Realm non ha mai visto nulla di simile. Siete la leggenda.`,
-    `Il dungeon è stato una passeggiata — una passeggiata pericolosissima che avete trasformato in un capolavoro. Ogni turno ideale, ogni scelta perfetta. Siete entrati nella storia.`,
+    `La perfezione si avvicina e voi le siete andati incontro. Punteggio massimo. Gemme massime. Vita quasi intatta. La Morte non ha mai visto nulla di simile. Siete la leggenda.`,
+    `L'ospedale è stato una passeggiata — una passeggiata pericolosissima che avete trasformato in un capolavoro. Ogni turno ideale, ogni scelta perfetta. Siete entrati nella storia.`,
     `Freddy Krueger non ha trovato nemmeno un sogno. I vostri sogni erano tutti vincenti. Un punteggio che supera qualsiasi aspettativa e racconta di una partita perfetta.`,
-    `Le creature del Realm sono cadute come dominoes. L'ordine era il vostro, il tempo era il vostro, la vittoria era la vostra dall'inizio. Un'impresa assoluta. Storica.`,
-    `Michael Myers è caduto prima ancora di capire cosa stesse succedendo. Come tutti gli altri. Avete attraversato il dungeon come un vento impossibile. Punteggio leggendario.`,
+    `Le creature del La Morte sono cadute come dominoes. L'ordine era il vostro, il tempo era il vostro, la vittoria era la vostra dall'inizio. Un'impresa assoluta. Storica.`,
+    `Michael Myers è caduto prima ancora di capire cosa stesse succedendo. Come tutti gli altri. Avete attraversato l'ospedale come un vento impossibile. Punteggio leggendario.`,
     `Il boss ha perso ogni colpo di vita senza poter fare nulla. Avete orchestrato la battaglia come compositori. Il finale era scritto. Il punteggio è la prova: perfetti.`,
     `Jigsaw ha visto la sua sconfitta nell'ordine assoluto con cui avete barrato ogni casella. Non c'era niente da scegliere — avevate già scelto tutto, e tutto era giusto.`,
-    `Il Realm vi teme. Non vi rispetta — vi teme. Un punteggio come il vostro è al di là della comprensione delle creature che abitano questi corridoi. Siete qualcosa di diverso.`,
-    `Le gemme riempiono ogni tasca. Il corpo è intatto. Il dungeon è un ricordo. E il punteggio finale è il più alto che questi corridoi maledetti abbiano mai visto. Pura leggenda.`,
-    `Ghostface non ha fatto in tempo a fare una domanda. Era già caduto. Come tutti. Con una velocità e una precisione che il Realm ricorderà per sempre. Eravate inarrestabili.`,
+    `La Morte vi teme. Non vi rispetta — vi teme. Un punteggio come il vostro è al di là della comprensione delle creature che abitano questi corridoi. Siete qualcosa di diverso.`,
+    `Le gemme riempiono ogni tasca. Il corpo è intatto. L'ospedale è un ricordo. E il punteggio finale è il più alto che questi corridoi maledetti abbiano mai visto. Pura leggenda.`,
+    `Ghostface non ha fatto in tempo a fare una domanda. Era già caduto. Come tutti. Con una velocità e una precisione che la Morte ricorderà per sempre. Eravate inarrestabili.`,
     `Avete giocato la partita perfetta. Non quasi perfetta — perfetta. Ogni dado sfruttato, ogni gemma raccolta, ogni mostro eliminato al momento esatto. Irripetibile.`,
-    `Il dungeon esiste da secoli. Nessuno l'aveva mai affrontato così. Avete riscritto la storia del Realm con un punteggio che non si dimentica. Siete entrati nella leggenda.`,
+    `L'ospedale esiste da secoli. Nessuno l'aveva mai affrontato così. Avete riscritto la storia del La Morte con un punteggio che non si dimentica. Siete entrati nella leggenda.`,
     `Jason, Freddy, Jigsaw, Myers, Leatherface, Ghostface, Pennywise — nomi che fanno tremare. Tremano ancora, ma davanti a voi. Non è ironia: è il vostro punteggio che parla.`,
-    `Pennywise ha smesso di ridere prima ancora di morire. Vi aveva visti giocare. Sapeva. Un dungeon finito alla perfezione da esploratori che il Realm non meritava.`,
-    `Avete massimizzato ogni risorsa disponibile nel dungeon. Gemme, tesori, vita, dadi — tutto ottimizzato al massimo. Un'impresa che va oltre il gioco e diventa arte.`,
-    `Il Realm non ha barriere per voi. Le avete attraversate tutte, una per una, con un punteggio che dice: non c'era niente qui che potesse fermarci. E avete ragione.`,
+    `Pennywise ha smesso di ridere prima ancora di morire. Vi aveva visti giocare. Sapeva. Un ospedale finito alla perfezione da esploratori che la Morte non meritava.`,
+    `Avete massimizzato ogni risorsa disponibile nell'ospedale. Gemme, tesori, vita, dadi — tutto ottimizzato al massimo. Un'impresa che va oltre il gioco e diventa arte.`,
+    `La Morte non ha barriere per voi. Le avete attraversate tutte, una per una, con un punteggio che dice: non c'era niente qui che potesse fermarci. E avete ragione.`,
     `Le creature hanno lottato. Avete lottato meglio — molto meglio. Un punteggio di questo livello racconta di due esploratori che hanno raggiunto il limite assoluto del possibile.`,
-    `Il boss aveva 12 punti vita. Voi ne avete tolti uno alla volta, senza fretta, senza errori. Un'esecuzione perfetta di un piano perfetto in un dungeon perfettamente conquistato.`,
-    `Siete i più grandi esploratori che il Realm abbia mai visto. Il punteggio lo certifica. I mostri morti lo testimoniano. Il dungeon silenzioso lo conferma. Siete la leggenda.`,
-    `Nessuno aveva mai estratto così tanto valore da questo dungeon. Voi l'avete fatto. Con intelligenza, con precisione, con una coordinazione che rasenta il soprannaturale. Perfetti.`,
+    `Il boss aveva 12 punti vita. Voi ne avete tolti uno alla volta, senza fretta, senza errori. Un'esecuzione perfetta di un piano perfetto in un ospedale perfettamente conquistato.`,
+    `Siete i più grandi esploratori che la Morte abbia mai visto. Il punteggio lo certifica. I mostri morti lo testimoniano. L'ospedale silenzioso lo conferma. Siete la leggenda.`,
+    `Nessuno aveva mai estratto così tanto valore da questo ospedale. Voi l'avete fatto. Con intelligenza, con precisione, con una coordinazione che rasenta il soprannaturale. Perfetti.`,
   ],
 };
 
@@ -968,6 +1026,39 @@ function getVictoryStory(score){
 
 // ─── STORAGE ───
 const PFX='hd6_';
+
+// ─── NOMI GIOCATORI ───
+let playerNames={1:'Giocatore 1', 2:'Giocatore 2'};
+
+function pName(p){
+  if(p===1||p==='1')return playerNames[1];
+  if(p===2||p==='2')return playerNames[2];
+  if(p==='M')return playerNames[1]+' & '+playerNames[2];
+  return 'Giocatore '+p;
+}
+
+function loadNames(){
+  const n1=localStorage.getItem(PFX+'name1');
+  const n2=localStorage.getItem(PFX+'name2');
+  if(n1)playerNames[1]=n1;
+  if(n2)playerNames[2]=n2;
+}
+
+function saveNames(n1,n2){
+  playerNames[1]=n1||'Giocatore 1';
+  playerNames[2]=n2||'Giocatore 2';
+  localStorage.setItem(PFX+'name1',playerNames[1]);
+  localStorage.setItem(PFX+'name2',playerNames[2]);
+}
+
+function confirmNames(){
+  const n1=(document.getElementById('name-p1-input').value.trim())||'Giocatore 1';
+  const n2=(document.getElementById('name-p2-input').value.trim())||'Giocatore 2';
+  saveNames(n1,n2);
+  // Procedi con il flusso normale
+  allScreensOff();
+  document.getElementById('sc-side').className='screen active';
+}
 let P=1,turnCrossed=0;
 const MAX_CROSS=2;
 let dV=[0,0,0,0,0],dSel=[false,false,false,false,false],dUsed=[false,false,false,false,false];
@@ -975,6 +1066,7 @@ let pairs=[[],[]],pairsConsumed=[false,false],rolled=false,bUsedThisTurn=0;
 let fistDoneGlobal=false;
 let globalTurnNumber=0;
 let p1StartSide='left';
+let pendingMerge=false; // true quando la casella comune è stata barrata ma il turno non è ancora passato
 
 // Torcia
 let torchMode=false,torchLeft=0,torchAvailable=false;
@@ -1003,10 +1095,8 @@ function svS(p,k,v){
   if(isMerged()||P==='M'){const other=p===1?2:1;sv(other,k,v);}
 }
 function isMerged(){
-  const mk1=ld(1,'mk',{}),mk2=ld(2,'mk',{});
-  if(Object.keys(mk1).some(k=>mk2[k]))return true;
-  const mhp1=ld(1,'mhp',{}),mhp2=ld(2,'mhp',{});
-  return MK.some(mk=>(mhp1[mk]||0)>0&&(mhp2[mk]||0)>0);
+  // L'unificazione è confermata solo dopo il passTurn (flag persistente)
+  return !!localStorage.getItem(PFX+'mergedConfirmed');
 }
 function getMM(){return{...ld(1,'mk',{}),...ld(2,'mk',{})};}
 function getMLife(){return Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));}
@@ -1107,13 +1197,13 @@ function genPeerId(){
 function copyHostCode(){
   const code=document.getElementById('host-code').textContent.trim();
   if(!code||code==='——')return;
-  navigator.clipboard.writeText(code).then(()=>showN('✓ Codice copiato!','Incollalo al Giocatore 2.')).catch(()=>{
+  navigator.clipboard.writeText(code).then(()=>showN('✓ Codice copiato!',`Incollalo a ${pName(2)}.`)).catch(()=>{
     const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    showN('✓ Codice copiato!','Incollalo al Giocatore 2.');
+    showN('✓ Codice copiato!',`Incollalo a ${pName(2)}.`);
   });
 }
 function allScreensOff(){
-  ['sc-mode','sc-host','sc-join','sc-side','sc-pass','sc-game','sc-gameover','sc-victory'].forEach(id=>{
+  ['sc-mode','sc-host','sc-join','sc-side','sc-names','sc-pass','sc-game','sc-gameover','sc-victory','sc-disconnect'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.className='screen';
   });
 }
@@ -1125,6 +1215,7 @@ function clearGameData(){
   localStorage.removeItem(PFX+'turnNum');
   localStorage.removeItem(PFX+'p1side');
   localStorage.removeItem(PFX+'savedMode');
+  localStorage.removeItem(PFX+'mergedConfirmed');
   fistDoneGlobal=false;globalTurnNumber=0;p1StartSide='';
 }
 
@@ -1132,12 +1223,40 @@ function startSingleDevice(){
   deviceRole='single';
   clearGameData();
   localStorage.setItem(PFX+'savedMode','single');
-  showScreen('sc-side');
+  // Mostra entrambi i campi nome
+  document.getElementById('name-p1-wrap').style.display='block';
+  document.getElementById('name-p2-wrap').style.display='block';
+  document.getElementById('name-p1-input').value=playerNames[1]==='Giocatore 1'?'':playerNames[1];
+  document.getElementById('name-p2-input').value=playerNames[2]==='Giocatore 2'?'':playerNames[2];
+  showScreen('sc-names');
 }
 
 function startMultiDevice(role){
   deviceRole=role;
   clearGameData();
+  // Mostra solo il campo nome del proprio giocatore
+  const isHost=role==='host';
+  document.getElementById('name-p1-wrap').style.display=isHost?'block':'none';
+  document.getElementById('name-p2-wrap').style.display=isHost?'none':'block';
+  if(isHost){
+    document.getElementById('name-p1-input').value=playerNames[1]==='Giocatore 1'?'':playerNames[1];
+  } else {
+    document.getElementById('name-p2-input').value=playerNames[2]==='Giocatore 2'?'':playerNames[2];
+  }
+  // Override confirmNames per la modalità multi
+  document.querySelector('#sc-names .pass-btn').onclick=()=>confirmNamesMulti(role);
+  showScreen('sc-names');
+}
+
+function confirmNamesMulti(role){
+  if(role==='host'){
+    const n1=(document.getElementById('name-p1-input').value.trim())||'Giocatore 1';
+    saveNames(n1, playerNames[2]);
+  } else {
+    const n2=(document.getElementById('name-p2-input').value.trim())||'Giocatore 2';
+    saveNames(playerNames[1], n2);
+  }
+  allScreensOff();
   if(role==='host'){
     showScreen('sc-host');
     document.getElementById('host-code').textContent='——';
@@ -1157,13 +1276,13 @@ function initHostPeer(){
     const shortCode=id.replace('hd6-','');
     syncBinId=id; syncRoomCode=shortCode;
     document.getElementById('host-code').textContent=shortCode;
-    document.getElementById('host-status').textContent='✓ Pronto — Giocatore 2, inserisci il codice qui sopra';
+    document.getElementById('host-status').textContent=`✓ Pronto — ${pName(2)}, inserisci il codice qui sopra`;
     document.getElementById('host-status').className='sync-status ok';
   });
   hostPeer.on('connection', conn=>{
     hostConn=conn;
     conn.on('open',()=>{
-      document.getElementById('host-status').textContent='✓ Giocatore 2 connesso!';
+      document.getElementById('host-status').textContent=`✓ ${pName(2)} connesso!`;
       // Invia stato attuale al join
       conn.send({type:'state',state:exportState(),ts:Date.now()});
       // Host: naviga alla schermata gioco (scelta lato o pass turno)
@@ -1171,6 +1290,7 @@ function initHostPeer(){
       if(!side){showScreen('sc-side');}else{P=1;showPass(1);}
     });
     conn.on('data', d=>handlePeerData(d,'host'));
+    conn.on('close', ()=>showDisconnect(true));
     conn.on('error', e=>console.warn('hostConn error',e));
   });
   hostPeer.on('error', e=>{
@@ -1181,10 +1301,33 @@ function initHostPeer(){
 
 function createSyncBin(){} // stub — non usato con PeerJS
 
+function showDisconnect(isHost){
+  // Non mostrare se siamo già in gameover o victory
+  const cur=['sc-gameover','sc-victory'].find(id=>document.getElementById(id)?.className?.includes('active'));
+  if(cur)return;
+  allScreensOff();
+  const el=document.getElementById('sc-disconnect');
+  if(el)el.className='screen active';
+  const msg=document.getElementById('disconnect-msg');
+  if(msg)msg.textContent=isHost
+    ? `${pName(2)} si è disconnesso dall'ospedale. La partita non può continuare.`
+    : `${pName(1)} si è disconnesso dall'ospedale. La partita non può continuare.`;
+}
+
+function goToMainMenu(){
+  // Pulisce lo stato di connessione senza cancellare i dati di gioco
+  if(syncInterval)clearInterval(syncInterval);
+  try{if(hostPeer)hostPeer.destroy();}catch(e){}
+  hostPeer=null;hostConn=null;joinConn=null;
+  deviceRole='single';syncBinId='';syncRoomCode='';
+  allScreensOff();
+  document.getElementById('sc-mode').className='active';
+}
+
 function joinGame(){
   const code=document.getElementById('join-code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(code.length<4){
-    document.getElementById('join-status').textContent='Inserisci il codice del Giocatore 1.';
+    document.getElementById('join-status').textContent=`Inserisci il codice di ${pName(1)}.`;
     document.getElementById('join-status').className='sync-status err';
     return;
   }
@@ -1197,7 +1340,7 @@ function joinGame(){
   joinPeer.on('open', myId=>{
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent='Timeout: codice non trovato o Giocatore 1 non in attesa.';
+      document.getElementById('join-status').textContent='Timeout: codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
@@ -1209,10 +1352,12 @@ function joinGame(){
       if(!d)return;
       if(d.type==='reset'){doReset();return;}
       if(d.type==='gameover'){showGameOver(d.dp);return;}
+      if(d.type==='victory'){showVictory();return;}
       if(d.type==='state'){
         if(d.ts<=lastSyncTs)return;
         lastSyncTs=d.ts;
         importState(d.state);
+        loadNames();
         fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
         globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
         p1StartSide=localStorage.getItem(PFX+'p1side')||'';
@@ -1220,13 +1365,12 @@ function joinGame(){
         if(deviceRole!=='join'){P=2;deviceRole='join';}
         const side=localStorage.getItem(PFX+'p1side')||'';
         const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:2;
+        const firstMerge=!!d.firstMerge;
         if(!side){
-          // L'host non ha ancora scelto il lato: rimani su sc-join in attesa
           document.getElementById('join-status').textContent='✓ Connesso! In attesa che l\'host avvii la partita…';
           document.getElementById('join-status').className='sync-status ok';
         } else {
-          // Naviga sempre alla schermata corretta
-          showPass(nextP);
+          showPass(nextP, firstMerge);
         }
       }
     });
@@ -1234,6 +1378,7 @@ function joinGame(){
       document.getElementById('join-status').textContent='Errore connessione: '+e.type;
       document.getElementById('join-status').className='sync-status err';
     });
+    joinConn.on('close', ()=>showDisconnect(false));
   });
   joinPeer.on('error', e=>{
     document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
@@ -1249,7 +1394,7 @@ function exportState(){
       if(v!==null)state[PFX+'p'+p+'_'+k]=v;
     });
   });
-  ['fistDone','turnNum','p1side'].forEach(k=>{
+  ['fistDone','turnNum','p1side','mergedConfirmed','name1','name2'].forEach(k=>{
     const v=localStorage.getItem(PFX+k);
     if(v!==null)state[PFX+k]=v;
   });
@@ -1260,9 +1405,9 @@ function importState(state){
   Object.entries(state).forEach(([k,v])=>localStorage.setItem(k,v));
 }
 
-function pushState(nextP){
+function pushState(nextP, firstMerge=false){
   if(deviceRole==='single')return;
-  const payload={type:'state',state:exportState(),ts:Date.now(),nextP:nextP!==undefined?nextP:null};
+  const payload={type:'state',state:exportState(),ts:Date.now(),nextP:nextP!==undefined?nextP:null,firstMerge:!!firstMerge};
   try{
     if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
     if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
@@ -1273,19 +1418,22 @@ function handlePeerData(d, myRole){
   if(!d)return;
   if(d.type==='reset'){doReset();return;}
   if(d.type==='gameover'){showGameOver(d.dp);return;}
+  if(d.type==='victory'){showVictory();return;}
   if(d.type!=='state')return;
   if(d.ts<=lastSyncTs)return;
   lastSyncTs=d.ts;
   importState(d.state);
+  loadNames();
   fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
   globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
   p1StartSide=localStorage.getItem(PFX+'p1side')||'';
   const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:(globalTurnNumber%2===0?1:2);
+  const firstMerge=!!d.firstMerge;
   // Se il gioco è in corso (sc-game attivo), aggiorna solo il render
   if(document.getElementById('sc-game').className.includes('active')){renderAll();return;}
   // Resetta il pulsante prima di mostrare la schermata pass (gestisce transizione merge)
   const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=false;
-  showPass(nextP);
+  showPass(nextP, firstMerge);
 }
 
 async function loadAndApplyState(){} // non usato con PeerJS
@@ -1321,6 +1469,7 @@ function installApp(){
 
 // ─── INIT ───
 window.onload=()=>{
+  loadNames();
   if(!localStorage.getItem(PFX+'p1_lifeIdx'))sv(1,'lifeIdx',0);
   if(!localStorage.getItem(PFX+'p2_lifeIdx'))sv(2,'lifeIdx',0);
   fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
@@ -1354,9 +1503,12 @@ function chooseStartSide(side){
   else showPass(2);
 }
 
-function showPass(nextP){
+function showPass(nextP, firstMerge=false){
   allScreensOff();
   const el=document.getElementById('sc-pass');if(el)el.className='screen active';
+  // Mostra il messaggio di unione solo al primo turno unificato
+  const storyEl=document.getElementById('merge-story');
+  if(storyEl)storyEl.style.display=firstMerge?'block':'none';
 
   const merged=isMerged();
 
@@ -1370,12 +1522,12 @@ function showPass(nextP){
       // Host gioca i turni pari (globalTurnNumber pari)
       const isMyTurn=(globalTurnNumber%2===0);
       const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
-      pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+      pw.textContent=pName('M');pw.className='pass-player pm';
       const free=isBlackDieFreeThisTurn();
       if(isMyTurn){
-        pm.innerHTML=`È il tuo turno (Host).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
+        pm.innerHTML=`È il tuo turno (${pName(1)}).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
       } else {
-        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 2 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
+        pm.innerHTML=`<span style="color:#8a7060;">Turno di ${pName(2)} — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
       }
       const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=!isMyTurn;
       return;
@@ -1387,12 +1539,12 @@ function showPass(nextP){
         // È il turno dell'host
         const side=p1StartSide||'left';
         const sideIt=side==='left'?'SINISTRA':'DESTRA';
-        pw.textContent='Turno di: Giocatore 1';pw.className='pass-player p1';
-        pm.innerHTML=`È il tuo turno, Giocatore 1.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+        pw.textContent=`Turno di: ${pName(1)}`;pw.className='pass-player p1';
+        pm.innerHTML=`È il tuo turno, ${pName(1)}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
       } else {
         // È il turno del join — host attende
-        pw.textContent='Turno di: Giocatore 2';pw.className='pass-player p2';
-        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 2 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
+        pw.textContent=`Turno di: ${pName(2)}`;pw.className='pass-player p2';
+        pm.innerHTML=`<span style="color:#8a7060;">Turno di ${pName(2)} — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
         // Disabilita il pulsante startTurn
         const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=true;
       }
@@ -1407,12 +1559,12 @@ function showPass(nextP){
       // Join gioca i turni dispari (globalTurnNumber dispari)
       const isMyTurn=(globalTurnNumber%2===1);
       const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
-      pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+      pw.textContent=pName('M');pw.className='pass-player pm';
       const free=isBlackDieFreeThisTurn();
       if(isMyTurn){
-        pm.innerHTML=`È il tuo turno (Giocatore 2).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
+        pm.innerHTML=`È il tuo turno (${pName(2)}).<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO':'non gratuito'} questo turno</span>`;
       } else {
-        pm.innerHTML=`<span style="color:#8a7060;">Turno dell'Host — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
+        pm.innerHTML=`<span style="color:#8a7060;">Turno di ${pName(1)} — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Lo stato si aggiorna automaticamente ogni 4 secondi.</span>`;
       }
       const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=!isMyTurn;
       return;
@@ -1424,12 +1576,12 @@ function showPass(nextP){
         // È il turno del join
         const side=p1StartSide==='left'?'right':'left';
         const sideIt=side==='left'?'SINISTRA':'DESTRA';
-        pw.textContent='Turno di: Giocatore 2';pw.className='pass-player p2';
-        pm.innerHTML=`È il tuo turno, Giocatore 2.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+        pw.textContent=`Turno di: ${pName(2)}`;pw.className='pass-player p2';
+        pm.innerHTML=`È il tuo turno, ${pName(2)}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
       } else {
         // È il turno dell'host — join attende
-        pw.textContent='Turno di: Giocatore 1';pw.className='pass-player p1';
-        pm.innerHTML=`<span style="color:#8a7060;">Turno del Giocatore 1 — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
+        pw.textContent=`Turno di: ${pName(1)}`;pw.className='pass-player p1';
+        pm.innerHTML=`<span style="color:#8a7060;">Turno di ${pName(1)} — attendi…</span><br><span style="font-size:9px;color:#6a5a3a;">Il tuo turno arriverà dopo.</span>`;
       }
       const btn=document.getElementById('pass-btn-start');
       if(btn)btn.disabled=(nextP!==2);
@@ -1440,15 +1592,15 @@ function showPass(nextP){
   // Rendering standard (single device o multi non-unificato)
   const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
   if(P==='M'){
-    pw.textContent='Giocatore Unificato';pw.className='pass-player pm';
+    pw.textContent=pName('M');pw.className='pass-player pm';
     const free=isBlackDieFreeThisTurn();
     pm.innerHTML=`Ora siete un unico esploratore. Potete usare tutte le caselle Start.<br><span style="font-size:10px;color:${free?'#50dd50':'#dd6060'};">Dado nero: ${free?'GRATUITO questo turno (3 slot)':'non gratuito questo turno'}</span>`;
   } else {
-    pw.textContent=`Turno di: Giocatore ${P}`;pw.className='pass-player p'+P;
+    pw.textContent=`Turno di: ${pName(P)}`;pw.className='pass-player p'+P;
     const side=P===1?(p1StartSide||'left'):(p1StartSide==='left'?'right':'left');
     const sideIt=side==='left'?'SINISTRA':'DESTRA';
     if(deviceRole==='single'){
-      pm.innerHTML=`Passa il dispositivo al Giocatore ${P} e premi Inizia Turno.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+      pm.innerHTML=`Passa il dispositivo a ${pName(P)} e premi Inizia Turno.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     } else {
       pm.innerHTML=`È il tuo turno, Giocatore ${P}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     }
@@ -1458,21 +1610,21 @@ function showPass(nextP){
 function startTurn(){
   // In modalità multi-device: verifica che sia il proprio turno
   if(deviceRole==='host'&&!isMerged()){
-    if(P!==1){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 2 finisca il suo turno.');return;}
+    if(P!==1){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
   }
   if(deviceRole==='join'&&!isMerged()){
-    if(P!==2){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 1 finisca il suo turno.');return;}
+    if(P!==2){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
   }
   // In modalità unificata multi-device: verifica che sia il proprio turno
   if(deviceRole!=='single'&&isMerged()){
     const isHostTurn=(globalTurnNumber%2===0);
-    if(deviceRole==='host'&&!isHostTurn){showN('⏳ Non è il tuo turno','Attendi che il Giocatore 2 finisca il suo turno.');return;}
-    if(deviceRole==='join'&&isHostTurn){showN('⏳ Non è il tuo turno','Attendi che l\'Host finisca il suo turno.');return;}
+    if(deviceRole==='host'&&!isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
+    if(deviceRole==='join'&&isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
   }
   document.getElementById('sc-pass').className='screen';
   document.getElementById('sc-game').className='screen active';
   dV.fill(0);dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
-  rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;
+  rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;pendingMerge=false;
   turnCrossed=0;bUsedThisTurn=0;bFreeUsedThisTurn=0;turnMarked=new Set();pairActions=[[],[]];
   // Snapshot stato inizio turno
   const cp=isMerged()?'M':P;
@@ -1495,7 +1647,96 @@ function startTurn(){
 }
 
 function passTurn(){
+  if(!rolled){showN('🎲 Lancia prima i dadi','Devi lanciare i dadi prima di passare il turno.');return;}
   const prevP=P;
+
+  // ── Esegui l'unificazione se pendingMerge è attivo ──
+  if(pendingMerge){
+    pendingMerge=false;
+
+    // Segna l'unificazione come confermata (da ora isMerged() ritorna true)
+    localStorage.setItem(PFX+'mergedConfirmed','1');
+
+    // 1. Unifica mappe
+    const mm={...ld(1,'mk',{}),...ld(2,'mk',{})};
+
+    // 2. Unifica danni mostri: SOMMA (non max) i danni, gestisce kill
+    const mhp1=ld(1,'mhp',{}),mhp2=ld(2,'mhp',{});
+    const def1=ld(1,'def',{}),def2=ld(2,'def',{});
+    const mergedMhp={},mergedDef={...def1,...def2};
+    let bonusGems=0;
+    MK.forEach(mk=>{
+      const mon=MONS[mk];
+      const totalHits=(mhp1[mk]||0)+(mhp2[mk]||0);
+      if(def1[mk]||def2[mk]){
+        // Già morto da uno dei due: conferma morte, gemme già conteggiate
+        mergedMhp[mk]=mon.hp;
+        mergedDef[mk]=true;
+        mm[mk]=true; // barra la casella mostro
+      } else if(totalHits>=mon.hp){
+        // Muore per somma dei colpi
+        mergedMhp[mk]=mon.hp;
+        mergedDef[mk]=true;
+        mm[mk]=true;
+        bonusGems+=mon.gem;
+        if(mon.isBoss){
+          // Boss: applica -2❤ anche qui
+          const shield=Math.max(ld(1,'shield',0),ld(2,'shield',0));
+          let dmg=2,shieldLeft=shield;
+          if(shieldLeft>0){const abs=Math.min(shieldLeft,dmg);shieldLeft-=abs;dmg-=abs;}
+          const worstLi=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
+          const ni=Math.min(MAX_LIFE_IDX,worstLi+dmg);
+          sv(1,'lifeIdx',ni);sv(2,'lifeIdx',ni);
+          sv(1,'shield',shieldLeft);sv(2,'shield',shieldLeft);
+        }
+      } else {
+        mergedMhp[mk]=totalHits;
+      }
+    });
+    sv(1,'mk',mm);sv(2,'mk',mm);
+    sv(1,'mhp',mergedMhp);sv(2,'mhp',mergedMhp);
+    sv(1,'def',mergedDef);sv(2,'def',mergedDef);
+
+    // 3. Unifica gemme: somma + bonus uccisioni + 1 bonus unione
+    const totalGems=ld(1,'gems',0)+ld(2,'gems',0)+bonusGems+1;
+    sv(1,'gems',totalGems);sv(2,'gems',totalGems);
+
+    // 4. Unifica vita: la peggiore
+    const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
+    sv(1,'lifeIdx',worstLife);sv(2,'lifeIdx',worstLife);
+
+    // 5. Unifica tesori: somma torch, max per life e dice
+    const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+    const mergedTres={
+      life:Math.max(tr1.life||0,tr2.life||0),
+      torch:(tr1.torch||0)+(tr2.torch||0),
+      dice:Math.max(tr1.dice||0,tr2.dice||0)
+    };
+    sv(1,'tres',mergedTres);sv(2,'tres',mergedTres);
+
+    // 6. Unifica scudo: somma (entrambi i giocatori potrebbero averne)
+    const mergedShield=(ld(1,'shield',0))+(ld(2,'shield',0));
+    sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
+
+    // 7. Unifica slot dadi neri: il massimo
+    const bmax=Math.max(ld(1,'bmax',3),ld(2,'bmax',3));
+    sv(1,'bmax',bmax);sv(2,'bmax',bmax);
+
+    // 8. Unifica pugni: somma
+    const mergedFists=ld(1,'fists',0)+ld(2,'fists',0);
+    sv(1,'fists',mergedFists);sv(2,'fists',mergedFists);
+
+    // Il primo turno da unificato lo gioca il giocatore successivo
+    commitTurn(prevP);
+    globalTurnNumber++;
+    localStorage.setItem(PFX+'turnNum',globalTurnNumber);
+    if(deviceRole!=='single')pushState('M');
+    // Controlla vittoria (potrebbe essere avvenuta per somma danni)
+    if(checkVictory())return;
+    showPass('M', true);
+    return;
+  }
+
   // Nuova regola: penalità solo se non si è barrata NESSUNA casella nel turno
   if(turnCrossed===0){
     let dmg=2;
@@ -1545,11 +1786,22 @@ function triggerGO(dp){
   showGameOver(dp);
 }
 
+function triggerVictory(){
+  if(deviceRole!=='single'){
+    const payload={type:'victory',ts:Date.now()};
+    try{
+      if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
+      if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
+    }catch(e){}
+  }
+  showVictory();
+}
+
 function showGameOver(dp){
   allScreensOff();
   playAudio('gameover');
   document.getElementById('sc-gameover').className='screen active';
-  document.getElementById('go-player').textContent=`— ${dp==='M'?'Giocatore Unificato':'Giocatore '+dp} —`;
+  document.getElementById('go-player').textContent=`— ${dp==='M'?pName('M'):pName(dp)} —`;
   document.getElementById('go-epitaph').textContent=EPITAPHS[Math.floor(Math.random()*EPITAPHS.length)];
   const vp=calcVP(dp==='M'?1:dp);
   document.getElementById('go-score').textContent=`Punteggio finale: ${vp} PV`;
@@ -1559,7 +1811,7 @@ function checkVictory(){
   const def=ld(P,'def',{});
   const allDead=MK.every(mk=>!!def[mk]);
   if(!allDead)return false;
-  showVictory();
+  triggerVictory();
   return true;
 }
 
@@ -1582,50 +1834,34 @@ function showVictory(){
   allScreensOff();
   playAudio('victory');
   document.getElementById('sc-victory').className='screen active';
-  const vp1=calcVP(1),vp2=calcVP(2);
+
+  // Punteggio unico condiviso tra i due giocatori
+  const totalGems=ld(1,'gems',0)+ld(2,'gems',0);
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+  const totalTres=(tr1.life||0)+(tr1.torch||0)+(tr1.dice||0)+(tr2.life||0)+(tr2.torch||0)+(tr2.dice||0);
+  const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
+  const penIdx=Math.min(worstLife+1,MAX_LIFE_IDX);
+  const pen=LIFE_STEPS[penIdx].pen;
+  const sharedVP=Math.max(0,totalGems*3+totalTres*2-pen);
+
   const rows=document.getElementById('vic-scores');
-  const winner=vp1>=vp2?1:2;
-  const topScore=Math.max(vp1,vp2);
-
-  // Dettaglio punteggio
-  function scoreDetail(p){
-    const gems=ld(p,'gems',0);
-    const li=ld(p,'lifeIdx',0);
-    const tres=ld(p,'tres',{life:0,torch:0,dice:0});
-    const tresCount=(tres.life||0)+(tres.torch||0)+(tres.dice||0);
-    const pen=LIFE_STEPS[li].pen;
-    return `💎${gems}×3=${gems*3} + 💰${tresCount}×2=${tresCount*2} − ❤${pen}`;
-  }
-
   rows.innerHTML=`
-    <div class="vic-score-row ${winner===1?'vic-winner':''}">
-      <div>
-        <span class="vic-player" style="color:#4a9eff">Giocatore 1</span>
-        <div class="vic-score-detail">${scoreDetail(1)}</div>
-      </div>
-      <span class="vic-pts">${vp1}</span>
-    </div>
-    <div class="vic-score-row ${winner===2?'vic-winner':''}">
-      <div>
-        <span class="vic-player" style="color:#ff6b6b">Giocatore 2</span>
-        <div class="vic-score-detail">${scoreDetail(2)}</div>
-      </div>
-      <span class="vic-pts">${vp2}</span>
-    </div>
-    <div style="font-size:11px;color:#c8a020;margin-top:8px;font-family:'Cinzel',serif;">
-      🏆 Vince Giocatore ${winner}!
+    <div class="vic-score-row vic-winner" style="flex-direction:column;gap:6px;">
+      <div style="font-family:'Cinzel',serif;font-size:13px;color:#c8a020;">🏆 Punteggio Comune</div>
+      <div style="font-size:10px;color:#8a7a5a;">💎${totalGems}×3=${totalGems*3} + 💰${totalTres}×2=${totalTres*2} − ❤${pen}</div>
+      <div class="vic-pts" style="font-size:28px;">${sharedVP} PV</div>
     </div>`;
 
-  // Storia finale basata sul punteggio del vincitore
-  const story=getVictoryStory(topScore);
+  // Storia finale basata sul punteggio condiviso
+  const story=getVictoryStory(sharedVP);
   const storyEl=document.getElementById('vic-story');
   if(storyEl)storyEl.textContent=story;
 }
 function renderAll(){
   const merged=isMerged()||P==='M';
   const pc=document.getElementById('pcur'),badge=document.getElementById('merged-badge');
-  if(merged){pc.textContent='Giocatore Unificato';pc.className='pname-cur pm';badge.classList.remove('hidden');}
-  else{pc.textContent='Giocatore '+P;pc.className='pname-cur p'+P;badge.classList.add('hidden');}
+  if(merged){pc.textContent=pName('M');pc.className='pname-cur pm';badge.classList.remove('hidden');}
+  else{pc.textContent=pName(P);pc.className='pname-cur p'+P;badge.classList.add('hidden');}
   renderLife();renderDice();renderPairs();buildSVG();renderMonsters();renderTreasures();renderFists();updCnts();updTurnInfo();
 }
 
@@ -2123,7 +2359,7 @@ function clearDice(){
   torchMode=false; activeTorchSlot=-1;
   dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
   bUsedThisTurn=0;bFreeUsedThisTurn=0;pairActions=[[],[]];
-  turnCrossed=0; turnMarked=new Set();
+  turnCrossed=0; turnMarked=new Set(); pendingMerge=false;
   document.getElementById('tmodal').classList.add('hidden');
   if(rolled)renderDice();
   renderAll();
@@ -2167,15 +2403,29 @@ function clickCell(k){
             const f=Math.max(0,ld(P,'fists',0)-ra.amount);svS(P,'fists',f);
             if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
             renderFists();
+          } else if(ra.type==='mhp'){
+            const hp=ld(P,'mhp',{});
+            hp[ra.mkey]=Math.max(0,(hp[ra.mkey]||0)-ra.amount);
+            svS(P,'mhp',hp);
+            if(ra.killed){
+              const def=ld(P,'def',{});delete def[ra.mkey];svS(P,'def',def);
+              saveMk(ra.mkey,false);
+              svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.gemGained));
+              if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ld(P,'lifeIdx',0)-ra.lifeDmg));}
+              if(ra.shieldUsed){svS(P,'shield',ld(P,'shield',0)+ra.shieldUsed);}
+            }
+            renderMonsters();renderLife();
           } else if(ra.type==='tmodal'){
             document.getElementById('tmodal').classList.add('hidden');
             const tres=ld(P,'tres',{life:0,torch:0,dice:0});
             if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
-            else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-1);svS(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
-            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);svS(P,'bmax',3);renderDice();}
+            else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-2);svS(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
+            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);svS(P,'bmax',Math.max(3,ld(P,'bmax',3)-3));renderDice();}
             renderTreasures();
           }
         });
+        // Annulla anche pendingMerge se questa casella lo aveva attivato
+        if(pendingMerge&&act.k===k)pendingMerge=false;
         updCnts();buildSVG();renderMonsters();updTurnInfo();return;
       }
     }
@@ -2203,6 +2453,9 @@ function clickCell(k){
 
   // ── MOSTRO ──
   if(cell.t==='M'||cell.t==='BOSS'){
+    // Mostro già sconfitto: non selezionabile
+    const defCheck=ld(P,'def',{});
+    if(defCheck[cell.mkey]){showN('✓ Già sconfitto',`${MONS[cell.mkey]?.name} è stato eliminato.`);return;}
     if(turnCrossed>=MAX_CROSS){showN('✔ Turno completo','Premi Passa Turno.');return;}
     const sums=getSums();
     if(!sums.length){showN('👾 '+MONS[cell.mkey]?.name,'Forma prima una coppia di dadi.');return;}
@@ -2352,59 +2605,14 @@ function clickCell(k){
     showTModal();buildSVG();renderTreasures();updCnts();updTurnInfo();return;
   }
 
-  // Merge
-  if(!isMerged()&&P!=='M'&&otM[k]){
-    const other2=P===1?2:1;
-    const m2=ld(other2,'mk',{});const mm={...ld(P,'mk',{}),...m2,[k]:true};
-    sv(1,'mk',mm);sv(2,'mk',mm);
-
-    // Unifica gemme (somma)
-    const totalGems=ld(1,'gems',0)+ld(2,'gems',0)+1; // +1 bonus unione
-    sv(1,'gems',totalGems);sv(2,'gems',totalGems);
-    recordAction(usedPairIdx,{type:'gem',amount:1});
-
-    // Unifica vita: prende la peggiore (indice più alto)
-    const li1=ld(1,'lifeIdx',0),li2=ld(2,'lifeIdx',0);
-    const worstLife=Math.max(li1,li2);
-    sv(1,'lifeIdx',worstLife);sv(2,'lifeIdx',worstLife);
-
-    // Unifica tesori: somma torch, prende il max per life e dice
-    const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
-    const mergedTres={
-      life:Math.max(tr1.life||0,tr2.life||0),
-      torch:(tr1.torch||0)+(tr2.torch||0),
-      dice:Math.max(tr1.dice||0,tr2.dice||0)
-    };
-    sv(1,'tres',mergedTres);sv(2,'tres',mergedTres);
-
-    // Unifica scudo: prende il massimo
-    const sh1=ld(1,'shield',0),sh2=ld(2,'shield',0);
-    const mergedShield=Math.max(sh1,sh2);
-    sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
-
-    // Unifica dadi neri slot
-    const bmax=Math.max(ld(1,'bmax',3),ld(2,'bmax',3));
-    sv(1,'bmax',bmax);sv(2,'bmax',bmax);
-
-    // Unifica danni mostri: prende il massimo per ogni mostro
-    const mhp1=ld(1,'mhp',{}),mhp2=ld(2,'mhp',{});
-    const def1=ld(1,'def',{}),def2=ld(2,'def',{});
-    const mergedMhp={},mergedDef={};
-    MK.forEach(mk=>{
-      mergedMhp[mk]=Math.max(mhp1[mk]||0,mhp2[mk]||0);
-      if(def1[mk]||def2[mk])mergedDef[mk]=true;
-    });
-    sv(1,'mhp',mergedMhp);sv(2,'mhp',mergedMhp);
-    sv(1,'def',mergedDef);sv(2,'def',mergedDef);
-
-    // Unifica pugni
-    const f1=ld(1,'fists',0),f2=ld(2,'fists',0);
-    const mergedFists=f1+f2;
-    sv(1,'fists',mergedFists);sv(2,'fists',mergedFists);
-
-    showN('⚔ UNIONE! +1💎','I due esploratori si sono incontrati! Vita, gemme e tesori unificati.');
+  // Merge — la casella viene barrata subito, ma l'unificazione avviene solo al passa turno
+  if(!isMerged()&&!pendingMerge&&P!=='M'&&otM[k]){
+    saveMk(k,true);turnMarked.add(k);turnCrossed++;
+    recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
+    pairsConsumed[usedPairIdx]=true;
+    pendingMerge=true;
     playAudio('merge');
-    buildSVG();renderLife();renderMonsters();renderTreasures();renderFists();updCnts();updTurnInfo();return;
+    buildSVG();updCnts();updTurnInfo();return;
   }
 
   buildSVG();updCnts();updTurnInfo();
@@ -2420,17 +2628,20 @@ function saveMk(k,val){
 
 // ─── TESORO ───
 function showTModal(){
-  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
-  const lifeUsed=tres.life>=1, diceUsed=tres.dice>=1;
+  // Controlla entrambi i giocatori per tutte le ricompense (1× per partita globale)
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+  const lifeUsed=(tr1.life||0)+(tr2.life||0)>=1;
+  const torchUsed=(tr1.torch||0)+(tr2.torch||0)>=2;
+  const diceUsed=(tr1.dice||0)+(tr2.dice||0)>=1;
   let h='';
   h+=`<div class="ropt ${lifeUsed?'disabled':''}" onclick="${lifeUsed?'':'chooseTres(\'life\')'}">
-    <div class="ropt-t">🛡 Vita — +1💎 & 3 Scudi${lifeUsed?' (già usato)':''}</div>
+    <div class="ropt-t">🛡 Vita — +1💎 & 3 Scudi</div>
     <div class="ropt-d">Guadagni 1 Gemma subito. I prossimi 3 danni alla vita vengono annullati (scudo).</div></div>`;
-  h+=`<div class="ropt" onclick="chooseTres('torch')">
+  h+=`<div class="ropt ${torchUsed?'disabled':''}" onclick="${torchUsed?'':'chooseTres(\'torch\')'}">
     <div class="ropt-t">🕯 Torcia — +2 token</div>
     <div class="ropt-d">Aggiungi 2 token torcia. Usane uno quando vuoi: barra una casella adiacente a quelle già barrate senza usare i dadi.</div></div>`;
   h+=`<div class="ropt ${diceUsed?'disabled':''}" onclick="${diceUsed?'':'chooseTres(\'dice\')'}">
-    <div class="ropt-t">⬛ Dado nero — +3 slot${diceUsed?' (già usato)':''}</div>
+    <div class="ropt-t">⬛ Dado nero — +3 slot</div>
     <div class="ropt-d">Aumenta i dadi neri disponibili di 3 per tutta la partita.</div></div>`;
   document.getElementById('tropts').innerHTML=h;
   document.getElementById('tmodal').classList.remove('hidden');
@@ -2556,7 +2767,9 @@ function renderMonsters(){
     let hpH='';for(let i=0;i<mon.hp;i++)hpH+=`<div class="hp ${i<cur?'hit':''}"></div>`;
     const active=unl[mk]||[];
     const numsH=mon.nums.map(n=>`<span class="mnum ${active.includes(n)?'unlocked':'locked'}">${n}</span>`).join('');
-    h+=`<div class="mcard ${mon.isBoss?'boss':''} ${dead?'dead':''}">
+    const deadOverlay=dead?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:rgba(80,200,80,0.7);pointer-events:none;border-radius:6px;background:rgba(0,0,0,0.35);">✕</div>`:'';
+    h+=`<div class="mcard ${mon.isBoss?'boss':''} ${dead?'dead':''}" style="position:relative;">
+      ${deadOverlay}
       <div class="mname">${mon.isBoss?'👑 ':''}${MICO[mk]} ${mon.name}</div>
       <div class="minfo">PV:${mon.hp} +${mon.gem}💎${mon.isBoss?' · -2❤':''}</div>
       <div class="mnums">${numsH}</div><div class="hprow">${hpH}</div></div>`;
@@ -2593,6 +2806,7 @@ function doReset(){
   localStorage.removeItem(PFX+'turnNum');
   localStorage.removeItem(PFX+'p1side');
   localStorage.removeItem(PFX+'savedMode');
+  localStorage.removeItem(PFX+'mergedConfirmed');
   window.location.reload();
 }
 function showN(t,b){
@@ -2652,3 +2866,4 @@ function playAudio(eventKey){
 </script>
 </body>
 </html>
+Visualizzazione di AAA_v9 (20).html.
