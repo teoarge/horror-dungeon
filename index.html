@@ -1157,23 +1157,31 @@ function applyZoom(z){
 // Pinch-to-zoom
 (function(){
   let initialDist=0,initialZoom=1;
-  const wrap=document.getElementById('mapwrap');
   function getDist(t){
     const a=t[0],b=t[1];
     return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
   }
-  wrap.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){initialDist=getDist(e.touches);initialZoom=zoomLevel;e.preventDefault();}
-  },{passive:false});
-  wrap.addEventListener('touchmove',e=>{
-    if(e.touches.length===2){
-      e.preventDefault();
-      const d=getDist(e.touches);
-      let z=initialZoom*(d/initialDist);
-      z=Math.min(Math.max(z,ZOOM_STEPS[0]),ZOOM_STEPS[ZOOM_STEPS.length-1]);
-      applyZoom(z);
-    }
-  },{passive:false});
+  function initPinch(){
+    const wrap=document.getElementById('mapwrap');
+    if(!wrap)return;
+    wrap.addEventListener('touchstart',e=>{
+      if(e.touches.length===2){initialDist=getDist(e.touches);initialZoom=zoomLevel;e.preventDefault();}
+    },{passive:false});
+    wrap.addEventListener('touchmove',e=>{
+      if(e.touches.length===2){
+        e.preventDefault();
+        const d=getDist(e.touches);
+        let z=initialZoom*(d/initialDist);
+        z=Math.min(Math.max(z,ZOOM_STEPS[0]),ZOOM_STEPS[ZOOM_STEPS.length-1]);
+        applyZoom(z);
+      }
+    },{passive:false});
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initPinch);
+  } else {
+    initPinch();
+  }
 })();
 
 // ─── MULTI-DEVICE SYNC (PeerJS WebRTC) ───
@@ -1340,7 +1348,7 @@ function joinGame(){
   joinPeer.on('open', myId=>{
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent='Timeout: codice non trovato o ${pName(1)} non in attesa.`;
+      document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
@@ -2866,4 +2874,3 @@ function playAudio(eventKey){
 </script>
 </body>
 </html>
-Visualizzazione di AAA_v9 (20).html.
