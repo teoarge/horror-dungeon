@@ -1342,7 +1342,11 @@ function initHostPeer(){
       if(!side){showScreen('sc-side');}else{P=1;showPass(1);}
     });
     conn.on('data', d=>handlePeerData(d,'host'));
-    conn.on('close', ()=>showDisconnect(true));
+    conn.on('close', ()=>{
+      // Il giocatore 2 si è disconnesso inaspettatamente: mostra la schermata scappa/continua
+      localStorage.setItem(PFX+'exitedPlayer', '2');
+      showPartnerLeft(pName(2), 2);
+    });
     conn.on('error', e=>console.warn('hostConn error',e));
   });
   hostPeer.on('error', e=>{
@@ -1495,7 +1499,12 @@ function joinGame(){
       document.getElementById('join-status').textContent='Errore connessione: '+e.type;
       document.getElementById('join-status').className='sync-status err';
     });
-    joinConn.on('close', ()=>showDisconnect(false));
+    joinConn.on('close', ()=>{
+      // Il giocatore 1 si è disconnesso inaspettatamente: mostra la schermata scappa/continua.
+      // I dati di P1 in localStorage sono quelli dell'ultimo turno completato e restano intatti per il merge.
+      localStorage.setItem(PFX+'exitedPlayer', '1');
+      showPartnerLeft(pName(1), 1);
+    });
   });
   joinPeer.on('error', e=>{
     document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
@@ -1739,7 +1748,7 @@ function showPass(nextP, firstMerge=false){
     if(deviceRole==='single'){
       pm.innerHTML=`Passa il dispositivo a ${pName(P)} e premi Inizia Turno.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     } else {
-      pm.innerHTML=`È il tuo turno, Giocatore ${P}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+      pm.innerHTML=`È il tuo turno, ${pName(P)}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     }
   }
 }
@@ -1767,7 +1776,9 @@ function startTurn(){
   rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;pendingMerge=false;pendingMergeCell='';
   turnCrossed=0;bUsedThisTurn=0;bFreeUsedThisTurn=0;turnMarked=new Set();pairActions=[[],[]];
   // pendingTresOpenCount parte dal totale di ricompense già usate nei turni precedenti
-  const tr1i=ld(1,'tres',{used:0}),tr2i=ld(2,'tres',{used:0});
+  // Dopo il merge P1 e P2 hanno valori identici: leggi solo da P1 per non raddoppiare
+  const mergedNowT=isMerged()||P==='M';
+  const tr1i=ld(1,'tres',{used:0}),tr2i=mergedNowT?{used:0}:ld(2,'tres',{used:0});
   pendingTresOpenCount=(tr1i.used||0)+(tr2i.used||0);
   // Snapshot stato inizio turno
   const cp=isMerged()?'M':P;
@@ -1851,12 +1862,13 @@ function passTurn(){
     const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
     sv(1,'lifeIdx',worstLife);sv(2,'lifeIdx',worstLife);
 
-    // 5. Unifica tesori: somma torch, max per life e dice
-    const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+    // 5. Unifica tesori: somma tutto (life, torch, dice, used)
+    const tr1=ld(1,'tres',{life:0,torch:0,dice:0,used:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0,used:0});
     const mergedTres={
-      life:Math.max(tr1.life||0,tr2.life||0),
+      life:(tr1.life||0)+(tr2.life||0),
       torch:(tr1.torch||0)+(tr2.torch||0),
-      dice:Math.max(tr1.dice||0,tr2.dice||0)
+      dice:(tr1.dice||0)+(tr2.dice||0),
+      used:(tr1.used||0)+(tr2.used||0)
     };
     sv(1,'tres',mergedTres);sv(2,'tres',mergedTres);
 
@@ -1864,8 +1876,8 @@ function passTurn(){
     const mergedShield=(ld(1,'shield',0))+(ld(2,'shield',0));
     sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
 
-    // 7. Unifica slot dadi neri: il massimo
-    const bmax=Math.max(ld(1,'bmax',3),ld(2,'bmax',3));
+    // 7. Unifica slot dadi neri: 3 base + 3 se almeno uno dei due aveva la ricompensa dado nero
+    const bmax=(mergedTres.dice||0)>=1?6:3;
     sv(1,'bmax',bmax);sv(2,'bmax',bmax);
 
     // 8. Unifica pugni: somma
@@ -1992,8 +2004,11 @@ function showVictory(){
   document.getElementById('sc-victory').className='screen active';
 
   // Punteggio unico condiviso tra i due giocatori
-  const totalGems=ld(1,'gems',0)+ld(2,'gems',0);
-  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+  // Dopo il merge P1 e P2 hanno valori identici: leggi solo da P1 per non raddoppiare
+  const merged=isMerged();
+  const totalGems=merged?ld(1,'gems',0):ld(1,'gems',0)+ld(2,'gems',0);
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0});
+  const tr2=merged?{life:0,torch:0,dice:0}:ld(2,'tres',{life:0,torch:0,dice:0});
   const totalTres=(tr1.life||0)+(tr1.torch||0)+(tr1.dice||0)+(tr2.life||0)+(tr2.torch||0)+(tr2.dice||0);
   const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
   const penIdx=Math.min(worstLife+1,MAX_LIFE_IDX);
@@ -2522,7 +2537,8 @@ function clearDice(){
     torchLeft=turnSnapshot.torchLeft;
   }
   // Calcola il pendingTresOpenCount dallo stato ripristinato (= used cumulativi pre-turno)
-  const tr1r=ld(1,'tres',{used:0}),tr2r=ld(2,'tres',{used:0});
+  const mergedNowR=isMerged()||P==='M';
+  const tr1r=ld(1,'tres',{used:0}),tr2r=mergedNowR?{used:0}:ld(2,'tres',{used:0});
   pendingTresOpenCount=(tr1r.used||0)+(tr2r.used||0);
   torchMode=false; activeTorchSlot=-1;
   dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
@@ -2808,12 +2824,14 @@ function saveMk(k,val){
 // ─── TESORO ───
 function showTModal(){
   // Controlla entrambi i giocatori per tutte le ricompense (1× per partita globale)
-  const tr1=ld(1,'tres',{life:0,torch:0,dice:0,used:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0,used:0});
+  // Dopo il merge P1 e P2 hanno valori identici: leggi solo da P1 per non raddoppiare
+  const mergedNow=isMerged()||P==='M';
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0,used:0}),tr2=mergedNow?{life:0,torch:0,dice:0,used:0}:ld(2,'tres',{life:0,torch:0,dice:0,used:0});
   const lifeUsed=(tr1.life||0)+(tr2.life||0)>=1;
   const torchUsed=(tr1.torch||0)+(tr2.torch||0)>=2;
   const diceUsed=(tr1.dice||0)+(tr2.dice||0)>=1;
   // Quante ricompense totali già scelte vs quanti tesori aperti
-  const totalUsed=(tr1.used||0)+(tr2.used||0);
+  const totalUsed=mergedNow?(tr1.used||0):(tr1.used||0)+(tr2.used||0);
   const totalOpened=(pendingTresOpenCount||0);
   // Se per questo tesoro è già stata scelta una ricompensa, disabilita tutto
   const thisAlreadyUsed=totalUsed>=totalOpened;
@@ -2882,7 +2900,8 @@ function clickTorchSlot(slotIdx){
 function renderTreasures(){
   const merged=isMerged()||P==='M';
   const t1=ld(1,'tres',{life:0,torch:0,dice:0}),t2=ld(2,'tres',{life:0,torch:0,dice:0});
-  const tres=merged?{life:t1.life+t2.life,torch:t1.torch+t2.torch,dice:t1.dice+t2.dice}:ld(P,'tres',{life:0,torch:0,dice:0});
+  // Dopo il merge i valori sono identici su P1 e P2: leggi solo da P1 per non raddoppiare
+  const tres=merged?t1:ld(P,'tres',{life:0,torch:0,dice:0});
 
   // Scudo (life) — mostra quante volte è stato preso
   const lifeCnt=tres.life||0;
@@ -2934,7 +2953,8 @@ function renderTreasures(){
 
 function renderFists(){
   const merged=isMerged()||P==='M';
-  const fists=merged?ld(1,'fists',0)+ld(2,'fists',0):ld(P,'fists',0);
+  // Dopo il merge i valori sono identici su P1 e P2: leggi solo da P1 per non raddoppiare
+  const fists=merged?ld(1,'fists',0):ld(P,'fists',0);
   const cur=fistDoneGlobal?5:fists%5;
   let h=`<div class="fist-row"><div class="fist-boxes">`;
   for(let i=0;i<5;i++){const checked=i<cur;h+=`<div class="fist-box ${checked?'checked':''}">${checked?'✊':''}</div>`;}
