@@ -1453,22 +1453,24 @@ function joinGame(){
   }
   const peerId='hd6-'+code;
   syncBinId=peerId; syncRoomCode=code;
-  document.getElementById('join-status').textContent='Connessione in corso…';
+  document.getElementById('join-status').textContent='[1] Creazione peer…';
   document.getElementById('join-status').className='sync-status wait';
 
   const joinPeer=new Peer({debug:0});
   joinPeer.on('open', myId=>{
+    document.getElementById('join-status').textContent='[2] Peer creato: '+myId.slice(0,12)+'… — Connessione a '+peerId.slice(0,12)+'…';
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
+      document.getElementById('join-status').textContent=`[TIMEOUT] Codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
       clearTimeout(timeout);
-      document.getElementById('join-status').textContent='✓ Connesso!';
+      document.getElementById('join-status').textContent='[3] ✓ Canale aperto! In attesa dati…';
       document.getElementById('join-status').className='sync-status ok';
     });
     joinConn.on('data', d=>{
+      document.getElementById('join-status').textContent='[4] Dati ricevuti: '+(d&&d.type||'?');
       if(!d)return;
       if(d.type==='reset'){doReset();return;}
       if(d.type==='gameover'){showGameOver(d.dp);return;}
@@ -1488,21 +1490,25 @@ function joinGame(){
         const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:2;
         const firstMerge=!!d.firstMerge;
         if(!side){
-          document.getElementById('join-status').textContent='✓ Connesso! In attesa che l\'host avvii la partita…';
+          document.getElementById('join-status').textContent='[5] ✓ Connesso! In attesa che l\'host avvii la partita…';
           document.getElementById('join-status').className='sync-status ok';
         } else {
+          document.getElementById('join-status').textContent='[5] Avvio partita…';
           showPass(nextP, firstMerge);
         }
       }
     });
     joinConn.on('error', e=>{
-      document.getElementById('join-status').textContent='Errore connessione: '+e.type;
+      document.getElementById('join-status').textContent='[ERR] '+e.type+' — '+JSON.stringify(e);
       document.getElementById('join-status').className='sync-status err';
     });
-    joinConn.on('close', ()=>showDisconnect(false));
+    joinConn.on('close', ()=>{
+      document.getElementById('join-status').textContent='[CLOSE] Connessione chiusa — showDisconnect';
+      showDisconnect(false);
+    });
   });
   joinPeer.on('error', e=>{
-    document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
+    document.getElementById('join-status').textContent='[PEER ERR] '+e.type+' — '+JSON.stringify(e);
     document.getElementById('join-status').className='sync-status err';
   });
 }
