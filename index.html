@@ -1124,6 +1124,12 @@ function svS(p,k,v){
     sv(p,k,v);
   }
 }
+// ldS: legge il valore canonico quando unificati (sempre da P1, identico a P2 dopo merge).
+// Evita che ld('M',...) ritorni il default perché 'pM_...' non esiste in localStorage.
+function ldS(p,k,d){
+  if(p==='M'||isMerged()||P==='M') return ld(1,k,d);
+  return ld(p,k,d);
+}
 function isMerged(){
   // L'unificazione è confermata solo dopo il passTurn (flag persistente)
   return !!localStorage.getItem(PFX+'mergedConfirmed');
@@ -1343,6 +1349,12 @@ function initHostPeer(){
     });
     conn.on('data', d=>handlePeerData(d,'host'));
     conn.on('close', ()=>{
+      // Mostra scappa/continua solo se la partita è effettivamente iniziata
+      if(!localStorage.getItem(PFX+'p1side')){
+        // La partita non era ancora iniziata: torna alla schermata di attesa
+        showDisconnect(true);
+        return;
+      }
       // Il giocatore 2 si è disconnesso inaspettatamente: mostra la schermata scappa/continua
       localStorage.setItem(PFX+'exitedPlayer', '2');
       showPartnerLeft(pName(2), 2);
@@ -1500,6 +1512,12 @@ function joinGame(){
       document.getElementById('join-status').className='sync-status err';
     });
     joinConn.on('close', ()=>{
+      // Mostra scappa/continua solo se la partita è effettivamente iniziata
+      if(!localStorage.getItem(PFX+'p1side')){
+        // La partita non era ancora iniziata: torna alla schermata generica
+        showDisconnect(false);
+        return;
+      }
       // Il giocatore 1 si è disconnesso inaspettatamente: mostra la schermata scappa/continua.
       // I dati di P1 in localStorage sono quelli dell'ultimo turno completato e restano intatti per il merge.
       localStorage.setItem(PFX+'exitedPlayer', '1');
@@ -2449,14 +2467,14 @@ function deletePair(pi){
       turnCrossed=Math.max(0,turnCrossed-1);
       if(act.wasTorch){torchLeft++;torchMode=true;}
     } else if(act.type==='gem'){
-      svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.amount));
+      svS(P,'gems',Math.max(0,ldS(P,'gems',0)-act.amount));
     } else if(act.type==='fist'){
       const f=Math.max(0,ld(P,'fists',0)-act.amount);
       svS(P,'fists',f);
       if(act.completedFists){
         fistDoneGlobal=false;
         localStorage.removeItem(PFX+'fistDone');
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-3));
       }
       renderFists();
     } else if(act.type==='mhp'){
@@ -2469,13 +2487,13 @@ function deletePair(pi){
         delete def[act.mkey];svS(P,'def',def);
         // Ripristina casella mostro come non barrata
         saveMk(act.mkey,false);
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-act.gemGained));
         if(act.lifeDmg){
-          const ci=ld(P,'lifeIdx',0);
+          const ci=ldS(P,'lifeIdx',0);
           svS(P,'lifeIdx',Math.max(0,ci-act.lifeDmg));
         }
         if(act.shieldUsed){
-          svS(P,'shield',ld(P,'shield',0)+act.shieldUsed);
+          svS(P,'shield',ldS(P,'shield',0)+act.shieldUsed);
         }
       }
       renderMonsters();renderLife();
@@ -2485,13 +2503,13 @@ function deletePair(pi){
     } else if(act.type==='tmodal'){
       // Richiudi il modale tesoro se era aperto e annulla la scelta
       document.getElementById('tmodal').classList.add('hidden');
-      const tres=ld(P,'tres',{life:0,torch:0,dice:0,used:0});
+      const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
       tres.used=Math.max(0,(tres.used||0)-1);
       pendingTresOpenCount=Math.max(0,pendingTresOpenCount-1);
       if(act.tresType==='life'){
         tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));
-        svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-1));
+        svS(P,'shield',Math.max(0,ldS(P,'shield',0)-3));
         renderLife();
       } else if(act.tresType==='torch'){
         tres.torch=Math.max(0,(tres.torch||0)-1);svS(P,'tres',tres);
@@ -2586,10 +2604,10 @@ function clickCell(k){
         // Annulla anche le azioni collegate (gem, fist, tesoro) della stessa coppia dopo il mark
         const related=pairActions[pi].splice(idx);
         related.slice(1).reverse().forEach(ra=>{
-          if(ra.type==='gem')svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.amount));
+          if(ra.type==='gem')svS(P,'gems',Math.max(0,ldS(P,'gems',0)-ra.amount));
           else if(ra.type==='fist'){
-            const f=Math.max(0,ld(P,'fists',0)-ra.amount);svS(P,'fists',f);
-            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
+            const f=Math.max(0,ldS(P,'fists',0)-ra.amount);svS(P,'fists',f);
+            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ldS(P,'gems',0)-3));}
             renderFists();
           } else if(ra.type==='mhp'){
             const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
@@ -2599,17 +2617,17 @@ function clickCell(k){
               const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
               delete def[ra.mkey];svS(P,'def',def);
               saveMk(ra.mkey,false);
-              svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.gemGained));
-              if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ld(P,'lifeIdx',0)-ra.lifeDmg));}
-              if(ra.shieldUsed){svS(P,'shield',ld(P,'shield',0)+ra.shieldUsed);}
+              svS(P,'gems',Math.max(0,ldS(P,'gems',0)-ra.gemGained));
+              if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ldS(P,'lifeIdx',0)-ra.lifeDmg));}
+              if(ra.shieldUsed){svS(P,'shield',ldS(P,'shield',0)+ra.shieldUsed);}
             }
             renderMonsters();renderLife();
           } else if(ra.type==='tmodal'){
             document.getElementById('tmodal').classList.add('hidden');
-            const tres=ld(P,'tres',{life:0,torch:0,dice:0,used:0});
+            const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
             tres.used=Math.max(0,(tres.used||0)-1);
             pendingTresOpenCount=Math.max(0,pendingTresOpenCount-1);
-            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
+            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ldS(P,'gems',0)-1));svS(P,'shield',Math.max(0,ldS(P,'shield',0)-3));renderLife();}
             else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-2);svS(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
             else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);sv(1,'bmax',turnSnapshot?turnSnapshot.bmax1:Math.max(3,ld(1,'bmax',3)-3));sv(2,'bmax',turnSnapshot?turnSnapshot.bmax2:Math.max(3,ld(2,'bmax',3)-3));renderDice();}
             renderTreasures();
@@ -2631,7 +2649,7 @@ function clickCell(k){
     if(marked[k]){showN('Già barrata','');return;}
     if(!canReach(k,marked)){showN('❌ Non raggiungibile con la torcia','Deve essere adiacente a una casella già barrata.');return;}
     // Usa il token: riduce il conteggio torch nel tesoro
-    const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+    const tres=ldS(P,'tres',{life:0,torch:0,dice:0});
     tres.torch=Math.max(0,(tres.torch||0)-1);
     svS(P,'tres',tres);
     saveMk(k,true);turnMarked.add(k);turnCrossed++;
@@ -2667,13 +2685,13 @@ function clickCell(k){
       const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
       def[cell.mkey]=true;svS(P,'def',def);
       saveMk(k,true);
-      const prevGems=ld(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
+      const prevGems=ldS(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
       playAudio('kill_'+cell.mkey.toLowerCase());
       if(mon.isBoss){
         let dmg=2,shieldUsed=0;
-        const shield=ld(P,'shield',0);
+        const shield=ldS(P,'shield',0);
         if(shield>0){const abs=Math.min(shield,dmg);svS(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
-        const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);svS(P,'lifeIdx',ni);
+        const ci=ldS(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);svS(P,'lifeIdx',ni);
         recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed,counted:true});
         svS(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();updTurnInfo();
         showN('👑 Boss sconfitto! +'+mon.gem+'💎 -2❤','');
@@ -2727,12 +2745,12 @@ function clickCell(k){
     pairsConsumed[usedPairIdx]=true;
 
     // ── Segna sempre la barra pugni ──
-    const f=ld(P,'fists',0)+1;svS(P,'fists',f);
+    const f=ldS(P,'fists',0)+1;svS(P,'fists',f);
     const completedFists=f>=5;
     recordAction(usedPairIdx,{type:'fist',amount:1,completedFists});
     if(completedFists&&!fistDoneGlobal){
       fistDoneGlobal=true;localStorage.setItem(PFX+'fistDone','1');
-      svS(P,'gems',ld(P,'gems',0)+3);
+      svS(P,'gems',ldS(P,'gems',0)+3);
       recordAction(usedPairIdx,{type:'gem',amount:3});
       showN('✊ 5 Pugni! +3💎','Bonus conquistato! (solo la prima volta)');
       updCnts();
@@ -2751,7 +2769,7 @@ function clickCell(k){
         hp[mk]=mon.hp;
         def[mk]=true;
         saveMk(mk,true);
-        svS(P,'gems',ld(P,'gems',0)+mon.gem);
+        svS(P,'gems',ldS(P,'gems',0)+mon.gem);
         recordAction(usedPairIdx,{type:'mhp',mkey:mk,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0,counted:false});
         monsHit.push(mon.name+' ☠');
       } else {
@@ -2782,7 +2800,7 @@ function clickCell(k){
 
   // Gemma (BX)
   if(cell.gem){
-    svS(P,'gems',ld(P,'gems',0)+1);
+    svS(P,'gems',ldS(P,'gems',0)+1);
     recordAction(usedPairIdx,{type:'gem',amount:1});
     showN('💎 +1 Gemma!','');updCnts();
   }
@@ -2851,12 +2869,12 @@ function showTModal(){
 
 function chooseTres(t){
   document.getElementById('tmodal').classList.add('hidden');
-  const tres=ld(P,'tres',{life:0,torch:0,dice:0,used:0});
+  const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
   if(t==='life'){
     if(tres.life>=1)return;
     tres.life++;tres.used=(tres.used||0)+1;svS(P,'tres',tres);
-    svS(P,'gems',ld(P,'gems',0)+1);
-    svS(P,'shield',(ld(P,'shield',0)||0)+3);
+    svS(P,'gems',ldS(P,'gems',0)+1);
+    svS(P,'shield',(ldS(P,'shield',0)||0)+3);
     recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'life'});
     showN('🛡 +1💎 & 3 Scudi!','I prossimi 3 danni alla vita saranno annullati.');
     renderLife();
@@ -2868,7 +2886,7 @@ function chooseTres(t){
   } else {
     if(tres.dice>=1)return;
     tres.dice++;tres.used=(tres.used||0)+1;svS(P,'tres',tres);
-    svS(P,'bmax',(ld(P,'bmax',3)||3)+3);
+    svS(P,'bmax',(ldS(P,'bmax',3)||3)+3);
     recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'dice'});
     showN('⬛ +3 Dadi Neri!','Il numero di dadi neri disponibili è aumentato di 3.');
     renderDice();
@@ -2878,7 +2896,7 @@ function chooseTres(t){
 
 // Clicca un token torcia: se è disponibile lo attiva (modalità scelta cella)
 function clickTorchSlot(slotIdx){
-  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  const tres=ldS(P,'tres',{life:0,torch:0,dice:0});
   const totalTokens=tres.torch||0;
   // slot 0..totalTokens-1 sono i token disponibili
   // Conta quanti sono stati usati (torchLeft tiene quanti rimangono nel turno corrente)
