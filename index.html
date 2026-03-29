@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>Horror Hospital vcorretta</title>
+<title>Horror Hospital</title>
 <!-- PWA -->
 <meta name="theme-color" content="#0a0806">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1067,6 +1067,7 @@ let fistDoneGlobal=false;
 let globalTurnNumber=0;
 let p1StartSide='left';
 let pendingMerge=false; // true quando la casella comune è stata barrata ma il turno non è ancora passato
+let pendingMergeCell=''; // quale casella ha attivato il merge pendente
 
 // Torcia
 let torchMode=false,torchLeft=0,torchAvailable=false;
@@ -1091,16 +1092,35 @@ function sv(p,k,v){localStorage.setItem(PFX+'p'+p+'_'+k,JSON.stringify(v));}
 function ld(p,k,d){const v=localStorage.getItem(PFX+'p'+p+'_'+k);return v!==null?JSON.parse(v):d;}
 // svS: salva su entrambi i giocatori quando unificati
 function svS(p,k,v){
-  sv(p,k,v);
-  if(isMerged()||P==='M'){const other=p===1?2:1;sv(other,k,v);}
+  // Se p è 'M', salva su entrambi i giocatori
+  if(p==='M'||isMerged()||P==='M'){
+    sv(1,k,v);
+    sv(2,k,v);
+  } else {
+    sv(p,k,v);
+  }
 }
 function isMerged(){
   // L'unificazione è confermata solo dopo il passTurn (flag persistente)
   return !!localStorage.getItem(PFX+'mergedConfirmed');
 }
 function getMM(){return{...ld(1,'mk',{}),...ld(2,'mk',{})};}
-function getMLife(){return Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));}
-function getMGems(){return ld(1,'gems',0)+ld(2,'gems',0);}
+function getMLife(){
+  // Dopo il merge, la vita è identica in P1 e P2, quindi leggi solo da P1
+  return ld(1,'lifeIdx',0);
+}
+function getMGems(){
+  // Dopo il merge, le gemme sono identiche in P1 e P2, quindi leggi solo da P1
+  return ld(1,'gems',0);
+}
+function getMHp(){
+  // Per il giocatore unificato, leggi i dati da P1 (sono identici in P1 e P2 dopo il merge)
+  return ld(1,'mhp',{});
+}
+function getMDef(){
+  // Per il giocatore unificato, leggi i dati da P1 (sono identici in P1 e P2 dopo il merge)
+  return ld(1,'def',{});
+}
 function effMk(){return(isMerged()||P==='M')?getMM():ld(P,'mk',{});}
 
 // ─── DADO NERO ───
@@ -1157,23 +1177,31 @@ function applyZoom(z){
 // Pinch-to-zoom
 (function(){
   let initialDist=0,initialZoom=1;
-  const wrap=document.getElementById('mapwrap');
   function getDist(t){
     const a=t[0],b=t[1];
     return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
   }
-  wrap.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){initialDist=getDist(e.touches);initialZoom=zoomLevel;e.preventDefault();}
-  },{passive:false});
-  wrap.addEventListener('touchmove',e=>{
-    if(e.touches.length===2){
-      e.preventDefault();
-      const d=getDist(e.touches);
-      let z=initialZoom*(d/initialDist);
-      z=Math.min(Math.max(z,ZOOM_STEPS[0]),ZOOM_STEPS[ZOOM_STEPS.length-1]);
-      applyZoom(z);
-    }
-  },{passive:false});
+  function initPinch(){
+    const wrap=document.getElementById('mapwrap');
+    if(!wrap)return;
+    wrap.addEventListener('touchstart',e=>{
+      if(e.touches.length===2){initialDist=getDist(e.touches);initialZoom=zoomLevel;e.preventDefault();}
+    },{passive:false});
+    wrap.addEventListener('touchmove',e=>{
+      if(e.touches.length===2){
+        e.preventDefault();
+        const d=getDist(e.touches);
+        let z=initialZoom*(d/initialDist);
+        z=Math.min(Math.max(z,ZOOM_STEPS[0]),ZOOM_STEPS[ZOOM_STEPS.length-1]);
+        applyZoom(z);
+      }
+    },{passive:false});
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initPinch);
+  } else {
+    initPinch();
+  }
 })();
 
 // ─── MULTI-DEVICE SYNC (PeerJS WebRTC) ───
@@ -1276,13 +1304,13 @@ function initHostPeer(){
     const shortCode=id.replace('hd6-','');
     syncBinId=id; syncRoomCode=shortCode;
     document.getElementById('host-code').textContent=shortCode;
-    document.getElementById('host-status').textContent=`✓ Pronto — ${pName(2)}, inserisci il codice qui sopra`;
+    document.getElementById('host-status').textContent=`✓ Pronto — Il secondo giocatore deve inserire il codice qui sopra`;
     document.getElementById('host-status').className='sync-status ok';
   });
   hostPeer.on('connection', conn=>{
     hostConn=conn;
     conn.on('open',()=>{
-      document.getElementById('host-status').textContent=`✓ ${pName(2)} connesso!`;
+      document.getElementById('host-status').textContent=`✓ Secondo giocatore connesso!`;
       // Invia stato attuale al join
       conn.send({type:'state',state:exportState(),ts:Date.now()});
       // Host: naviga alla schermata gioco (scelta lato o pass turno)
@@ -1340,7 +1368,7 @@ function joinGame(){
   joinPeer.on('open', myId=>{
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent='Timeout: codice non trovato o ${pName(1)} non in attesa.`;
+      document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
@@ -1424,6 +1452,13 @@ function handlePeerData(d, myRole){
   lastSyncTs=d.ts;
   importState(d.state);
   loadNames();
+  // Aggiorna il messaggio di connessione dell'host quando riceve il nome del Giocatore 2
+  if(myRole==='host' && document.getElementById('sc-host')?.className?.includes('active')){
+    const statusEl = document.getElementById('host-status');
+    if(statusEl && statusEl.textContent.includes('Secondo giocatore connesso')){
+      statusEl.textContent = `✓ ${pName(2)} connesso!`;
+    }
+  }
   fistDoneGlobal=!!localStorage.getItem(PFX+'fistDone');
   globalTurnNumber=parseInt(localStorage.getItem(PFX+'turnNum')||'0');
   p1StartSide=localStorage.getItem(PFX+'p1side')||'';
@@ -1624,7 +1659,7 @@ function startTurn(){
   document.getElementById('sc-pass').className='screen';
   document.getElementById('sc-game').className='screen active';
   dV.fill(0);dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
-  rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;pendingMerge=false;
+  rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;pendingMerge=false;pendingMergeCell='';
   turnCrossed=0;bUsedThisTurn=0;bFreeUsedThisTurn=0;turnMarked=new Set();pairActions=[[],[]];
   // Snapshot stato inizio turno
   const cp=isMerged()?'M':P;
@@ -1634,8 +1669,8 @@ function startTurn(){
     tres1:JSON.stringify(ld(1,'tres',{life:0,torch:0,dice:0})),
     tres2:JSON.stringify(ld(2,'tres',{life:0,torch:0,dice:0})),
     bmax1:ld(1,'bmax',3), bmax2:ld(2,'bmax',3),
-    mhp:JSON.stringify(ld(P,'mhp',{})),
-    def:JSON.stringify(ld(P,'def',{})),
+    mhp:JSON.stringify((isMerged()||P==='M')?getMHp():ld(P,'mhp',{})),
+    def:JSON.stringify((isMerged()||P==='M')?getMDef():ld(P,'def',{})),
     mk1:JSON.stringify(ld(1,'mk',{})), mk2:JSON.stringify(ld(2,'mk',{})),
     fists:ld(P,'fists',0), fistDone:fistDoneGlobal,
     lifeIdx1:ld(1,'lifeIdx',0), lifeIdx2:ld(2,'lifeIdx',0),
@@ -1653,6 +1688,9 @@ function passTurn(){
   // ── Esegui l'unificazione se pendingMerge è attivo ──
   if(pendingMerge){
     pendingMerge=false;
+    // Ora che il merge è confermato, incrementa turnCrossed per la casella in comune
+    turnCrossed++;
+    pendingMergeCell=''; // reset
 
     // Segna l'unificazione come confermata (da ora isMerged() ritorna true)
     localStorage.setItem(PFX+'mergedConfirmed','1');
@@ -1808,7 +1846,7 @@ function showGameOver(dp){
 }
 
 function checkVictory(){
-  const def=ld(P,'def',{});
+  const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
   const allDead=MK.every(mk=>!!def[mk]);
   if(!allDead)return false;
   triggerVictory();
@@ -1945,9 +1983,12 @@ function buildSVG(){
     const cellW=CW*(1+cw)+(cw);   // extra cols add CW+1 each
     const cellH=CH*(1+ch)+(ch);
     const isMarked=!!myM[k];
-    const isP1=!merged&&isMarked&&!otM[k]&&P===1;
-    const isP2=!merged&&isMarked&&!otM[k]&&P===2;
-    const isBoth=!merged&&isMarked&&!!otM[k];
+    // Casella pendingMerge: trattala come se fosse solo del giocatore corrente
+    const isPendingMergeCell=(pendingMerge&&k===pendingMergeCell);
+    const isP1=!merged&&isMarked&&((!otM[k]&&P===1)||(isPendingMergeCell&&P===1));
+    const isP2=!merged&&isMarked&&((!otM[k]&&P===2)||(isPendingMergeCell&&P===2));
+    // isBoth deve essere false se questa è la casella pendingMerge
+    const isBoth=!merged&&isMarked&&!!otM[k]&&!isPendingMergeCell;
     const isMC=merged&&isMarked;
 
     // Highlight
@@ -2283,12 +2324,13 @@ function deletePair(pi){
       }
       renderFists();
     } else if(act.type==='mhp'){
-      const hp=ld(P,'mhp',{});
+      const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
       hp[act.mkey]=Math.max(0,(hp[act.mkey]||0)-act.amount);
       svS(P,'mhp',hp);
       if(act.counted)turnCrossed=Math.max(0,turnCrossed-1);
       if(act.killed){
-        const def=ld(P,'def',{});delete def[act.mkey];svS(P,'def',def);
+        const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
+        delete def[act.mkey];svS(P,'def',def);
         // Ripristina casella mostro come non barrata
         saveMk(act.mkey,false);
         svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
@@ -2359,7 +2401,7 @@ function clearDice(){
   torchMode=false; activeTorchSlot=-1;
   dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
   bUsedThisTurn=0;bFreeUsedThisTurn=0;pairActions=[[],[]];
-  turnCrossed=0; turnMarked=new Set(); pendingMerge=false;
+  turnCrossed=0; turnMarked=new Set(); pendingMerge=false; pendingMergeCell='';
   document.getElementById('tmodal').classList.add('hidden');
   if(rolled)renderDice();
   renderAll();
@@ -2392,7 +2434,11 @@ function clickCell(k){
       const idx=pairActions[pi].findIndex(a=>a.type==='mark'&&a.k===k);
       if(idx>=0){
         const act=pairActions[pi][idx];
-        saveMk(k,false);turnMarked.delete(k);turnCrossed=Math.max(0,turnCrossed-1);
+        saveMk(k,false);turnMarked.delete(k);
+        // Decrementa turnCrossed solo se NON era una casella pendingMerge
+        if(!act.isPendingMerge){
+          turnCrossed=Math.max(0,turnCrossed-1);
+        }
         if(act.wasTorch){torchLeft++;torchMode=true;}
         pairsConsumed[pi]=false;
         // Annulla anche le azioni collegate (gem, fist, tesoro) della stessa coppia dopo il mark
@@ -2404,11 +2450,12 @@ function clickCell(k){
             if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
             renderFists();
           } else if(ra.type==='mhp'){
-            const hp=ld(P,'mhp',{});
+            const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
             hp[ra.mkey]=Math.max(0,(hp[ra.mkey]||0)-ra.amount);
             svS(P,'mhp',hp);
             if(ra.killed){
-              const def=ld(P,'def',{});delete def[ra.mkey];svS(P,'def',def);
+              const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
+              delete def[ra.mkey];svS(P,'def',def);
               saveMk(ra.mkey,false);
               svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.gemGained));
               if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ld(P,'lifeIdx',0)-ra.lifeDmg));}
@@ -2425,7 +2472,7 @@ function clickCell(k){
           }
         });
         // Annulla anche pendingMerge se questa casella lo aveva attivato
-        if(pendingMerge&&act.k===k)pendingMerge=false;
+        if(pendingMerge&&act.k===k){pendingMerge=false;pendingMergeCell='';}
         updCnts();buildSVG();renderMonsters();updTurnInfo();return;
       }
     }
@@ -2454,7 +2501,7 @@ function clickCell(k){
   // ── MOSTRO ──
   if(cell.t==='M'||cell.t==='BOSS'){
     // Mostro già sconfitto: non selezionabile
-    const defCheck=ld(P,'def',{});
+    const defCheck=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
     if(defCheck[cell.mkey]){showN('✓ Già sconfitto',`${MONS[cell.mkey]?.name} è stato eliminato.`);return;}
     if(turnCrossed>=MAX_CROSS){showN('✔ Turno completo','Premi Passa Turno.');return;}
     const sums=getSums();
@@ -2468,12 +2515,13 @@ function clickCell(k){
     if(pairIdx<0){showN('❌ Mancato!',`Numeri attivi: ${unl.join(', ')} · Coppie: ${sums.join(', ')}`);return;}
     pairsConsumed[pairIdx]=true;
     turnCrossed++; // colpire un mostro conta come azione del turno (evita penalità)
-    const hp=ld(P,'mhp',{});
+    const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
     hp[cell.mkey]=(hp[cell.mkey]||0)+1;
     const killed=hp[cell.mkey]>=mon.hp;
     if(killed){
       hp[cell.mkey]=mon.hp;
-      const def=ld(P,'def',{});def[cell.mkey]=true;svS(P,'def',def);
+      const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
+      def[cell.mkey]=true;svS(P,'def',def);
       saveMk(k,true);
       const prevGems=ld(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
       playAudio('kill_'+cell.mkey.toLowerCase());
@@ -2548,8 +2596,8 @@ function clickCell(k){
     renderFists();
 
     // ── Ogni mostro vivo subisce 1 danno ──
-    const hp=ld(P,'mhp',{});
-    const def=ld(P,'def',{});
+    const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
+    const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
     let monsHit=[];
     MK.forEach(mk=>{
       if(def[mk])return; // già morto
@@ -2607,10 +2655,12 @@ function clickCell(k){
 
   // Merge — la casella viene barrata subito, ma l'unificazione avviene solo al passa turno
   if(!isMerged()&&!pendingMerge&&P!=='M'&&otM[k]){
-    saveMk(k,true);turnMarked.add(k);turnCrossed++;
-    recordAction(usedPairIdx,{type:'mark',k,wasTorch:false});
+    saveMk(k,true);turnMarked.add(k);
+    // NON incrementare turnCrossed qui - verrà fatto al passa turno
+    recordAction(usedPairIdx,{type:'mark',k,wasTorch:false,isPendingMerge:true});
     pairsConsumed[usedPairIdx]=true;
     pendingMerge=true;
+    pendingMergeCell=k; // salva quale casella ha attivato il merge
     playAudio('merge');
     buildSVG();updCnts();updTurnInfo();return;
   }
@@ -2760,7 +2810,9 @@ function renderFists(){
 }
 
 function renderMonsters(){
-  const marked=effMk(),unl=getUnlocked(marked),hp=ld(P,'mhp',{}),def=ld(P,'def',{});
+  const marked=effMk(),unl=getUnlocked(marked);
+  const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
+  const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
   let h='';
   MK.forEach(mk=>{
     const mon=MONS[mk],cur=hp[mk]||0,dead=!!def[mk];
