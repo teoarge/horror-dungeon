@@ -1351,16 +1351,10 @@ function initHostPeer(){
     });
     conn.on('data', d=>handlePeerData(d,'host'));
     conn.on('close', ()=>{
-      // Ignora close se la connessione non era mai stata aperta (es. handshake fallito)
-      if(!hostConnOpened) return;
-      // Mostra scappa/continua solo se la partita è effettivamente iniziata
-      if(!localStorage.getItem(PFX+'p1side')){
-        showDisconnect(true);
-        return;
-      }
-      // Il giocatore 2 si è disconnesso inaspettatamente: mostra la schermata scappa/continua
-      localStorage.setItem(PFX+'exitedPlayer', '2');
-      showPartnerLeft(pName(2), 2);
+      if(!hostConnOpened)return;
+      if(!localStorage.getItem(PFX+'p1side')){showDisconnect(true);return;}
+      localStorage.setItem(PFX+'exitedPlayer','2');
+      showPartnerLeft(pName(2),2);
     });
     conn.on('error', e=>console.warn('hostConn error',e));
   });
@@ -1517,16 +1511,10 @@ function joinGame(){
       document.getElementById('join-status').className='sync-status err';
     });
     joinConn.on('close', ()=>{
-      // Ignora close se la connessione non era mai stata aperta (es. handshake fallito)
-      if(!joinConnOpened) return;
-      // Mostra scappa/continua solo se la partita è effettivamente iniziata
-      if(!localStorage.getItem(PFX+'p1side')){
-        showDisconnect(false);
-        return;
-      }
-      // Il giocatore 1 si è disconnesso inaspettatamente: mostra la schermata scappa/continua.
-      localStorage.setItem(PFX+'exitedPlayer', '1');
-      showPartnerLeft(pName(1), 1);
+      if(!joinConnOpened)return;
+      if(!localStorage.getItem(PFX+'p1side')){showDisconnect(false);return;}
+      localStorage.setItem(PFX+'exitedPlayer','1');
+      showPartnerLeft(pName(1),1);
     });
   });
   joinPeer.on('error', e=>{
@@ -1899,7 +1887,7 @@ function passTurn(){
     const mergedShield=(ld(1,'shield',0))+(ld(2,'shield',0));
     sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
 
-    // 7. Unifica slot dadi neri: 3 base + 3 se almeno uno dei due aveva la ricompensa dado nero
+    // 7. Unifica slot dadi neri: 3 base + 3 se almeno uno aveva la ricompensa dado nero
     const bmax=(mergedTres.dice||0)>=1?6:3;
     sv(1,'bmax',bmax);sv(2,'bmax',bmax);
 
@@ -2028,10 +2016,10 @@ function showVictory(){
 
   // Punteggio unico condiviso tra i due giocatori
   // Dopo il merge P1 e P2 hanno valori identici: leggi solo da P1 per non raddoppiare
-  const merged=isMerged();
-  const totalGems=merged?ld(1,'gems',0):ld(1,'gems',0)+ld(2,'gems',0);
+  const mergedV=isMerged();
+  const totalGems=mergedV?ld(1,'gems',0):ld(1,'gems',0)+ld(2,'gems',0);
   const tr1=ld(1,'tres',{life:0,torch:0,dice:0});
-  const tr2=merged?{life:0,torch:0,dice:0}:ld(2,'tres',{life:0,torch:0,dice:0});
+  const tr2=mergedV?{life:0,torch:0,dice:0}:ld(2,'tres',{life:0,torch:0,dice:0});
   const totalTres=(tr1.life||0)+(tr1.torch||0)+(tr1.dice||0)+(tr2.life||0)+(tr2.torch||0)+(tr2.dice||0);
   const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
   const penIdx=Math.min(worstLife+1,MAX_LIFE_IDX);
