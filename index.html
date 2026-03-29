@@ -1339,7 +1339,9 @@ function initHostPeer(){
   });
   hostPeer.on('connection', conn=>{
     hostConn=conn;
+    let hostConnOpened=false;
     conn.on('open',()=>{
+      hostConnOpened=true;
       document.getElementById('host-status').textContent=`✓ Secondo giocatore connesso!`;
       // Invia stato attuale al join
       conn.send({type:'state',state:exportState(),ts:Date.now()});
@@ -1349,9 +1351,10 @@ function initHostPeer(){
     });
     conn.on('data', d=>handlePeerData(d,'host'));
     conn.on('close', ()=>{
+      // Ignora close se la connessione non era mai stata aperta (es. handshake fallito)
+      if(!hostConnOpened) return;
       // Mostra scappa/continua solo se la partita è effettivamente iniziata
       if(!localStorage.getItem(PFX+'p1side')){
-        // La partita non era ancora iniziata: torna alla schermata di attesa
         showDisconnect(true);
         return;
       }
@@ -1475,7 +1478,9 @@ function joinGame(){
       document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
+    let joinConnOpened=false;
     joinConn.on('open',()=>{
+      joinConnOpened=true;
       clearTimeout(timeout);
       document.getElementById('join-status').textContent='✓ Connesso!';
       document.getElementById('join-status').className='sync-status ok';
@@ -1512,14 +1517,14 @@ function joinGame(){
       document.getElementById('join-status').className='sync-status err';
     });
     joinConn.on('close', ()=>{
+      // Ignora close se la connessione non era mai stata aperta (es. handshake fallito)
+      if(!joinConnOpened) return;
       // Mostra scappa/continua solo se la partita è effettivamente iniziata
       if(!localStorage.getItem(PFX+'p1side')){
-        // La partita non era ancora iniziata: torna alla schermata generica
         showDisconnect(false);
         return;
       }
       // Il giocatore 1 si è disconnesso inaspettatamente: mostra la schermata scappa/continua.
-      // I dati di P1 in localStorage sono quelli dell'ultimo turno completato e restano intatti per il merge.
       localStorage.setItem(PFX+'exitedPlayer', '1');
       showPartnerLeft(pName(1), 1);
     });
