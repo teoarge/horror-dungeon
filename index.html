@@ -14,7 +14,7 @@
 if('serviceWorker' in navigator){
   const sw=`
 self.addEventListener('install',e=>e.waitUntil(
-  caches.open('hd6-v1').then(c=>c.addAll([location.pathname]))
+  caches.open('hd6-v2').then(c=>c.addAll([location.pathname]))
 ));
 self.addEventListener('fetch',e=>e.respondWith(
   caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match(e.request)))
@@ -47,6 +47,18 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
 .go-epitaph{font-family:'Crimson Text',Georgia,serif;font-size:14px;color:#a89068;line-height:2;max-width:310px;font-style:italic;margin-bottom:28px;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;}
 .go-score{font-family:'Cinzel',serif;font-size:15px;color:#c8a020;margin-bottom:20px;padding:12px;border:1px solid rgba(200,160,32,.3);border-radius:8px;background:rgba(200,160,32,.06);text-align:center;}
 .go-restart{font-family:'Cinzel',serif;font-size:12px;padding:10px 24px;border-radius:7px;border:1.5px solid #8b0000;background:rgba(139,0,0,.12);color:#cc4040;cursor:pointer;letter-spacing:2px;}
+.exit-btn{font-family:'Cinzel',serif;font-size:9px;padding:4px 10px;border-radius:5px;border:1.5px solid rgba(139,0,0,.5);background:rgba(139,0,0,.08);color:#cc4040;cursor:pointer;white-space:nowrap;margin-top:4px;}
+.exit-btn:hover{background:rgba(139,0,0,.2);}
+#sc-partner-left{background:#050302;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
+#sc-partner-left.active{display:flex;}
+.pl-icon{font-size:52px;margin-bottom:18px;animation:bp 2s ease-in-out infinite;}
+.pl-title{font-family:'Cinzel',serif;font-size:16px;color:#8b0000;letter-spacing:3px;margin-bottom:16px;text-shadow:0 0 20px rgba(180,0,0,.7);}
+.pl-msg{font-family:'Crimson Text',Georgia,serif;font-size:13px;color:#a89068;line-height:2;max-width:300px;margin-bottom:28px;font-style:italic;border-left:2px solid #6a1a0a;padding-left:14px;text-align:left;}
+.pl-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:260px;}
+.pl-btn-run{font-family:'Cinzel',serif;font-size:13px;padding:12px 20px;border-radius:8px;border:1.5px solid #8b0000;background:rgba(139,0,0,.1);color:#cc4040;cursor:pointer;letter-spacing:1px;}
+.pl-btn-run:hover{background:rgba(139,0,0,.25);}
+.pl-btn-stay{font-family:'Cinzel',serif;font-size:13px;padding:12px 20px;border-radius:8px;border:1.5px solid #c8a020;background:rgba(200,160,32,.1);color:#c8a020;cursor:pointer;letter-spacing:1px;}
+.pl-btn-stay:hover{background:rgba(200,160,32,.25);}
 /* VICTORY */
 #sc-victory{background:#050a02;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
 #sc-victory.active{display:flex;}
@@ -403,6 +415,17 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
   </div>
 </div>
 
+<!-- Schermata compagno uscito: messaggio horror + scelta -->
+<div id="sc-partner-left" class="screen">
+  <div class="pl-icon">🩸</div>
+  <div class="pl-title">UN GRIDO LONTANO</div>
+  <div class="pl-msg" id="pl-msg">Senti delle grida di terrore in lontananza.</div>
+  <div class="pl-btns">
+    <button class="pl-btn-run" onclick="partnerLeftRun()">🚪 Scappa — Torna al menù</button>
+    <button class="pl-btn-stay" onclick="partnerLeftContinue()">🔦 Continua — Vai avanti da solo</button>
+  </div>
+</div>
+
 <!-- Schermata host: mostra codice -->
 <div id="sc-host" class="screen">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;">
@@ -490,6 +513,7 @@ body{background:#0a0806;font-family:Georgia,serif;color:#f0e8d0;min-height:100vh
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:6px;">
       <button onclick="resetAll()" style="font-size:9px;color:#5a4a2a;background:none;border:1px solid rgba(90,74,42,.3);border-radius:4px;padding:3px 8px;cursor:pointer;">🔄 Reset</button>
+      <button id="exit-game-btn" onclick="exitGame()" class="exit-btn" style="display:none;">🚪 Esci</button>
       <div><div class="pname-cur" id="pcur">—</div><div style="font-size:8px;color:#6a5a3a;">Turno in corso</div></div>
     </div>
     <div><div class="vpbox" id="vpv">0</div><div class="vplbl">PV</div></div>
@@ -1100,6 +1124,10 @@ function svS(p,k,v){
     sv(p,k,v);
   }
 }
+function ldS(p,k,d){
+  if(p==='M'||isMerged()||P==='M') return ld(1,k,d);
+  return ld(p,k,d);
+}
 function isMerged(){
   // L'unificazione è confermata solo dopo il passTurn (flag persistente)
   return !!localStorage.getItem(PFX+'mergedConfirmed');
@@ -1231,7 +1259,7 @@ function copyHostCode(){
   });
 }
 function allScreensOff(){
-  ['sc-mode','sc-host','sc-join','sc-side','sc-names','sc-pass','sc-game','sc-gameover','sc-victory','sc-disconnect'].forEach(id=>{
+  ['sc-mode','sc-host','sc-join','sc-side','sc-names','sc-pass','sc-game','sc-gameover','sc-victory','sc-disconnect','sc-partner-left'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.className='screen';
   });
 }
@@ -1327,12 +1355,76 @@ function initHostPeer(){
   });
 }
 
-function createSyncBin(){} // stub — non usato con PeerJS
+// Modalità "continua da solo" dopo disconnessione del partner
+let soloMode=false;        // true quando si gioca da soli dopo uscita del partner
+let soloActivePlayer=1;    // il giocatore ancora connesso (1 o 2)
+
+function exitGame(){
+  if(deviceRole==='single')return;
+  if(!confirm('Vuoi uscire? Lo stato della partita verrà salvato per permettere al tuo compagno di continuare da solo.'))return;
+  // Salva snapshot corrente (lo stato è già in localStorage, non serve fare nulla di extra)
+  // Notifica l'altro giocatore con il messaggio horror
+  const myP=deviceRole==='host'?1:2;
+  const partnerName=pName(myP);
+  const payload={type:'partner_exit', exitedPlayer:myP, exitedName:partnerName, ts:Date.now()};
+  try{
+    if(deviceRole==='host'&&hostConn&&hostConn.open)hostConn.send(payload);
+    if(deviceRole==='join'&&joinConn&&joinConn.open)joinConn.send(payload);
+  }catch(e){}
+  // Disconnetti senza cancellare i dati
+  setTimeout(()=>{
+    try{if(hostPeer)hostPeer.destroy();}catch(e){}
+    hostPeer=null;hostConn=null;joinConn=null;
+    deviceRole='single';
+    allScreensOff();
+    document.getElementById('sc-mode').className='active';
+    const exitBtn=document.getElementById('exit-game-btn');
+    if(exitBtn)exitBtn.style.display='none';
+  },300);
+}
+
+function showPartnerLeft(exitedName, exitedPlayer){
+  allScreensOff();
+  const sc=document.getElementById('sc-partner-left');
+  if(sc)sc.className='screen active';
+  const msg=document.getElementById('pl-msg');
+  if(msg)msg.textContent=`Senti delle grida di terrore in lontananza. Riconosci la voce del tuo compagno ${exitedName} che piano piano si affievolisce, fino a scomparire del tutto. In quel momento, capisci che sei solo. Lo rivedrai ancora? Quello che sai, è che ti restano solo due scelte... Scappare o continuare da solo`;
+  // Salva il giocatore uscito per uso futuro
+  localStorage.setItem(PFX+'exitedPlayer', String(exitedPlayer));
+}
+
+function partnerLeftRun(){
+  // Scappa: torna al menù senza cancellare i dati
+  try{if(hostPeer)hostPeer.destroy();}catch(e){}
+  hostPeer=null;hostConn=null;joinConn=null;
+  deviceRole='single';
+  allScreensOff();
+  document.getElementById('sc-mode').className='active';
+}
+
+function partnerLeftContinue(){
+  // Continua da solo: modalità single con solo il giocatore connesso
+  try{if(hostPeer)hostPeer.destroy();}catch(e){}
+  hostPeer=null;hostConn=null;joinConn=null;
+  const exitedPlayer=parseInt(localStorage.getItem(PFX+'exitedPlayer')||'0');
+  soloActivePlayer=exitedPlayer===1?2:1; // chi rimane è l'altro
+  soloMode=true;
+  deviceRole='single';
+  P=soloActivePlayer;
+  // Nascondi il bottone Esci
+  const exitBtn=document.getElementById('exit-game-btn');
+  if(exitBtn)exitBtn.style.display='none';
+  // Riparte dalla schermata di passaggio turno del giocatore attivo
+  allScreensOff();
+  showPass(soloActivePlayer);
+}
 
 function showDisconnect(isHost){
   // Non mostrare se siamo già in gameover o victory
   const cur=['sc-gameover','sc-victory'].find(id=>document.getElementById(id)?.className?.includes('active'));
   if(cur)return;
+  // Se è un'uscita volontaria (partner_exit), la gestione è già in showPartnerLeft
+  // Questa funzione gestisce solo le disconnessioni inaspettate (crash/rete)
   allScreensOff();
   const el=document.getElementById('sc-disconnect');
   if(el)el.className='screen active';
@@ -1361,26 +1453,29 @@ function joinGame(){
   }
   const peerId='hd6-'+code;
   syncBinId=peerId; syncRoomCode=code;
-  document.getElementById('join-status').textContent='Connessione in corso…';
+  document.getElementById('join-status').textContent='[1] Creazione peer…';
   document.getElementById('join-status').className='sync-status wait';
 
   const joinPeer=new Peer({debug:0});
   joinPeer.on('open', myId=>{
+    document.getElementById('join-status').textContent='[2] Peer creato: '+myId.slice(0,12)+'… — Connessione a '+peerId.slice(0,12)+'…';
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
+      document.getElementById('join-status').textContent=`[TIMEOUT] Codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
       clearTimeout(timeout);
-      document.getElementById('join-status').textContent='✓ Connesso!';
+      document.getElementById('join-status').textContent='[3] ✓ Canale aperto! In attesa dati…';
       document.getElementById('join-status').className='sync-status ok';
     });
     joinConn.on('data', d=>{
+      document.getElementById('join-status').textContent='[4] Dati ricevuti: '+(d&&d.type||'?');
       if(!d)return;
       if(d.type==='reset'){doReset();return;}
       if(d.type==='gameover'){showGameOver(d.dp);return;}
       if(d.type==='victory'){showVictory();return;}
+      if(d.type==='partner_exit'){showPartnerLeft(d.exitedName||pName(d.exitedPlayer),d.exitedPlayer);return;}
       if(d.type==='state'){
         if(d.ts<=lastSyncTs)return;
         lastSyncTs=d.ts;
@@ -1395,21 +1490,25 @@ function joinGame(){
         const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:2;
         const firstMerge=!!d.firstMerge;
         if(!side){
-          document.getElementById('join-status').textContent='✓ Connesso! In attesa che l\'host avvii la partita…';
+          document.getElementById('join-status').textContent='[5] ✓ Connesso! In attesa che l\'host avvii la partita…';
           document.getElementById('join-status').className='sync-status ok';
         } else {
+          document.getElementById('join-status').textContent='[5] Avvio partita…';
           showPass(nextP, firstMerge);
         }
       }
     });
     joinConn.on('error', e=>{
-      document.getElementById('join-status').textContent='Errore connessione: '+e.type;
+      document.getElementById('join-status').textContent='[ERR] '+e.type+' — '+JSON.stringify(e);
       document.getElementById('join-status').className='sync-status err';
     });
-    joinConn.on('close', ()=>showDisconnect(false));
+    joinConn.on('close', ()=>{
+      document.getElementById('join-status').textContent='[CLOSE] Connessione chiusa — showDisconnect';
+      showDisconnect(false);
+    });
   });
   joinPeer.on('error', e=>{
-    document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
+    document.getElementById('join-status').textContent='[PEER ERR] '+e.type+' — '+JSON.stringify(e);
     document.getElementById('join-status').className='sync-status err';
   });
 }
@@ -1447,6 +1546,7 @@ function handlePeerData(d, myRole){
   if(d.type==='reset'){doReset();return;}
   if(d.type==='gameover'){showGameOver(d.dp);return;}
   if(d.type==='victory'){showVictory();return;}
+  if(d.type==='partner_exit'){showPartnerLeft(d.exitedName||pName(d.exitedPlayer),d.exitedPlayer);return;}
   if(d.type!=='state')return;
   if(d.ts<=lastSyncTs)return;
   lastSyncTs=d.ts;
@@ -1547,6 +1647,18 @@ function showPass(nextP, firstMerge=false){
 
   const merged=isMerged();
 
+  // ── SOLO MODE: dopo ricongiungimento mostra solo pulsante e poi vai in M ──
+  if(soloMode){
+    P=soloActivePlayer;
+    const pw=document.getElementById('pass-who'),pm=document.getElementById('pass-msg');
+    const exitedPlayer=parseInt(localStorage.getItem(PFX+'exitedPlayer')||'0');
+    const exitedName=pName(exitedPlayer);
+    if(pw){pw.textContent=`${pName(soloActivePlayer)} — Continua da solo`;pw.className='pass-player p'+soloActivePlayer;}
+    if(pm)pm.innerHTML=`Stai esplorando da solo — ${exitedName} è disconnesso.<br><span style="font-size:10px;color:#8a7060;">Cerca una stanza in comune per ricongiungerti.</span>`;
+    const btn=document.getElementById('pass-btn-start');if(btn)btn.disabled=false;
+    return;
+  }
+
   if(deviceRole==='single'){
     // Modalità singolo: alterna P1/P2, o M se unificati
     P=merged?'M':nextP;
@@ -1637,44 +1749,51 @@ function showPass(nextP, firstMerge=false){
     if(deviceRole==='single'){
       pm.innerHTML=`Passa il dispositivo a ${pName(P)} e premi Inizia Turno.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     } else {
-      pm.innerHTML=`È il tuo turno, Giocatore ${P}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
+      pm.innerHTML=`È il tuo turno, ${pName(P)}.<br><span style="font-size:10px;color:#8a7060;">Lato: <b style="color:#c8a020">${sideIt}</b></span><br><span style="font-size:10px;color:#50dd50;">⬛ Dado nero: GRATUITO (illimitato)</span>`;
     }
   }
 }
 
 function startTurn(){
-  // In modalità multi-device: verifica che sia il proprio turno
-  if(deviceRole==='host'&&!isMerged()){
-    if(P!==1){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
-  }
-  if(deviceRole==='join'&&!isMerged()){
-    if(P!==2){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
-  }
-  // In modalità unificata multi-device: verifica che sia il proprio turno
-  if(deviceRole!=='single'&&isMerged()){
-    const isHostTurn=(globalTurnNumber%2===0);
-    if(deviceRole==='host'&&!isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
-    if(deviceRole==='join'&&isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
+  // In solo-mode: bypassa i controlli multi-device, il turno è sempre del giocatore attivo
+  if(!soloMode){
+    // In modalità multi-device: verifica che sia il proprio turno
+    if(deviceRole==='host'&&!isMerged()){
+      if(P!==1){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
+    }
+    if(deviceRole==='join'&&!isMerged()){
+      if(P!==2){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
+    }
+    // In modalità unificata multi-device: verifica che sia il proprio turno
+    if(deviceRole!=='single'&&isMerged()){
+      const isHostTurn=(globalTurnNumber%2===0);
+      if(deviceRole==='host'&&!isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(2)} finisca il suo turno.`);return;}
+      if(deviceRole==='join'&&isHostTurn){showN('⏳ Non è il tuo turno',`Attendi che ${pName(1)} finisca il suo turno.`);return;}
+    }
   }
   document.getElementById('sc-pass').className='screen';
   document.getElementById('sc-game').className='screen active';
   dV.fill(0);dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
   rolled=false;torchMode=false;torchLeft=0;torchAvailable=false;activeTorchSlot=-1;pendingMerge=false;pendingMergeCell='';
   turnCrossed=0;bUsedThisTurn=0;bFreeUsedThisTurn=0;turnMarked=new Set();pairActions=[[],[]];
+  // pendingTresOpenCount parte dal totale di ricompense già usate nei turni precedenti
+  const mergedNowT=isMerged()||P==='M';
+  const tr1i=ld(1,'tres',{used:0}),tr2i=mergedNowT?{used:0}:ld(2,'tres',{used:0});
+  pendingTresOpenCount=(tr1i.used||0)+(tr2i.used||0);
   // Snapshot stato inizio turno
   const cp=isMerged()?'M':P;
   turnSnapshot={
     gems1:ld(1,'gems',0), gems2:ld(2,'gems',0),
     shield1:ld(1,'shield',0), shield2:ld(2,'shield',0),
-    tres1:JSON.stringify(ld(1,'tres',{life:0,torch:0,dice:0})),
-    tres2:JSON.stringify(ld(2,'tres',{life:0,torch:0,dice:0})),
+    tres1:JSON.stringify(ld(1,'tres',{life:0,torch:0,dice:0,used:0})),
+    tres2:JSON.stringify(ld(2,'tres',{life:0,torch:0,dice:0,used:0})),
     bmax1:ld(1,'bmax',3), bmax2:ld(2,'bmax',3),
     mhp:JSON.stringify((isMerged()||P==='M')?getMHp():ld(P,'mhp',{})),
     def:JSON.stringify((isMerged()||P==='M')?getMDef():ld(P,'def',{})),
     mk1:JSON.stringify(ld(1,'mk',{})), mk2:JSON.stringify(ld(2,'mk',{})),
     fists:ld(P,'fists',0), fistDone:fistDoneGlobal,
     lifeIdx1:ld(1,'lifeIdx',0), lifeIdx2:ld(2,'lifeIdx',0),
-    torchAvailable:false, torchLeft:0,
+    torchAvailable:torchAvailable, torchLeft:torchLeft,
   };
   renderAll();renderBlackDieStatus();setTimeout(()=>zm(0),80);
   // Notifica l'altro dispositivo che il turno è iniziato (così aggiorna la sua schermata di attesa)
@@ -1743,12 +1862,13 @@ function passTurn(){
     const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
     sv(1,'lifeIdx',worstLife);sv(2,'lifeIdx',worstLife);
 
-    // 5. Unifica tesori: somma torch, max per life e dice
-    const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+    // 5. Unifica tesori: somma tutto
+    const tr1=ld(1,'tres',{life:0,torch:0,dice:0,used:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0,used:0});
     const mergedTres={
-      life:Math.max(tr1.life||0,tr2.life||0),
+      life:(tr1.life||0)+(tr2.life||0),
       torch:(tr1.torch||0)+(tr2.torch||0),
-      dice:Math.max(tr1.dice||0,tr2.dice||0)
+      dice:(tr1.dice||0)+(tr2.dice||0),
+      used:(tr1.used||0)+(tr2.used||0)
     };
     sv(1,'tres',mergedTres);sv(2,'tres',mergedTres);
 
@@ -1756,8 +1876,8 @@ function passTurn(){
     const mergedShield=(ld(1,'shield',0))+(ld(2,'shield',0));
     sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
 
-    // 7. Unifica slot dadi neri: il massimo
-    const bmax=Math.max(ld(1,'bmax',3),ld(2,'bmax',3));
+    // 7. Unifica slot dadi neri: 6 se almeno uno aveva dado nero
+    const bmax=(mergedTres.dice||0)>=1?6:3;
     sv(1,'bmax',bmax);sv(2,'bmax',bmax);
 
     // 8. Unifica pugni: somma
@@ -1771,7 +1891,16 @@ function passTurn(){
     if(deviceRole!=='single')pushState('M');
     // Controlla vittoria (potrebbe essere avvenuta per somma danni)
     if(checkVictory())return;
-    showPass('M', true);
+    // Se eravamo in solo mode, mostra messaggio ricongiungimento speciale
+    if(soloMode){
+      soloMode=false;
+      showPass('M', false);
+      // Sostituisce il messaggio nella pass screen con quello del ricongiungimento
+      const pm=document.getElementById('pass-msg');
+      if(pm)pm.innerHTML=`Hai trovato il tuo compagno paralizzato dalla paura. Vedendoti, ritrova il coraggio per proseguire insieme a te, ma dovrai guidarlo tu tra le stanze.<br><br><span style="font-size:10px;color:#c8a020;">Ora giocate in modalità giocatore unificato.</span>`;
+    } else {
+      showPass('M', true);
+    }
     return;
   }
 
@@ -1794,8 +1923,9 @@ function passTurn(){
   commitTurn(prevP);
   globalTurnNumber++;
   localStorage.setItem(PFX+'turnNum',globalTurnNumber);
-  // Calcola il prossimo giocatore/dispositivo
-  const nextP=P==='M'?'M':(P===1?2:1);
+
+  // In solo mode torna sempre allo stesso giocatore; altrimenti logica normale
+  const nextP=soloMode?soloActivePlayer:(P==='M'?'M':(P===1?2:1));
   if(deviceRole!=='single')pushState(nextP);
   showPass(nextP);
 }
@@ -1874,8 +2004,9 @@ function showVictory(){
   document.getElementById('sc-victory').className='screen active';
 
   // Punteggio unico condiviso tra i due giocatori
-  const totalGems=ld(1,'gems',0)+ld(2,'gems',0);
-  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+  const mergedV=isMerged();
+  const totalGems=mergedV?ld(1,'gems',0):ld(1,'gems',0)+ld(2,'gems',0);
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=mergedV?{life:0,torch:0,dice:0}:ld(2,'tres',{life:0,torch:0,dice:0});
   const totalTres=(tr1.life||0)+(tr1.torch||0)+(tr1.dice||0)+(tr2.life||0)+(tr2.torch||0)+(tr2.dice||0);
   const worstLife=Math.max(ld(1,'lifeIdx',0),ld(2,'lifeIdx',0));
   const penIdx=Math.min(worstLife+1,MAX_LIFE_IDX);
@@ -1900,6 +2031,9 @@ function renderAll(){
   const pc=document.getElementById('pcur'),badge=document.getElementById('merged-badge');
   if(merged){pc.textContent=pName('M');pc.className='pname-cur pm';badge.classList.remove('hidden');}
   else{pc.textContent=pName(P);pc.className='pname-cur p'+P;badge.classList.add('hidden');}
+  // Mostra pulsante ESCI solo in modalità multi-device, non in solo-mode
+  const exitBtn=document.getElementById('exit-game-btn');
+  if(exitBtn)exitBtn.style.display=(deviceRole!=='single'&&!soloMode)?'inline-block':'none';
   renderLife();renderDice();renderPairs();buildSVG();renderMonsters();renderTreasures();renderFists();updCnts();updTurnInfo();
 }
 
@@ -2313,14 +2447,14 @@ function deletePair(pi){
       turnCrossed=Math.max(0,turnCrossed-1);
       if(act.wasTorch){torchLeft++;torchMode=true;}
     } else if(act.type==='gem'){
-      svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.amount));
+      svS(P,'gems',Math.max(0,ldS(P,'gems',0)-act.amount));
     } else if(act.type==='fist'){
       const f=Math.max(0,ld(P,'fists',0)-act.amount);
       svS(P,'fists',f);
       if(act.completedFists){
         fistDoneGlobal=false;
         localStorage.removeItem(PFX+'fistDone');
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-3));
       }
       renderFists();
     } else if(act.type==='mhp'){
@@ -2333,13 +2467,13 @@ function deletePair(pi){
         delete def[act.mkey];svS(P,'def',def);
         // Ripristina casella mostro come non barrata
         saveMk(act.mkey,false);
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-act.gemGained));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-act.gemGained));
         if(act.lifeDmg){
-          const ci=ld(P,'lifeIdx',0);
+          const ci=ldS(P,'lifeIdx',0);
           svS(P,'lifeIdx',Math.max(0,ci-act.lifeDmg));
         }
         if(act.shieldUsed){
-          svS(P,'shield',ld(P,'shield',0)+act.shieldUsed);
+          svS(P,'shield',ldS(P,'shield',0)+act.shieldUsed);
         }
       }
       renderMonsters();renderLife();
@@ -2348,20 +2482,22 @@ function deletePair(pi){
       torchMode=false;torchLeft=0;
     } else if(act.type==='tmodal'){
       // Richiudi il modale tesoro se era aperto e annulla la scelta
-      // La scelta del tesoro va annullata
       document.getElementById('tmodal').classList.add('hidden');
-      const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+      const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
+      tres.used=Math.max(0,(tres.used||0)-1);
+      pendingTresOpenCount=Math.max(0,pendingTresOpenCount-1);
       if(act.tresType==='life'){
         tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);
-        svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));
-        svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));
+        svS(P,'gems',Math.max(0,ldS(P,'gems',0)-1));
+        svS(P,'shield',Math.max(0,ldS(P,'shield',0)-3));
         renderLife();
       } else if(act.tresType==='torch'){
         tres.torch=Math.max(0,(tres.torch||0)-1);svS(P,'tres',tres);
         torchAvailable=false;torchMode=false;torchLeft=0;
       } else if(act.tresType==='dice'){
         tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);
-        svS(P,'bmax',3);
+        sv(1,'bmax',turnSnapshot?turnSnapshot.bmax1:Math.max(3,ld(1,'bmax',3)-3));
+        sv(2,'bmax',turnSnapshot?turnSnapshot.bmax2:Math.max(3,ld(2,'bmax',3)-3));
         renderDice();
       }
       renderTreasures();
@@ -2398,6 +2534,10 @@ function clearDice(){
     torchAvailable=turnSnapshot.torchAvailable;
     torchLeft=turnSnapshot.torchLeft;
   }
+  // Calcola il pendingTresOpenCount dallo stato ripristinato (= used cumulativi pre-turno)
+  const mergedNowR=isMerged()||P==='M';
+  const tr1r=ld(1,'tres',{used:0}),tr2r=mergedNowR?{used:0}:ld(2,'tres',{used:0});
+  pendingTresOpenCount=(tr1r.used||0)+(tr2r.used||0);
   torchMode=false; activeTorchSlot=-1;
   dSel.fill(false);dUsed.fill(false);pairs=[[],[]];pairsConsumed=[false,false];
   bUsedThisTurn=0;bFreeUsedThisTurn=0;pairActions=[[],[]];
@@ -2444,10 +2584,10 @@ function clickCell(k){
         // Annulla anche le azioni collegate (gem, fist, tesoro) della stessa coppia dopo il mark
         const related=pairActions[pi].splice(idx);
         related.slice(1).reverse().forEach(ra=>{
-          if(ra.type==='gem')svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.amount));
+          if(ra.type==='gem')svS(P,'gems',Math.max(0,ldS(P,'gems',0)-ra.amount));
           else if(ra.type==='fist'){
-            const f=Math.max(0,ld(P,'fists',0)-ra.amount);svS(P,'fists',f);
-            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ld(P,'gems',0)-3));}
+            const f=Math.max(0,ldS(P,'fists',0)-ra.amount);svS(P,'fists',f);
+            if(ra.completedFists){fistDoneGlobal=false;localStorage.removeItem(PFX+'fistDone');svS(P,'gems',Math.max(0,ldS(P,'gems',0)-3));}
             renderFists();
           } else if(ra.type==='mhp'){
             const hp=(isMerged()||P==='M')?getMHp():ld(P,'mhp',{});
@@ -2457,17 +2597,19 @@ function clickCell(k){
               const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
               delete def[ra.mkey];svS(P,'def',def);
               saveMk(ra.mkey,false);
-              svS(P,'gems',Math.max(0,ld(P,'gems',0)-ra.gemGained));
-              if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ld(P,'lifeIdx',0)-ra.lifeDmg));}
-              if(ra.shieldUsed){svS(P,'shield',ld(P,'shield',0)+ra.shieldUsed);}
+              svS(P,'gems',Math.max(0,ldS(P,'gems',0)-ra.gemGained));
+              if(ra.lifeDmg){svS(P,'lifeIdx',Math.max(0,ldS(P,'lifeIdx',0)-ra.lifeDmg));}
+              if(ra.shieldUsed){svS(P,'shield',ldS(P,'shield',0)+ra.shieldUsed);}
             }
             renderMonsters();renderLife();
           } else if(ra.type==='tmodal'){
             document.getElementById('tmodal').classList.add('hidden');
-            const tres=ld(P,'tres',{life:0,torch:0,dice:0});
-            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ld(P,'gems',0)-1));svS(P,'shield',Math.max(0,ld(P,'shield',0)-3));renderLife();}
+            const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
+            tres.used=Math.max(0,(tres.used||0)-1);
+            pendingTresOpenCount=Math.max(0,pendingTresOpenCount-1);
+            if(ra.tresType==='life'){tres.life=Math.max(0,(tres.life||0)-1);svS(P,'tres',tres);svS(P,'gems',Math.max(0,ldS(P,'gems',0)-1));svS(P,'shield',Math.max(0,ldS(P,'shield',0)-3));renderLife();}
             else if(ra.tresType==='torch'){tres.torch=Math.max(0,(tres.torch||0)-2);svS(P,'tres',tres);torchAvailable=false;torchMode=false;torchLeft=0;}
-            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);svS(P,'bmax',Math.max(3,ld(P,'bmax',3)-3));renderDice();}
+            else if(ra.tresType==='dice'){tres.dice=Math.max(0,(tres.dice||0)-1);svS(P,'tres',tres);sv(1,'bmax',turnSnapshot?turnSnapshot.bmax1:Math.max(3,ld(1,'bmax',3)-3));sv(2,'bmax',turnSnapshot?turnSnapshot.bmax2:Math.max(3,ld(2,'bmax',3)-3));renderDice();}
             renderTreasures();
           }
         });
@@ -2487,7 +2629,7 @@ function clickCell(k){
     if(marked[k]){showN('Già barrata','');return;}
     if(!canReach(k,marked)){showN('❌ Non raggiungibile con la torcia','Deve essere adiacente a una casella già barrata.');return;}
     // Usa il token: riduce il conteggio torch nel tesoro
-    const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+    const tres=ldS(P,'tres',{life:0,torch:0,dice:0});
     tres.torch=Math.max(0,(tres.torch||0)-1);
     svS(P,'tres',tres);
     saveMk(k,true);turnMarked.add(k);turnCrossed++;
@@ -2523,13 +2665,13 @@ function clickCell(k){
       const def=(isMerged()||P==='M')?getMDef():ld(P,'def',{});
       def[cell.mkey]=true;svS(P,'def',def);
       saveMk(k,true);
-      const prevGems=ld(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
+      const prevGems=ldS(P,'gems',0);svS(P,'gems',prevGems+mon.gem);
       playAudio('kill_'+cell.mkey.toLowerCase());
       if(mon.isBoss){
         let dmg=2,shieldUsed=0;
-        const shield=ld(P,'shield',0);
+        const shield=ldS(P,'shield',0);
         if(shield>0){const abs=Math.min(shield,dmg);svS(P,'shield',shield-abs);shieldUsed=abs;dmg-=abs;}
-        const ci=ld(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);svS(P,'lifeIdx',ni);
+        const ci=ldS(P,'lifeIdx',0),ni=Math.min(MAX_LIFE_IDX,ci+dmg);svS(P,'lifeIdx',ni);
         recordAction(pairIdx,{type:'mhp',mkey:cell.mkey,amount:1,killed:true,gemGained:mon.gem,lifeDmg:dmg,shieldUsed,counted:true});
         svS(P,'mhp',hp);buildSVG();renderLife();renderMonsters();renderPairs();updCnts();updTurnInfo();
         showN('👑 Boss sconfitto! +'+mon.gem+'💎 -2❤','');
@@ -2583,12 +2725,12 @@ function clickCell(k){
     pairsConsumed[usedPairIdx]=true;
 
     // ── Segna sempre la barra pugni ──
-    const f=ld(P,'fists',0)+1;svS(P,'fists',f);
+    const f=ldS(P,'fists',0)+1;svS(P,'fists',f);
     const completedFists=f>=5;
     recordAction(usedPairIdx,{type:'fist',amount:1,completedFists});
     if(completedFists&&!fistDoneGlobal){
       fistDoneGlobal=true;localStorage.setItem(PFX+'fistDone','1');
-      svS(P,'gems',ld(P,'gems',0)+3);
+      svS(P,'gems',ldS(P,'gems',0)+3);
       recordAction(usedPairIdx,{type:'gem',amount:3});
       showN('✊ 5 Pugni! +3💎','Bonus conquistato! (solo la prima volta)');
       updCnts();
@@ -2607,7 +2749,7 @@ function clickCell(k){
         hp[mk]=mon.hp;
         def[mk]=true;
         saveMk(mk,true);
-        svS(P,'gems',ld(P,'gems',0)+mon.gem);
+        svS(P,'gems',ldS(P,'gems',0)+mon.gem);
         recordAction(usedPairIdx,{type:'mhp',mkey:mk,amount:1,killed:true,gemGained:mon.gem,lifeDmg:0,shieldUsed:0,counted:false});
         monsHit.push(mon.name+' ☠');
       } else {
@@ -2638,7 +2780,7 @@ function clickCell(k){
 
   // Gemma (BX)
   if(cell.gem){
-    svS(P,'gems',ld(P,'gems',0)+1);
+    svS(P,'gems',ldS(P,'gems',0)+1);
     recordAction(usedPairIdx,{type:'gem',amount:1});
     showN('💎 +1 Gemma!','');updCnts();
   }
@@ -2647,9 +2789,8 @@ function clickCell(k){
   if(cell.t==='T'){
     torchAvailable=true;
     playAudio('treasure');
-    // Il modale tesoro registra l'azione quando il giocatore sceglie (in chooseTres)
-    // Passiamo l'usedPairIdx al modale tramite variabile globale
     pendingTresPairIdx=usedPairIdx;
+    pendingTresOpenCount++;
     showTModal();buildSVG();renderTreasures();updCnts();updTurnInfo();return;
   }
 
@@ -2670,6 +2811,8 @@ function clickCell(k){
 
 // Indice della coppia che ha attivato il tesoro (per rollback)
 let pendingTresPairIdx=0;
+// Quanti tesori sono stati aperti in questa partita (per confronto con tres.used)
+let pendingTresOpenCount=0;
 
 function saveMk(k,val){
   if(isMerged()||P==='M'){const m=getMM();if(val)m[k]=true;else delete m[k];sv(1,'mk',m);sv(2,'mk',m);}
@@ -2679,19 +2822,25 @@ function saveMk(k,val){
 // ─── TESORO ───
 function showTModal(){
   // Controlla entrambi i giocatori per tutte le ricompense (1× per partita globale)
-  const tr1=ld(1,'tres',{life:0,torch:0,dice:0}),tr2=ld(2,'tres',{life:0,torch:0,dice:0});
+  const mergedNow=isMerged()||P==='M';
+  const tr1=ld(1,'tres',{life:0,torch:0,dice:0,used:0}),tr2=mergedNow?{life:0,torch:0,dice:0,used:0}:ld(2,'tres',{life:0,torch:0,dice:0,used:0});
   const lifeUsed=(tr1.life||0)+(tr2.life||0)>=1;
   const torchUsed=(tr1.torch||0)+(tr2.torch||0)>=2;
   const diceUsed=(tr1.dice||0)+(tr2.dice||0)>=1;
+  // Quante ricompense totali già scelte vs quanti tesori aperti
+  const totalUsed=mergedNow?(tr1.used||0):(tr1.used||0)+(tr2.used||0);
+  const totalOpened=(pendingTresOpenCount||0);
+  // Se per questo tesoro è già stata scelta una ricompensa, disabilita tutto
+  const thisAlreadyUsed=totalUsed>=totalOpened;
   let h='';
-  h+=`<div class="ropt ${lifeUsed?'disabled':''}" onclick="${lifeUsed?'':'chooseTres(\'life\')'}">
-    <div class="ropt-t">🛡 Vita — +1💎 & 3 Scudi</div>
+  h+=`<div class="ropt ${lifeUsed||thisAlreadyUsed?'disabled':''}" onclick="${lifeUsed||thisAlreadyUsed?'':'chooseTres(\'life\')'}">
+    <div class="ropt-t">🛡 Vita — +1💎 & 3 Scudi${lifeUsed?' (già usato)':''}</div>
     <div class="ropt-d">Guadagni 1 Gemma subito. I prossimi 3 danni alla vita vengono annullati (scudo).</div></div>`;
-  h+=`<div class="ropt ${torchUsed?'disabled':''}" onclick="${torchUsed?'':'chooseTres(\'torch\')'}">
-    <div class="ropt-t">🕯 Torcia — +2 token</div>
+  h+=`<div class="ropt ${torchUsed||thisAlreadyUsed?'disabled':''}" onclick="${torchUsed||thisAlreadyUsed?'':'chooseTres(\'torch\')'}">
+    <div class="ropt-t">🕯 Torcia — +2 token${torchUsed?' (già usato)':''}</div>
     <div class="ropt-d">Aggiungi 2 token torcia. Usane uno quando vuoi: barra una casella adiacente a quelle già barrate senza usare i dadi.</div></div>`;
-  h+=`<div class="ropt ${diceUsed?'disabled':''}" onclick="${diceUsed?'':'chooseTres(\'dice\')'}">
-    <div class="ropt-t">⬛ Dado nero — +3 slot</div>
+  h+=`<div class="ropt ${diceUsed||thisAlreadyUsed?'disabled':''}" onclick="${diceUsed||thisAlreadyUsed?'':'chooseTres(\'dice\')'}">
+    <div class="ropt-t">⬛ Dado nero — +3 slot${diceUsed?' (già usato)':''}</div>
     <div class="ropt-d">Aumenta i dadi neri disponibili di 3 per tutta la partita.</div></div>`;
   document.getElementById('tropts').innerHTML=h;
   document.getElementById('tmodal').classList.remove('hidden');
@@ -2699,24 +2848,24 @@ function showTModal(){
 
 function chooseTres(t){
   document.getElementById('tmodal').classList.add('hidden');
-  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  const tres=ldS(P,'tres',{life:0,torch:0,dice:0,used:0});
   if(t==='life'){
     if(tres.life>=1)return;
-    tres.life++;svS(P,'tres',tres);
-    svS(P,'gems',ld(P,'gems',0)+1);
-    svS(P,'shield',(ld(P,'shield',0)||0)+3);
+    tres.life++;tres.used=(tres.used||0)+1;svS(P,'tres',tres);
+    svS(P,'gems',ldS(P,'gems',0)+1);
+    svS(P,'shield',(ldS(P,'shield',0)||0)+3);
     recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'life'});
     showN('🛡 +1💎 & 3 Scudi!','I prossimi 3 danni alla vita saranno annullati.');
     renderLife();
   } else if(t==='torch'){
-    tres.torch=(tres.torch||0)+2;
+    tres.torch=(tres.torch||0)+2;tres.used=(tres.used||0)+1;
     svS(P,'tres',tres);
     recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'torch'});
     showN('🕯 +2 Token Torcia!','Clicca i token nella sezione Tesori per usarli.');
   } else {
     if(tres.dice>=1)return;
-    tres.dice++;svS(P,'tres',tres);
-    svS(P,'bmax',(ld(P,'bmax',3)||3)+3);
+    tres.dice++;tres.used=(tres.used||0)+1;svS(P,'tres',tres);
+    svS(P,'bmax',(ldS(P,'bmax',3)||3)+3);
     recordAction(pendingTresPairIdx,{type:'tmodal',tresType:'dice'});
     showN('⬛ +3 Dadi Neri!','Il numero di dadi neri disponibili è aumentato di 3.');
     renderDice();
@@ -2726,7 +2875,7 @@ function chooseTres(t){
 
 // Clicca un token torcia: se è disponibile lo attiva (modalità scelta cella)
 function clickTorchSlot(slotIdx){
-  const tres=ld(P,'tres',{life:0,torch:0,dice:0});
+  const tres=ldS(P,'tres',{life:0,torch:0,dice:0});
   const totalTokens=tres.torch||0;
   // slot 0..totalTokens-1 sono i token disponibili
   // Conta quanti sono stati usati (torchLeft tiene quanti rimangono nel turno corrente)
@@ -2748,7 +2897,7 @@ function clickTorchSlot(slotIdx){
 function renderTreasures(){
   const merged=isMerged()||P==='M';
   const t1=ld(1,'tres',{life:0,torch:0,dice:0}),t2=ld(2,'tres',{life:0,torch:0,dice:0});
-  const tres=merged?{life:t1.life+t2.life,torch:t1.torch+t2.torch,dice:t1.dice+t2.dice}:ld(P,'tres',{life:0,torch:0,dice:0});
+  const tres=merged?t1:ld(P,'tres',{life:0,torch:0,dice:0});
 
   // Scudo (life) — mostra quante volte è stato preso
   const lifeCnt=tres.life||0;
@@ -2800,7 +2949,7 @@ function renderTreasures(){
 
 function renderFists(){
   const merged=isMerged()||P==='M';
-  const fists=merged?ld(1,'fists',0)+ld(2,'fists',0):ld(P,'fists',0);
+  const fists=merged?ld(1,'fists',0):ld(P,'fists',0);
   const cur=fistDoneGlobal?5:fists%5;
   let h=`<div class="fist-row"><div class="fist-boxes">`;
   for(let i=0;i<5;i++){const checked=i<cur;h+=`<div class="fist-box ${checked?'checked':''}">${checked?'✊':''}</div>`;}
