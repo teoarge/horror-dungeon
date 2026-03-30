@@ -1116,16 +1116,10 @@ function sv(p,k,v){localStorage.setItem(PFX+'p'+p+'_'+k,JSON.stringify(v));}
 function ld(p,k,d){const v=localStorage.getItem(PFX+'p'+p+'_'+k);return v!==null?JSON.parse(v):d;}
 // svS: salva su entrambi i giocatori quando unificati
 function svS(p,k,v){
-  // Se p è 'M', salva su entrambi i giocatori
-  if(p==='M'||isMerged()||P==='M'){
-    sv(1,k,v);
-    sv(2,k,v);
-  } else {
-    sv(p,k,v);
-  }
+  if(p==='M'||isMerged()||P==='M'){sv(1,k,v);sv(2,k,v);}else{sv(p,k,v);}
 }
 function ldS(p,k,d){
-  if(p==='M'||isMerged()||P==='M') return ld(1,k,d);
+  if(p==='M'||isMerged()||P==='M')return ld(1,k,d);
   return ld(p,k,d);
 }
 function isMerged(){
@@ -1326,7 +1320,18 @@ function confirmNamesMulti(role){
 
 function initHostPeer(){
   const peerId=genPeerId();
-  hostPeer=new Peer(peerId,{debug:0});
+  hostPeer=new Peer(peerId,{
+    debug: 0,
+    config: {
+      iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun1.l.google.com:19302'},
+        {urls: 'turn:openrelay.metered.ca:80',    username:'openrelayproject', credential:'openrelayproject'},
+        {urls: 'turn:openrelay.metered.ca:443',   username:'openrelayproject', credential:'openrelayproject'},
+        {urls: 'turn:openrelay.metered.ca:443?transport=tcp', username:'openrelayproject', credential:'openrelayproject'}
+      ]
+    }
+  });
   hostPeer.on('open', id=>{
     // Mostra solo la parte leggibile (senza prefisso hd6-)
     const shortCode=id.replace('hd6-','');
@@ -1453,24 +1458,33 @@ function joinGame(){
   }
   const peerId='hd6-'+code;
   syncBinId=peerId; syncRoomCode=code;
-  document.getElementById('join-status').textContent='[1] Creazione peer…';
+  document.getElementById('join-status').textContent='Connessione in corso…';
   document.getElementById('join-status').className='sync-status wait';
 
-  const joinPeer=new Peer({debug:0});
+  const joinPeer=new Peer({
+    debug: 0,
+    config: {
+      iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun1.l.google.com:19302'},
+        {urls: 'turn:openrelay.metered.ca:80',    username:'openrelayproject', credential:'openrelayproject'},
+        {urls: 'turn:openrelay.metered.ca:443',   username:'openrelayproject', credential:'openrelayproject'},
+        {urls: 'turn:openrelay.metered.ca:443?transport=tcp', username:'openrelayproject', credential:'openrelayproject'}
+      ]
+    }
+  });
   joinPeer.on('open', myId=>{
-    document.getElementById('join-status').textContent='[2] Peer creato: '+myId.slice(0,12)+'… — Connessione a '+peerId.slice(0,12)+'…';
     joinConn=joinPeer.connect(peerId,{reliable:true});
     const timeout=setTimeout(()=>{
-      document.getElementById('join-status').textContent=`[TIMEOUT] Codice non trovato o ${pName(1)} non in attesa.`;
+      document.getElementById('join-status').textContent=`Timeout: codice non trovato o ${pName(1)} non in attesa.`;
       document.getElementById('join-status').className='sync-status err';
     },12000);
     joinConn.on('open',()=>{
       clearTimeout(timeout);
-      document.getElementById('join-status').textContent='[3] ✓ Canale aperto! In attesa dati…';
+      document.getElementById('join-status').textContent='✓ Connesso!';
       document.getElementById('join-status').className='sync-status ok';
     });
     joinConn.on('data', d=>{
-      document.getElementById('join-status').textContent='[4] Dati ricevuti: '+(d&&d.type||'?');
       if(!d)return;
       if(d.type==='reset'){doReset();return;}
       if(d.type==='gameover'){showGameOver(d.dp);return;}
@@ -1490,25 +1504,21 @@ function joinGame(){
         const nextP=d.nextP!==undefined&&d.nextP!==null?d.nextP:2;
         const firstMerge=!!d.firstMerge;
         if(!side){
-          document.getElementById('join-status').textContent='[5] ✓ Connesso! In attesa che l\'host avvii la partita…';
+          document.getElementById('join-status').textContent='✓ Connesso! In attesa che l\'host avvii la partita…';
           document.getElementById('join-status').className='sync-status ok';
         } else {
-          document.getElementById('join-status').textContent='[5] Avvio partita…';
           showPass(nextP, firstMerge);
         }
       }
     });
     joinConn.on('error', e=>{
-      document.getElementById('join-status').textContent='[ERR] '+e.type+' — '+JSON.stringify(e);
+      document.getElementById('join-status').textContent='Errore connessione: '+e.type;
       document.getElementById('join-status').className='sync-status err';
     });
-    joinConn.on('close', ()=>{
-      document.getElementById('join-status').textContent='[CLOSE] Connessione chiusa — showDisconnect';
-      showDisconnect(false);
-    });
+    joinConn.on('close', ()=>showDisconnect(false));
   });
   joinPeer.on('error', e=>{
-    document.getElementById('join-status').textContent='[PEER ERR] '+e.type+' — '+JSON.stringify(e);
+    document.getElementById('join-status').textContent='Errore: '+e.type+' — controlla il codice e la rete.';
     document.getElementById('join-status').className='sync-status err';
   });
 }
@@ -1876,7 +1886,7 @@ function passTurn(){
     const mergedShield=(ld(1,'shield',0))+(ld(2,'shield',0));
     sv(1,'shield',mergedShield);sv(2,'shield',mergedShield);
 
-    // 7. Unifica slot dadi neri: 6 se almeno uno aveva dado nero
+    // 7. Unifica slot dadi neri: 6 se almeno uno aveva la ricompensa dado nero
     const bmax=(mergedTres.dice||0)>=1?6:3;
     sv(1,'bmax',bmax);sv(2,'bmax',bmax);
 
@@ -2827,7 +2837,6 @@ function showTModal(){
   const lifeUsed=(tr1.life||0)+(tr2.life||0)>=1;
   const torchUsed=(tr1.torch||0)+(tr2.torch||0)>=2;
   const diceUsed=(tr1.dice||0)+(tr2.dice||0)>=1;
-  // Quante ricompense totali già scelte vs quanti tesori aperti
   const totalUsed=mergedNow?(tr1.used||0):(tr1.used||0)+(tr2.used||0);
   const totalOpened=(pendingTresOpenCount||0);
   // Se per questo tesoro è già stata scelta una ricompensa, disabilita tutto
